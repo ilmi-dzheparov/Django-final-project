@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 def product_preview_directory_path(instance: "Product", filename: str) -> str:
@@ -45,7 +46,7 @@ class Product(models.Model):
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_directory_path)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     available = models.BooleanField(default=True)
-    tags = models.ManyToManyField('Tag', related_name='products')
+    tags = TaggableManager(blank=True)
 
     def __str__(self):
         return self.name
@@ -54,11 +55,3 @@ class Product(models.Model):
         return reverse("product_details", kwargs={"pk": self.pk})
 
 
-class Tag(models.Model):
-    """
-    Модель Tag представляет теги, которые могут быть привязаны к товарам.
-    """
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
