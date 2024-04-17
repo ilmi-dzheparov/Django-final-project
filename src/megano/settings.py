@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django_cleanup.apps.CleanupConfig',
-    'products.views.CategoryListView',
+    'shop.apps.ShopConfig',
 ]
 
 MIDDLEWARE = [
@@ -112,10 +112,11 @@ DATABASES = {
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        'LOCATION': "/var/tmp/django_cache",
-    },
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+    }
 }
+
 
 
 # DATABASES = {

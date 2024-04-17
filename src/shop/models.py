@@ -7,5 +7,3 @@ from django.db.models.signals import post_save, post_delete
 @receiver(signal=post_delete, sender=Category)
 def clear_menu_cache(sender, **kwargs):
     cache.delete('categories')
-
-
