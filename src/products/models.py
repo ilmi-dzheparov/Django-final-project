@@ -15,6 +15,7 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=100, db_index=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    icon = models.ImageField(upload_to='category_icons/', blank=True, null=True)
 
     def __str__(self):
         return self.name
