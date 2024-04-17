@@ -44,7 +44,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(default=0, max_digits=8, decimal_places=2)
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_directory_path)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     available = models.BooleanField(default=True)
     tags = TaggableManager(blank=True)
 
