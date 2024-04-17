@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'taggit',
 
-    'products.apps.ProductsConfig'
+    'shop.apps.ProductsConfig'
 ]
 
 MIDDLEWARE = [
