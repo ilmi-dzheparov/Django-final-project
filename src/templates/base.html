@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Megano{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/basic.css' %}">
+        {% block extraStyles %}
+            <!-- Расширение стилей и другой мета-информации -->
+        {% endblock %}
+    </head>
+
+    <body>
+        <header>
+            {% block header %}
+                <!-- Расширение шапки страницы -->
+            {% endblock %}
+        </header>
+
+        <main>
+            {% block main %}
+                <!-- Расширение основного контента страницы -->
+            {% endblock %}
+        </main>
+
+        <footer>
+            {% block footer %}
+                <!-- Расширение подвала страницы -->
+            {% endblock %}
+        </footer>
+
+        <script>
+            {% block include_js %}
+                <!-- Расширение скриптов -->
+            {% endblock %}
+        </script>
+    </body>
+</html>
