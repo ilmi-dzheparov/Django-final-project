@@ -36,12 +36,12 @@ class Product(models.Model):
     """
 
     class Meta:
-        ordering = ["name", "price"]
+        ordering = ["name"]
         verbose_name = "product"
         verbose_name_plural = "shop"
 
     name = models.CharField(max_length=100, db_index=True)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, null=True)
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_directory_path)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='shop')
     available = models.BooleanField(default=True)
