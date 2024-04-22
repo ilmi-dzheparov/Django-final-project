@@ -15,7 +15,9 @@ class ProductListView(ListView):
         cache_key = 'categories'
         categories = cache.get(cache_key)
         if categories is None:
-            categories = Category.objects.all().prefetch_related('products').filter(products__available=True)
+            categories = Category.objects.filter(products__available=True).prefetch_related('products')
+
+
             context[cache_key] = categories
             seconds_in_day = 10 ** 5
             cache.set(cache_key, categories, seconds_in_day)
