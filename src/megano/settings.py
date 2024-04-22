@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django_cleanup.apps.CleanupConfig',
+    'shop.apps.ShopConfig',
 ]
 
 MIDDLEWARE = [
@@ -108,6 +109,15 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "127.0.0.1:11211",
+    }
+}
+
+
 
 # DATABASES = {
 #     "default": {
