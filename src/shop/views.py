@@ -15,13 +15,13 @@ class ProductListView(ListView):
         cache_key = 'categories'
         categories = cache.get(cache_key)
         if categories is None:
-            categories = Category.objects.all()
+            categories = Category.objects.all().prefetch_related('products').filter(products__available=True)
             context[cache_key] = categories
             seconds_in_day = 10 ** 5
             cache.set(cache_key, categories, seconds_in_day)
         else:
             context[cache_key] = categories
 
-        context['products'] = Product.objects.all()
+        context['products'] = Product.objects.all().select_related('category')
 
         return context

@@ -7,7 +7,6 @@
     </div>
     <div class="CategoriesButton-content">
         {% for category in categories %}
-            {% if category.products.filter(available=True).exists %}
                 <div class="CategoriesButton-link">
                     <a href="#">
                         <div class="CategoriesButton-icon">
@@ -16,7 +15,6 @@
                         <span class="CategoriesButton-text">{{ category.name }}</span>
                     </a>
                 </div>
-            {%  endif %}
         {% endfor %}
     </div>
 </div>
