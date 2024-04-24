@@ -29,6 +29,8 @@ class Category(models.Model):
         return self.name
 
 
+
+
 class Product(models.Model):
     """
       Модель Product представляет товар,
@@ -52,5 +54,3 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product_details", kwargs={"pk": self.pk})
-
-
