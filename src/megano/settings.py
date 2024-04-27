@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'taggit',
 
     'shop.apps.ProductsConfig'
+    'accounts.apps.AccountsConfig'
 ]
 
 MIDDLEWARE = [
