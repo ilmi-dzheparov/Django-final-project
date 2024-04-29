@@ -44,8 +44,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django_cleanup.apps.CleanupConfig',
     'taggit',
-
-    'shop.apps.ProductsConfig'
+    'shop.apps.ProductsConfig',
+    'banners.apps.BannersConfig',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +92,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'shop.context_processors.categories',
+                # 'shop.context_processors.categories',
+                "banners.context_processors.random_banner_context_processor",
             ],
         },
     },
