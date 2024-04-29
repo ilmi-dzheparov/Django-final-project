@@ -7,7 +7,7 @@ from shop.models import Review
 from shop.forms import ReviewForm
 
 
-class CommentCreateView(CreateView):
+class ReviewCreateView(CreateView):
     """
     Представление: для создания отзыва к продукту.
     """
