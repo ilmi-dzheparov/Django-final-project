@@ -178,3 +178,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DEFAULT_CACHE_TIME = 24 * 60 * 60
+
+AUTH_USER_MODEL = 'accounts.User'
