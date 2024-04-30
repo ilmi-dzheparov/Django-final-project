@@ -1,4 +1,7 @@
+from django.core.cache import cache
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from taggit.managers import TaggableManager
 
@@ -54,3 +57,5 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product_details", kwargs={"pk": self.pk})
+
+
