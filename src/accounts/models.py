@@ -15,7 +15,6 @@ class User(AbstractUser):
 
     phone = models.CharField(max_length=12, unique=True, validators=[phone_regex])
     avatar = models.ImageField(null=True, blank=True, upload_to=profile_avatar_directory_path)
-    created_at = models.DateField(auto_now_add=True)
     birth_date = models.DateField(null=True, blank=True)
     is_seller = models.BooleanField(default=False)
 
