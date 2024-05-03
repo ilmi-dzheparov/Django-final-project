@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from taggit.managers import TaggableManager
@@ -9,10 +8,6 @@ def product_preview_directory_path(instance: "Product", filename: str) -> str:
         pk=instance.pk,
         filename=filename,
     )
-
-
-def seller_thumbnail_directory_path(instance: "Seller", filename: str) -> str:
-    return f"shop/seller_thumbnails/seller_{instance.pk}/{filename}"
 
 
 class Category(models.Model):
@@ -32,6 +27,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
 
 
 class Product(models.Model):
@@ -59,40 +56,39 @@ class Product(models.Model):
         return reverse("product_details", kwargs={"pk": self.pk})
 
 
-class Seller(models.Model):
+class Attribute(models.Model):
     """
-    Модель Seller представляет продавца,
-    который может размещать свои товары (SellerProduct) в магазине.
+    Модель Attribute  определяет структуру данных для хранения характеристик товаров.
+    Имеет связь один-ко-многим с Category.
+    Поля name (имя характеристики) и unit (единица измерения)
     """
-
-    class Meta:
-        ordering = ["name"]
-
-    user = models.OneToOneField(User, related_name="seller", on_delete=models.CASCADE)
-    name = models.CharField(max_length=20, db_index=True, null=False)
-    thumbnail = models.ImageField(null=True, blank=True, upload_to=seller_thumbnail_directory_path)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    address = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    name = models.CharField(max_length=100, verbose_name='характеристика')
+    unit = models.CharField(max_length=50, blank=True, default='', verbose_name='единица измерения')
+    category = models.ForeignKey(Category,
+                                 blank=True,
+                                 null=True,
+                                 related_name='attribute_names',
+                                 on_delete=models.CASCADE,
+                                 verbose_name='категория')
 
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse("seller_details", kwargs={"pk": self.pk})
 
-
-class SellerProduct(models.Model):
+class ProductAttribute(models.Model):
     """
-    Модель SellerProduct представляет товар, который продает конкретный продавец (Seller).
-    Эта модель связана с Product и отличается ценой и количеством от продавца к продавцу.
+    Модель ProductAttribute связывает конкретный продукт (товар) с его характеристиками.
+    Также связь с моделью Attribute.
     """
 
-    seller = models.ForeignKey(Seller, related_name="products", on_delete=models.PROTECT)
-    product = models.ForeignKey(Product, related_name="seller_products", on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return self.product.name
+    product = models.ForeignKey(Product,
+                                related_name='attributes',
+                                on_delete=models.CASCADE,
+                                verbose_name='товар'
+                                )
+    attribute = models.ForeignKey(Attribute,
+                                  related_name='attributes',
+                                  on_delete=models.CASCADE,
+                                  verbose_name='характеристика',
+                                  )
+    value = models.CharField(max_length=250, verbose_name='значение')
