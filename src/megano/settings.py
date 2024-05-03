@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -44,8 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django_cleanup.apps.CleanupConfig',
     'taggit',
-
-    'shop.apps.ProductsConfig'
+    'accounts.apps.AccountsConfig',
+    'shop.apps.ProductsConfig',
 ]
 
 MIDDLEWARE = [
@@ -92,7 +93,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'shop.context_processors.categories',
+                # 'shop.context_processors.categories',
             ],
         },
     },
@@ -116,7 +117,6 @@ CACHES = {
         "LOCATION": "127.0.0.1:11211",
     }
 }
-
 
 # DATABASES = {
 #     "default": {
@@ -177,3 +177,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DEFAULT_CACHE_TIME = 24 * 60 * 60
+
+# LOGIN_REDIRECT_URL = reverse_lazy("")
