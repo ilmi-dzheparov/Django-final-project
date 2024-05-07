@@ -1,7 +1,4 @@
-from django.core.cache import cache
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.urls import reverse
 from taggit.managers import TaggableManager
 from django.conf import settings
@@ -42,12 +39,12 @@ class Product(models.Model):
     class Meta:
         ordering = ["name"]
         verbose_name = "product"
-        verbose_name_plural = "shop"
+        verbose_name_plural = "products"
 
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True, null=True)
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_directory_path)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='shop')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     available = models.BooleanField(default=True)
     tags = TaggableManager(blank=True)
 
