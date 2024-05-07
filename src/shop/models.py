@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from taggit.managers import TaggableManager
@@ -67,6 +68,7 @@ class Seller(models.Model):
     class Meta:
         ordering = ["name"]
 
+    user = models.OneToOneField(User, related_name="seller", on_delete=models.CASCADE)
     name = models.CharField(max_length=20, db_index=True, null=False)
     thumbnail = models.ImageField(null=True, blank=True, upload_to=seller_thumbnail_directory_path)
     email = models.EmailField()
@@ -83,7 +85,7 @@ class Seller(models.Model):
 
 class SellerProduct(models.Model):
     """
-    Модель SellerProduct представляет товар, который продает продавец (Seller).
+    Модель SellerProduct представляет товар, который продает конкретный продавец (Seller).
     Эта модель связана с Product и отличается ценой и количеством от продавца к продавцу.
     """
 
