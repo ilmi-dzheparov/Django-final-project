@@ -10,6 +10,10 @@ def product_preview_directory_path(instance: "Product", filename: str) -> str:
     )
 
 
+def seller_thumbnail_directory_path(instance: "Seller", filename: str) -> str:
+    return f"shop/seller_thumbnails/seller_{instance.pk}/{filename}"
+
+
 class Category(models.Model):
     """
       Модель Category представляет категорию
@@ -27,8 +31,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-
 
 
 class Product(models.Model):
@@ -54,3 +56,41 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product_details", kwargs={"pk": self.pk})
+
+
+class Seller(models.Model):
+    """
+    Модель Seller представляет продавца,
+    который может размещать свои товары (SellerProduct) в магазине.
+    """
+
+    class Meta:
+        ordering = ["name"]
+
+    name = models.CharField(max_length=20, db_index=True, null=False)
+    thumbnail = models.ImageField(null=True, blank=True, upload_to=seller_thumbnail_directory_path)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse("seller_details", kwargs={"pk": self.pk})
+
+
+class SellerProduct(models.Model):
+    """
+    Модель SellerProduct представляет товар, который продает продавец (Seller).
+    Эта модель связана с Product и отличается ценой и количеством от продавца к продавцу.
+    """
+
+    seller = models.ForeignKey(Seller, related_name="product", on_delete=models.PROTECT)
+    product = models.OneToOneField(Product, related_name="seller_product", on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.product.name
