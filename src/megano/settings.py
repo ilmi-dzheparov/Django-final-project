@@ -93,7 +93,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'shop.context_processors.categories',
+                'shop.context_processors.categories',
             ],
         },
     },
@@ -177,5 +177,3 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 DEFAULT_CACHE_TIME = 24 * 60 * 60
-
-# LOGIN_REDIRECT_URL = reverse_lazy("")
