@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from django.conf import settings
 
 
 def product_preview_directory_path(instance: "Product", filename: str) -> str:
@@ -32,8 +33,6 @@ class Category(models.Model):
         return self.name
 
 
-
-
 class Product(models.Model):
     """
       Модель Product представляет товар,
@@ -59,3 +58,35 @@ class Product(models.Model):
         return reverse("product_details", kwargs={"pk": self.pk})
 
 
+class Review(models.Model):
+    """
+    Модель для хранения отзывов.
+    """
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reviews_author'
+    )
+
+    text = models.TextField(
+        max_length=3000
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Review'
+        verbose_name_plural = 'Reviews'
+
+    def __str__(self):
+        return f'Отзыв от {self.created_at}'
