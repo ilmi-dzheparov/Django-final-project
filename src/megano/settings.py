@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'django_cleanup.apps.CleanupConfig',
     'taggit',
+    'banners.apps.BannersConfig',
     'accounts.apps.AccountsConfig',
     'shop.apps.ProductsConfig',
 ]
