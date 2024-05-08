@@ -5,7 +5,8 @@ from django.views.generic import ListView
 
 
 class BannerListView(ListView):
-    def random_banners_view(request):
+
+    def random_banners(self, request):
         """
         Добавляет в глобальный контекст три случайных баннера.
         """

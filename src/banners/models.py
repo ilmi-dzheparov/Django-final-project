@@ -21,8 +21,4 @@ class Banner(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-# сигналы, позволяющие очищать кэш при изменении или удалении баннеров
-@receiver(post_save, sender=Banner)
-@receiver(post_delete, sender=Banner)
-def reset_banners_cache(sender, **kwargs):
-    cache.clear()
+
