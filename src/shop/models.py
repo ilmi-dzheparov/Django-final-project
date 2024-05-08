@@ -33,7 +33,7 @@ class Category(models.Model):
 class Product(models.Model):
     """
       Модель Product представляет товар,
-      который можно продавать в интернет-магазине.
+      кoоторый можно продавать в интернет-магазине.
     """
 
     class Meta:
