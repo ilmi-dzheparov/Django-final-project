@@ -1,0 +1,54 @@
+<div class="Tabs-block" id="reviews">
+
+    {% include 'includes/pagination.html' %}
+
+    {% if page_obj %}
+
+        <header class="Section-header">
+            <h3 class="Section-title">
+                {{ page_obj.paginator.count }} отзыв
+            </h3>
+        </header>
+
+        {% for review in page_obj %}
+
+            <div class="Comments">
+                <div class="Comment">
+                    <div class="Comment-column Comment-column_pict">
+                        <div class="Comment-avatar">
+                            <img src={{review.author.avatar.url}}>
+                        </div>
+                    </div>
+                    <div class="Comment-column">
+                        <header class="Comment-header">
+                            <div>
+                                <strong class="Comment-title">{{ review.author }}
+                                </strong><span class="Comment-date">{{ review.created_at }}</span>
+                            </div>
+                        </header>
+                        <div class="Comment-content">{{ review.text }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <header class="Section-header Section-header_product">
+        <h3 class="Section-title">Добавить отзыв
+        </h3>
+    </header>
+
+    <div class="Tabs-addComment">
+        <form id="commentForm" class="form" action="{% url 'shop:review_create' product.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form }}
+            </div>
+            <div class="form-group">
+                <button class="btn btn_muted" type="submit">Отправить отзыв
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
