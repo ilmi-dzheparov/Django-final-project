@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 
-def profile_avatar_directory_path(instance: "Profile", filename: str):
+def user_avatar_directory_path(instance: "User", filename: str):
     return 'accounts/avatar/user_{pk}/{filename}'.format(
         pk=instance.user.pk,
         filename=filename
@@ -16,7 +16,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     username = None
     phone = models.CharField(max_length=12, unique=True, validators=[phone_regex])
-    avatar = models.ImageField(null=True, blank=True, upload_to=profile_avatar_directory_path)
+    avatar = models.ImageField(null=True, blank=True, upload_to=user_avatar_directory_path)
     birth_date = models.DateField(null=True, blank=True)
     is_seller = models.BooleanField(default=False)
 
