@@ -89,8 +89,8 @@ class SellerProduct(models.Model):
     Эта модель связана с Product и отличается ценой и количеством от продавца к продавцу.
     """
 
-    seller = models.ForeignKey(Seller, related_name="product", on_delete=models.PROTECT)
-    product = models.OneToOneField(Product, related_name="seller_product", on_delete=models.CASCADE)
+    seller = models.ForeignKey(Seller, related_name="products", on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, related_name="seller_products", on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
 
