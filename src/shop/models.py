@@ -87,3 +87,42 @@ class Review(models.Model):
 
     def __str__(self):
         return f'Отзыв от {self.created_at}'
+
+
+class Attribute(models.Model):
+    """
+    Модель Attribute  определяет структуру данных для хранения характеристик товаров.
+    Имеет связь один-ко-многим с Category.
+    Поля name (имя характеристики) и unit (единица измерения)
+    """
+
+    name = models.CharField(max_length=100, verbose_name='характеристика')
+    unit = models.CharField(max_length=50, blank=True, default='', verbose_name='единица измерения')
+    category = models.ForeignKey(Category,
+                                 blank=True,
+                                 null=True,
+                                 related_name='attribute_names',
+                                 on_delete=models.CASCADE,
+                                 verbose_name='категория')
+
+    def __str__(self):
+        return self.name
+
+
+class ProductAttribute(models.Model):
+    """
+        Модель ProductAttribute связывает конкретный продукт (товар) с его характеристиками.
+        Также связь с моделью Attribute.
+        """
+
+    product = models.ForeignKey(Product,
+                                related_name='attributes',
+                                on_delete=models.CASCADE,
+                                verbose_name='товар'
+                                )
+    attribute = models.ForeignKey(Attribute,
+                                  related_name='attributes',
+                                  on_delete=models.CASCADE,
+                                  verbose_name='характеристика',
+                                  )
+    value = models.CharField(max_length=250, verbose_name='значение')
