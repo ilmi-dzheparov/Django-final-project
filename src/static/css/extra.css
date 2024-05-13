@@ -2336,6 +2336,7 @@ a.Cart-title {
     background-color: #f3f4f9;
     position: relative;
     display: flex;
+    margin-bottom: 10px;
 }
 
 .Comment-column + .Comment-column {
@@ -2406,8 +2407,16 @@ a.Cart-title {
     width: 99px;
     height: 99px;
     border-radius: 100px;
-    background: #0063d1 url("../img/icons/user_icon.svg") center center no-repeat;
-}
+    background: #0063d1 center center no-repeat;
+
+    }
+
+    .Comment-avatar img {
+        width: 100%;
+        height: 100%;
+        border-radius: 100px;
+        margin-top: 0 !important;
+    }
 
 .Comment-rating {
     position: absolute;
@@ -3471,6 +3480,7 @@ a.Cart-title {
 }
 
 .Middle_top {
+    position: relative;
     margin-top: 80px;
 }
 
