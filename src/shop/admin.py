@@ -10,10 +10,6 @@ from shop.models import (
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 
 
-admin.site.register(Product)
-admin.site.register(Category)
-
-
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['product', 'author', 'review', 'created_at']
