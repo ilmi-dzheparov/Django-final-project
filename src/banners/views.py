@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from src.banners.models import Banner
+from banners.models import Banner
 from django.core.cache import cache
 from django.views.generic import ListView
 
