@@ -1,9 +1,10 @@
 from django import forms
-from shop.models import Attribute, ProductAttribute
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import BaseInlineFormSet
+
 from shop.admin_mixin import UniqueAttributeMixin
+from shop.models import Attribute, ProductAttribute, Review
 
 
 class CustomAttributeAdminForm(forms.ModelForm):
@@ -74,3 +75,21 @@ class ProductAttributeFormSet(BaseInlineFormSet, UniqueAttributeMixin):
 
     def clean(self):
         self.check_unique_attribute_name(self.forms, self.errors)
+
+
+class ReviewForm(forms.ModelForm):
+
+    class Meta:
+        model = Review
+        fields = ['text']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['text'].widget.attrs.update({
+            'name': "review",
+            'id': "review",
+            'placeholder': 'Отзывы',
+            'class': 'form-textarea'
+        })
+        self.fields['text'].label = False

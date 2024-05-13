@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 from taggit.managers import TaggableManager
 
 
@@ -29,8 +30,6 @@ class Category(models.Model):
         return self.name
 
 
-
-
 class Product(models.Model):
     """
       Модель Product представляет товар,
@@ -40,12 +39,12 @@ class Product(models.Model):
     class Meta:
         ordering = ["name"]
         verbose_name = "product"
-        verbose_name_plural = "shop"
+        verbose_name_plural = "products"
 
     name = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True, null=True)
     preview = models.ImageField(null=True, blank=True, upload_to=product_preview_directory_path)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='shop')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     available = models.BooleanField(default=True)
     tags = TaggableManager(blank=True)
 
@@ -54,6 +53,40 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse("product_details", kwargs={"pk": self.pk})
+
+
+class Review(models.Model):
+    """
+    Модель для хранения отзывов.
+    """
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='reviews'
+    )
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='reviews_author'
+    )
+
+    text = models.TextField(
+        max_length=3000
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Review'
+        verbose_name_plural = 'Reviews'
+
+    def __str__(self):
+        return f'Отзыв от {self.created_at}'
 
 
 class Attribute(models.Model):
