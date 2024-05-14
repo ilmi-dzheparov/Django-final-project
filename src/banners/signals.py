@@ -8,4 +8,4 @@ from banners.models import Banner
 @receiver(post_save, sender=Banner)
 @receiver(post_delete, sender=Banner)
 def reset_banners_cache(sender, **kwargs):
-    cache.clear()
+    cache.delete('banners')
