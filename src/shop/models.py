@@ -141,7 +141,7 @@ class Seller(models.Model):
     class Meta:
         ordering = ["name"]
 
-    user = models.OneToOneField(User, related_name="seller", on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="seller", on_delete=models.CASCADE)
     name = models.CharField(max_length=20, db_index=True, null=False)
     thumbnail = models.ImageField(null=True, blank=True, upload_to=seller_thumbnail_directory_path)
     email = models.EmailField()
