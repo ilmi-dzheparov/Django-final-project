@@ -126,8 +126,9 @@ class AttributeAdmin(admin.ModelAdmin):
 
     form = CustomAttributeAdminForm
 
+
 @admin.register(Seller)
-class SellerProductAdmin(admin.ModelAdmin):
+class SellerAdmin(admin.ModelAdmin):
     list_display = ["pk", "name", "email", "phone", "address"]
     list_display_links = ["pk", "name"]
 
@@ -136,6 +137,7 @@ class SellerProductAdmin(admin.ModelAdmin):
 class SellerProductAdmin(admin.ModelAdmin):
     list_display = ["pk", "product", "price", "quantity"]
     list_display_links = ["product"]
+    exclude = ("seller",)
 
     def get_queryset(self, request):
         """
@@ -144,15 +146,13 @@ class SellerProductAdmin(admin.ModelAdmin):
         queryset = super().get_queryset(request)
         if request.user.is_superuser:
             return queryset
-        else:
-            return queryset.filter(seller__user=request.user)
+        return queryset.filter(seller__user=request.user)
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    def save_model(self, request, obj, form, change):
         """
-        При создании SellerProduct, пользователь может указать только себя в выпадающем списке seller
+        Текущий пользователь указывается как Seller для созданного SellerProduct
         """
-        if db_field.name == "seller":
-            seller = Seller.objects.get(user=request.user)
-            kwargs["queryset"] = Seller.objects.filter(pk=seller.pk)
+        if not change:
+            obj.seller = request.user.seller
+        obj.save()
 
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
