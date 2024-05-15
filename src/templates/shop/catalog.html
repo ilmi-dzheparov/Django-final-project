@@ -1,6 +1,12 @@
+{% extends "base.html" %}
 
 
-    <div class="Middle Middle_top">
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block middle %}
+<div class="Middle Middle_top">
         <div class="Section Section_column Section_columnLeft">
             <div class="wrap">
                 <div class="Section-column">
@@ -102,3 +108,11 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
+
+
