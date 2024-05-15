@@ -1,0 +1,104 @@
+
+
+    <div class="Middle Middle_top">
+        <div class="Section Section_column Section_columnLeft">
+            <div class="wrap">
+                <div class="Section-column">
+                    <div class="Section-columnSection">
+                        <header class="Section-header">
+                            <strong class="Section-title">Фильтр
+                            </strong>
+                        </header>
+                        <div class="Section-columnContent">
+                                <form class="form" action="{% url 'product_list' %}" method="get">
+                                    <div class="form-group">
+                                        <div class="range Section-columnRange">
+                                                {{ form.price }}
+                                            <div class="range-price">Цена:&#32;
+                                                <div class="rangePrice">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="form-group">
+                                    {{ form.title }}
+                                </div>
+                                <div class="form-group">
+                                    <label class="toggle">
+                                        {{ form.in_stock }}
+                                        <span class="toggle-box"></span>
+                                        <span class="toggle-text">Только товары в наличии</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="toggle">
+                                        {{ form.free_delivery }}
+                                        <span class="toggle-box"></span>
+                                        <span class="toggle-text">С бесплатной доставкой</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="buttons">
+                                        <button type="submit" class="btn btn_square btn_dark btn_narrow">Фильтр</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="Section-columnSection">
+                        <header class="Section-header">
+                            <strong class="Section-title">Популярные тэги</strong>
+                        </header>
+                        <div class="Section-columnContent">
+                            <div class="buttons">
+                                {% for tag in tags %}
+                                    <a class="btn btn_default btn_sm" href="?tag={{ tag.slug }}&sort={{ request.GET.sort }}">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Section-content">
+                    <div class="Sort">
+                        <div class="Sort-title">Сортировать по:</div>
+                        <div class="Sort-variants">
+                            <a class="Sort-sortBy Sort-sortBy_dec" href="?sort=popularity&tag={{ request.GET.tag }}">Популярности</a>
+                            <a class="Sort-sortBy" href="?sort=price&tag={{ request.GET.tag }}">Цене</a>
+                            <a class="Sort-sortBy" href="?sort=reviews&tag={{ request.GET.tag }}">Отзывам</a>
+                            <a class="Sort-sortBy Sort-sortBy_inc" href="?sort=newness&tag={{ request.GET.tag }}">Новизне</a>
+                        </div>
+                    </div>
+                    <div class="Cards">
+                        {% for product in products %}
+                        <div class="Card">
+                            <a class="Card-picture" href="{{ product.get_absolute_url }}">
+                                <img src="{{ product.preview.url }}" alt="{{ product.name }}" />
+                            </a>
+                            <div class="Card-content">
+                                <strong class="Card-title">
+                                    <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                </strong>
+                                <div class="Card-description">
+                                    <div class="Card-cost">
+                                        <span class="Card-price">${{ product.price }}</span>
+                                    </div>
+                                    <div class="Card-category">
+                                        {{ product.category.name }}
+                                    </div>
+                                    <div class="Card-hover">
+                                        <a class="Card-btn" href="#">
+                                            <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    {% include "pagination.html" %}
+
+                </div>
+            </div>
+        </div>
+    </div>
