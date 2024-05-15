@@ -5,7 +5,9 @@ from shop.models import (
     Review,
     Category,
     Attribute,
-    ProductAttribute
+    ProductAttribute,
+    Seller,
+    SellerProduct
 )
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 
@@ -123,3 +125,41 @@ class AttributeAdmin(admin.ModelAdmin):
     ]
 
     form = CustomAttributeAdminForm
+
+
+@admin.register(Seller)
+class SellerAdmin(admin.ModelAdmin):
+    list_display = ["pk", "name", "email", "phone", "address"]
+    list_display_links = ["pk", "name"]
+
+
+@admin.register(SellerProduct)
+class SellerProductAdmin(admin.ModelAdmin):
+    list_display = ["pk", "product", "price", "quantity"]
+    list_display_links = ["product"]
+
+    def get_queryset(self, request):
+        """
+        Продавец может видеть только свои SellerProduct
+        """
+        queryset = super().get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        return queryset.filter(seller__user=request.user)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Текущий пользователь указывается как Seller для созданного SellerProduct
+        Суперпользователь может выбирать из выпадающего списка Seller для SellerProduct
+        """
+        if not change and not request.user.is_superuser:
+            obj.seller = request.user.seller
+        obj.save()
+
+    def get_exclude(self, request, obj=None):
+        """
+        Если не суперпользователь, то выпадающий список со всеми Seller отсутствует
+        """
+        if not request.user.is_superuser:
+            return ("seller",)
+        return super().get_exclude(request, obj)
