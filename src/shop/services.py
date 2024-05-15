@@ -19,14 +19,8 @@ def get_cached_products(tag, sort):
 
         products = SellerProduct.objects.all()
 
-        if sort == 'price':
-            products = products.order_by('price')
-        if sort == 'review':
-            products = products.product.order_by('-reviews')
-        if sort == 'newness':
-            products = products.order_by('created_at')
-        if sort == 'popularity:':
-            products = products.order_by('-popularity')
+        if sort:
+            products = products.order_by(sort)
 
         if tag:
             products = products.filter(tags__name=tag)

@@ -68,10 +68,10 @@
                     <div class="Sort">
                         <div class="Sort-title">Сортировать по:</div>
                         <div class="Sort-variants">
-                            <a class="Sort-sortBy Sort-sortBy_dec" href="?sort=popularity&tag={{ request.GET.tag }}">Популярности</a>
-                            <a class="Sort-sortBy" href="?sort=price&tag={{ request.GET.tag }}">Цене</a>
-                            <a class="Sort-sortBy" href="?sort=reviews&tag={{ request.GET.tag }}">Отзывам</a>
-                            <a class="Sort-sortBy Sort-sortBy_inc" href="?sort=newness&tag={{ request.GET.tag }}">Новизне</a>
+                            <a class="Sort-sortBy Sort-sortBy_dec" href="?sort={{ 'popularity' request.GET.sort != 'popularity' else '-popularity'}}&tag={{ request.GET.tag }}">Популярности</a>
+                            <a class="Sort-sortBy" href="?sort={{ 'price' request.GET.sort != 'price' else '-price'}}&tag={{ request.GET.tag }}">Цене</a>
+                            <a class="Sort-sortBy" href="?sort={{ 'reviews' request.GET.sort != 'reviews' else '-reviews'}}&tag={{ request.GET.tag }}">Отзывам</a>
+                            <a class="Sort-sortBy Sort-sortBy_inc" href="?sort={{ 'created_at' request.GET.sort != 'created_at' else '-created_at'}}&tag={{ request.GET.tag }}">Новизне</a>
                         </div>
                     </div>
                     <div class="Cards">
