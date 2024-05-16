@@ -5,9 +5,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, CreateView
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.http import HttpRequest
+from django.views.generic import ListView
 
 from shop.models import Product, Review
 from shop.forms import ReviewForm
+
+from shop.models import Seller, SellerProduct
 
 
 class ProductDetailView(DetailView):
@@ -24,6 +28,12 @@ class ProductDetailView(DetailView):
             product_data = serialize("json", [product])
             cache.set(product_cache_key, product_data, timeout=60 * 60 * 24)
         return product_data
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        product_id = self.kwargs.get('pk')
+        context['seller_products'] = SellerProduct.objects.filter(product_id=product_id).prefetch_related("seller")
+        return context
 
 
 class ReviewCreateView(CreateView):
