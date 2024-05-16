@@ -1,6 +1,6 @@
 from django.core.cache import cache
 from django.conf import settings
-from .models import Category
+from .models import Category, SellerProduct
 
 
 def get_cached_categories():
@@ -10,3 +10,21 @@ def get_cached_categories():
         categories = Category.objects.filter(products__available=True).prefetch_related('products')
         cache.set(cache_key, categories, settings.DEFAULT_CACHE_TIME)
     return categories
+
+
+def get_cached_products(tag, sort):
+    cache_key = f'products-{sort}-{tag}'
+    products = cache.get(cache_key)
+    if products is None:
+
+        products = SellerProduct.objects.all()
+
+        if sort:
+            products = products.order_by(sort)
+
+        if tag:
+            products = products.filter(tags__name=tag)
+
+        cache.set(cache_key, products, settings.DEFAULT_CACHE_TIME)
+
+    return products
