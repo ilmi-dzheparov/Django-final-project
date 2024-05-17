@@ -10,7 +10,7 @@
                             {{seller_product.seller.name}}
                         </a>
                         <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                            <a class="btn btn_primary" href="#modal_open">
+                            <a class="btn btn_primary" href="% url '#' product_id=seller_product.product.id seller_id=seller_product.seller.id %">
                                 <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                                 <span class="btn-content">Купить</span>
                             </a>
