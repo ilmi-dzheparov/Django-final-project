@@ -20,38 +20,15 @@ class ProductDetailView(DetailView):
     context_object_name = "product"
     model = Product
 
-    # def get_object(self, queryset=None):
-    #     product = get_object_or_404(Product, pk=self.kwargs.get("pk"))
-    #     product_cache_key = f'product_cache_key:{product.id}'
-    #     product_data = cache.get(product_cache_key)
-    #
-    #     if product_data is None:
-    #         product_data = serialize("json", [product])
-    #         cache.set(product_cache_key, product_data, timeout=60 * 60 * 24)
-    #     return product_data
-
     def get_object(self, queryset=None):
-        product_id = self.kwargs.get("pk")
-        product_cache_key = f'product_cache_key:{product_id}'
-
+        product = get_object_or_404(Product, pk=self.kwargs.get("pk"))
+        product_cache_key = f'product_cache_key:{product.id}'
         product_data = cache.get(product_cache_key)
 
         if product_data is None:
-            product = get_object_or_404(Product, pk=product_id)
-            product_data = serialize('json', [product])
+            product_data = serialize("json", [product])
             cache.set(product_cache_key, product_data, timeout=60 * 60 * 24)
-        else:
-            product = list(deserialize('json', product_data))[0].object
-
-        return product
-
-    def dispatch(self, request, *args, **kwargs):
-        # Record the view history
-        response = super().dispatch(request, *args, **kwargs)
-        if request.user.is_authenticated:
-            product = self.get_object()
-            ViewHistory.objects.create(user=request.user, product=product)
-        return response
+        return product_data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
