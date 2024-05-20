@@ -169,3 +169,28 @@ class SellerProduct(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class Cart(models.Model):
+    """
+    Модель Cart представляет корзину, в которую можно добавлять товары.
+    """
+    user = models.OneToOneField('accounts.User', on_delete=models.CASCADE)
+    items = models.ManyToManyField('CartItem', related_name='cart_items')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"Cart for {self.user.username}"
+
+
+class CartItem(models.Model):
+    """
+    Модель CartItem связана непосредственно с самой корзиной, описанной выше,
+    данная модель обозначает кол-во, сам товар, цену.
+    """
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity}"
