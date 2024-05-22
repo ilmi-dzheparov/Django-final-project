@@ -1,15 +1,18 @@
 from django.contrib import admin
-from shop.models import Product, Review, Category
-from shop.models import (
+from .models import (
     Product,
     Review,
     Category,
     Attribute,
     ProductAttribute,
     Seller,
-    SellerProduct
+    SellerProduct,
+    Cart,
+    CartItem
+
 )
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
+
 
 
 @admin.register(Review)
@@ -108,6 +111,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Cart)
+admin.site.register(CartItem)
 
 
 @admin.register(Attribute)
