@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block middle %}
+      <div class="Product">
+      <div class="wrap">
+                <div class="ProductCard">
+                        {% for table in tables %}
+                            <div class="ProductCard-desc">
+                                <div class="ProductCard-header">
+                                    <h2 class="ProductCard-title">
+                                        {{ table.product.name }}
+                                    </h2>
+                                    <div class="ProductCard-look">
+                                        <div class="ProductCard-photo">
+                                            {% if table.product.preview %}
+                                                <img src="{{ table.product.preview.url }}" alt="{{ table.product.name }}.png" />
+                                            {% else %}
+                                                <img src="{% static 'assets/img/logo.png' %}" alt="{{ table.product.name }}.png" />
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="Tabs Tabs_default">
+                                    <div class="Tabs-wrap">
+                                        <div class="Tabs-block" id="description">
+                                            <div class="table">
+                                                <table>
+                                                    <tr>
+                                                        <th class="hed">Характеристика</th>
+                                                        <th class="hed">Значение</th>
+                                                    </tr>
+                                                    {% for category in table.categories %}
+                                                        {% if category.active_status %}
+                                                            <tr>
+                                                                <td data-role="{{ category.css_data_role }}" class="{{ category.css_classes }}">
+                                                                    <b>{{ category.category_name }}</b>
+                                                                </td>
+                                                                <td data-role="{{ category.css_data_role }}" class="{{ category.css_classes }}"></td>
+                                                            </tr>
+                                                            {% for row in category.rows %}
+                                                                <tr>
+                                                                    <td data-role="{{ row.css_data_role }}" class="{{ row.css_classes }}">
+                                                                        {{ row.attribute.attribute.name }}
+                                                                    </td>
+                                                                    <td data-role="{{ row.css_data_role }}" class="{{ row.css_classes }}">
+                                                                        {{ row.value }}
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                </div>
+            </div>
+      <div class="comparison-filters">
+          <div class="comparison-checkbox-block">
+              <label class="filter-text" for="showAttrs">Показывать одинаковые характеристики</label>
+              <input type="checkbox" id="showAttrs" onclick="showSameAttrs()">
+          </div>
+          <form method="POST" action="{% url 'comparison:service_clear' %}">
+              {% csrf_token %}
+              <input type="submit" value="Очистить">
+          </form>
+      </div>
+        <form method="POST" action="{% url 'comparison:service_add' 1 %}">
+            {% csrf_token %}
+            <input type="submit" value="Добавить товар 1">
+        </form>
+        <form method="POST" action="{% url 'comparison:service_add' 2 %}">
+            {% csrf_token %}
+            <input type="submit" value="Добавить товар 2">
+        </form>
+        <form method="POST" action="{% url 'comparison:service_add' 3 %}">
+            {% csrf_token %}
+            <input type="submit" value="Добавить товар 3">
+        </form>
+        <form method="POST" action="{% url 'comparison:service_add' 4 %}">
+            {% csrf_token %}
+            <input type="submit" value="Добавить товар 4">
+        </form>
+      </div>
+
+      <script>
+        function showSameAttrs() {
+            let hidden_attrs = document.querySelectorAll("[data-role='hidden']");
+            let checkbox = document.getElementById("showAttrs");
+
+            if (checkbox.checked) {
+                hidden_attrs.forEach(function(element) {
+                    element.classList.remove("hidden_attributes");
+                })
+            } else {
+                hidden_attrs.forEach(function(element) {
+                    element.classList.add("hidden_attributes");
+                })
+            }
+        };
+    </script>
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
+
+
+
+

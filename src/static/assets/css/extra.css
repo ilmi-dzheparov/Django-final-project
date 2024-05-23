@@ -6490,3 +6490,32 @@ input[type="submit"] {
     bottom: 0rem;
     right: 0;
 }
+
+/* custom styles */
+.hidden_attributes {
+    display: none;
+}
+
+.comparison-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    bottom: 50%;
+    padding-left: 49px;
+}
+
+.comparison-checkbox-block {
+    display: flex;
+    align-items: center;
+}
+
+.filter-text {
+    color: #333;
+    text-transform: uppercase;
+    font-family: Roboto, Verdana, Arial, "Helvetica CY", Helvetica, "Nimbus Sans L", sans-serif;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 10px;
+    letter-spacing: 1.4px;
+}

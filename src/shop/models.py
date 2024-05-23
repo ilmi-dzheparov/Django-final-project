@@ -102,6 +102,7 @@ class Attribute(models.Model):
     """
     name = models.CharField(max_length=100, verbose_name='характеристика')
     unit = models.CharField(max_length=50, blank=True, default='', verbose_name='единица измерения')
+    attribute_category = models.CharField(max_length=50, verbose_name='категория атрибута')
     category = models.ForeignKey(Category,
                                  blank=True,
                                  null=True,
@@ -130,6 +131,13 @@ class ProductAttribute(models.Model):
                                   verbose_name='характеристика',
                                   )
     value = models.CharField(max_length=250, verbose_name='значение')
+
+    def __str__(self):
+        return self.value
+
+    @property
+    def attribute_name(self):
+        return self.attribute.name
 
 
 class Seller(models.Model):
