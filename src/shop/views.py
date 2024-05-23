@@ -20,15 +20,13 @@ from shop.mixins import NonCachingMixin
 
 
 @never_cache
-def history_view(request: HttpRequest) -> HttpResponse:
+def history_view(request: HttpRequest, limit=10) -> HttpResponse:
     """
     Представление для отображения истории просмотра товаров.
     """
 
     history_products = (
-        HistoryProduct.objects
-        .select_related('product', 'product__category')
-        .all()
+        HistoryProduct.history.all()[:limit]
     )
 
     return render(request, 'includes/history-product.html', {
@@ -36,7 +34,7 @@ def history_view(request: HttpRequest) -> HttpResponse:
     })
 
 
-def update_history_product(request, product_id, limit=5):
+def update_history_product(request, product_id):
     """
     Функция update_recently_viewed реализует логику добавление товара в список просмотренных.
 
@@ -54,10 +52,6 @@ def update_history_product(request, product_id, limit=5):
             history_product.created_at = timezone.now()
             history_product.save()
         else:
-            if len(history_products) >= limit:
-                oldest_history_product = history_products.order_by('created_at').first()
-                oldest_history_product.delete()
-
             HistoryProduct.objects.create(user=request.user, product_id=product_id)
 
 
