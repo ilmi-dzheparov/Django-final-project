@@ -23,7 +23,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("shop.urls")),
     path("accounts/", include("accounts.urls", namespace="accounts")),
-    path("banners/", include('banners.urls'))
+    path("banners/", include('banners.urls')),
+    path("comparison/", include("comparison.urls", namespace="comparison")),
 ]
 
 if settings.DEBUG:
