@@ -96,9 +96,10 @@ class Review(models.Model):
 
 class Attribute(models.Model):
     """
-    Модель Attribute  определяет структуру данных для хранения характеристик товаров.
+    Модель Attribute определяет структуру данных для хранения характеристик товаров.
     Имеет связь один-ко-многим с Category.
-    Поля name (имя характеристики) и unit (единица измерения)
+    Поля name (имя характеристики), unit (единица измерения), attribute_category (название категории: Экран, Общие параметры итд)
+
     """
     name = models.CharField(max_length=100, verbose_name='характеристика')
     unit = models.CharField(max_length=50, blank=True, default='', verbose_name='единица измерения')
