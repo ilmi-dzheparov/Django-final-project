@@ -182,3 +182,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_CACHE_TIME = 24 * 60 * 60
 
 AUTH_USER_MODEL = 'accounts.User'
+
+DJANGO_REGISTRATION_USER_MODEL = 'accounts.User'
+
+DJANGO_REGISTRATION = {
+    'REGISTRATION_FORM':
+        'src.accounts.forms.UserRegisterForm',
+}
