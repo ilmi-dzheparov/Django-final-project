@@ -177,22 +177,6 @@
               <input type="submit" value="Очистить">
           </form>
       </div>
-        <form method="POST" action="{% url 'comparison:service_add' 1 %}">
-            {% csrf_token %}
-            <input type="submit" value="Добавить товар 1">
-        </form>
-        <form method="POST" action="{% url 'comparison:service_add' 2 %}">
-            {% csrf_token %}
-            <input type="submit" value="Добавить товар 2">
-        </form>
-        <form method="POST" action="{% url 'comparison:service_add' 3 %}">
-            {% csrf_token %}
-            <input type="submit" value="Добавить товар 3">
-        </form>
-        <form method="POST" action="{% url 'comparison:service_add' 4 %}">
-            {% csrf_token %}
-            <input type="submit" value="Добавить товар 4">
-        </form>
       </div>
 
       <script>
