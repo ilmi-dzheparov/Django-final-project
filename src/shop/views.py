@@ -45,14 +45,12 @@ def update_history_product(request, product_id):
     """
 
     if request.user.is_authenticated:
-        history_products = HistoryProduct.objects.filter(user=request.user)
 
-        if product_id in history_products.values_list('product_id', flat=True):
-            history_product = history_products.get(product_id=product_id)
-            history_product.created_at = timezone.now()
-            history_product.save()
-        else:
-            HistoryProduct.objects.create(user=request.user, product_id=product_id)
+        product, created = HistoryProduct.objects.get_or_create(user=request.user, product=product_id)
+
+        if not created:
+            product.created_at = timezone.now()
+            product.save()
 
 
 class ProductDetailView(NonCachingMixin, DetailView):
@@ -82,8 +80,7 @@ class ProductDetailView(NonCachingMixin, DetailView):
                        .get(pk=self.kwargs.get('pk')))
 
             cache.set(product_cache_key, product, timeout=60 * 60 * 24)
-
-        update_history_product(self.request, product.id)
+            update_history_product(self.request, product.id)
 
         items_per_page = 3
         page_number = self.request.GET.get('page')
