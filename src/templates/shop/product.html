@@ -53,6 +53,15 @@
                                         <img class="btn-icon" src="assets/img/icons/card/cart_white.svg" alt="cart_white.svg" />
                                         <span class="btn-content">Купить</span>
                                     </a>
+                                    {% with product.pk as pk %}
+                                        <form method="POST" action="{% url 'comparison:service_add' pk %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn_primary">
+<!--                                                <img class="btn-icon" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg">-->
+                                                <span class="btn-content">Сравнить</span>
+                                            </button>
+                                        </form>
+                                    {% endwith %}
                                 </div>
                                 <div id="modal_open" class="my_modal">
                                     <div class="my_modal-dialog">
