@@ -52,10 +52,44 @@ class UserRegisterForm(UserCreationForm):
         return user
 
 
-class UserUpdateForm(forms.ModelForm):
+class UpdateProfileForm(forms.ModelForm):
+    last_name = forms.CharField(required=True)
+    first_name = forms.CharField(required=True)
+    middle_name = forms.CharField(required=True)
+
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name']
+        fields = ('last_name', 'first_name', 'middle_name', 'email', 'phone', 'password', 'avatar')
+
+    def update_profile(self, new_info):
+        errors = self.validate_profile(new_info)
+        if errors:
+            for field, error in errors.items():
+                print(f"Ошибка в поле {field}: {error}")
+        else:
+            new_info.pop('csrfmiddlewaretoken', None)  # Remove CSRF token if present
+            full_name = f"{new_info.get('last_name')} {new_info.get('first_name')} {new_info.get('middle_name')}"
+            self.instance.username = full_name
+            self.instance.email = new_info.get('email')
+            self.instance.phone = new_info.get('phone')
+            self.instance.set_password(new_info.get('password'))
+            self.instance.avatar = new_info.get('avatar')
+            self.instance.save()
+            print("Профиль успешно обновлен")
+
+    # Валидация введенных данных и их уникальность
+    def validate_profile(self, new_info):
+        errors = {}
+        if User.objects.filter(email=new_info.get('email')).exclude(pk=self.instance.pk).exists():
+            errors['Email'] = "Данный email уже используется"
+        if User.objects.filter(phone=new_info.get('phone')).exclude(pk=self.instance.pk).exists():
+            errors['Телефон'] = "Данный телефон уже используется"
+
+        # Проверка размера фотографии
+        if new_info.get('avatar') and len(new_info['avatar']) > 2 * 1024 * 1024:
+            errors['Аватарка'] = "Размер аватарки должен быть не более 2 Мб"
+
+        return errors
 
 
 class UserLoginForm(AuthenticationForm):
