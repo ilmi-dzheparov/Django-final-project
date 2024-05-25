@@ -2,38 +2,95 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.serializers import serialize, deserialize
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, ListView
+from django.views.decorators.cache import never_cache
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.http import HttpRequest
-from django.views.generic import ListView
+from django.utils import timezone
+from django.http import HttpRequest, HttpResponse
+from django.db.models import Prefetch
 
-from shop.models import Product, Review, ViewHistory
+from shop.models import Product, Review, ViewHistory, HistoryProduct
 from shop.forms import ReviewForm
 
 from shop.models import Seller, SellerProduct
+from shop.mixins import NonCachingMixin
 
 
-class ProductDetailView(DetailView):
+@never_cache
+def history_view(request: HttpRequest, limit=10) -> HttpResponse:
+    """
+    Представление для отображения истории просмотра товаров.
+    """
+
+    history_products = (
+        HistoryProduct.history.all()[:limit]
+    )
+
+    return render(request, 'includes/history-product.html', {
+        'recently_viewed_products': history_products
+    })
+
+
+def update_history_product(request, product_id):
+    """
+    Функция update_recently_viewed реализует логику добавление товара в список просмотренных.
+
+    При добавлении нового товара, если этот товар есть в списке просмотренных,
+    он со своего места перемещается в самое начало списка. То есть в этом списке
+    не может быть двух одинаковых товаров. Если этот товар и есть уже на последнем месте,
+    то ничего не происходит.
+    """
+
+    if request.user.is_authenticated:
+
+        product, created = HistoryProduct.objects.get_or_create(user=request.user, product=product_id)
+
+        if not created:
+            product.created_at = timezone.now()
+            product.save()
+
+
+class ProductDetailView(NonCachingMixin, DetailView):
+
     template_name = 'shop/product.html'
     context_object_name = "product"
     model = Product
 
-    def get_object(self, queryset=None):
-        product = get_object_or_404(Product, pk=self.kwargs.get("pk"))
-        product_cache_key = f'product_cache_key:{product.id}'
-        product_data = cache.get(product_cache_key)
-
-        if product_data is None:
-            product_data = serialize("json", [product])
-            cache.set(product_cache_key, product_data, timeout=60 * 60 * 24)
-        return product_data
-
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        product_id = self.kwargs.get('pk')
-        context['seller_products'] = SellerProduct.objects.filter(product_id=product_id).prefetch_related("seller")
+        context = super(ProductDetailView, self).get_context_data(**kwargs)
+        product_cache_key = f'product_{self.kwargs.get("pk")}'
+        product = cache.get(product_cache_key)
+
+        if product is None:
+            prefetch_reviews = Prefetch(
+                lookup='reviews',
+                queryset=Review.objects.select_related('author').all()
+            )
+
+            prefetch_sellers = Prefetch(
+                lookup='seller_products',
+                queryset=SellerProduct.objects.select_related('seller').all()
+            )
+
+            product = (Product.objects
+                       .prefetch_related(prefetch_reviews, prefetch_sellers, 'category')
+                       .get(pk=self.kwargs.get('pk')))
+
+            cache.set(product_cache_key, product, timeout=60 * 60 * 24)
+            update_history_product(self.request, product.id)
+
+        items_per_page = 3
+        page_number = self.request.GET.get('page')
+        paginator = Paginator(product.reviews.all(), items_per_page)
+        page_obj = paginator.get_page(page_number)
+
+        context['seller_products'] = product.seller_products.all()
+        context['page_obj'] = page_obj
+        context['form'] = ReviewForm()
+
         return context
 
 
