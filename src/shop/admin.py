@@ -137,15 +137,15 @@ admin.site.register(CartItem)
 
 @admin.register(Attribute)
 class AttributeAdmin(admin.ModelAdmin):
-    list_display = ['category', 'name', 'unit']
-    list_editable = ['name', 'unit']
+    list_display = ['category', 'name', 'unit', 'attribute_category']
+    list_editable = ['name', 'unit', 'attribute_category']
     list_filter = ['category', ]
     fieldsets = [
         ('Категория', {
             'fields': ('category',)
         }),
         ('Характеристика', {
-            'fields': ('name', 'unit')
+            'fields': ('name', 'unit', 'attribute_category')
         }),
     ]
 
