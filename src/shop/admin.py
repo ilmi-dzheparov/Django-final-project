@@ -8,11 +8,31 @@ from .models import (
     Seller,
     SellerProduct,
     Cart,
-    CartItem
+    CartItem,
+    HistoryProduct,
 
 )
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 
+
+@admin.register(HistoryProduct)
+class HistoryProductAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'created_at']
+    list_select_related = ['product', 'user']
+
+    def has_add_permission(self, request):
+        """
+        Метод запрещает создавать историю просмотра в админ-панели
+        """
+
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        """
+        Метод запрещает изменять историю просмотра в админ-панели.
+        """
+
+        return False
 
 
 @admin.register(Review)

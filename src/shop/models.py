@@ -16,6 +16,36 @@ def seller_thumbnail_directory_path(instance: "Seller", filename: str) -> str:
     return f"shop/seller_thumbnails/seller_{instance.pk}/{filename}"
 
 
+class HistoryProductManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related('product__category__parent')
+
+
+class HistoryProduct(models.Model):
+    """
+    Модель HistoryProduct представляет
+    историю пользователя просмотра продуктов.
+    """
+
+    class Meta:
+        ordering = ['-created_at']
+
+    user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    product = models.ForeignKey(
+        to='Product',
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    objects = models.Manager()
+    history = HistoryProductManager()
+
+
 class Category(models.Model):
     """
       Модель Category представляет категорию
