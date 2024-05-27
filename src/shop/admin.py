@@ -8,7 +8,7 @@ from .models import (
     Seller,
     SellerProduct,
     Cart,
-    CartItem
+    CartItem,
 
 )
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm

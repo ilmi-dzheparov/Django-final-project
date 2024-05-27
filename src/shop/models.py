@@ -1,8 +1,11 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from taggit.managers import TaggableManager
+from django.db.models import F, Sum, DecimalField
 
 
 def product_preview_directory_path(instance: "Product", filename: str) -> str:
@@ -167,6 +170,7 @@ class SellerProduct(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.product.name
 
@@ -175,12 +179,45 @@ class Cart(models.Model):
     """
     Модель Cart представляет корзину, в которую можно добавлять товары.
     """
-    user = models.OneToOneField('accounts.User', on_delete=models.CASCADE)
-    items = models.ManyToManyField('CartItem', related_name='cart_items')
+    user = models.OneToOneField('accounts.User', null=True, blank=True, on_delete=models.CASCADE)
+    token = models.CharField(max_length=50, null=True, blank=True, unique=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"Cart for {self.user.username}"
+        return f"Cart number {self.id}"
+
+    def update_total_price(self):
+        cart_items = self.cart_items.all()
+        total = cart_items.aggregate(
+            total=Sum(F('price') * F('quantity'), output_field=DecimalField())
+        )['total'] or 0
+        self.total_price = total
+        self.save()
+
+    def add_product(self, product, quantity=1):
+        cart_item, created = CartItem.objects.get_or_create(product=product, cart=self)
+        if created:
+            cart_item.quantity = quantity
+            cart_item.price = product.price
+        else:
+            cart_item.quantity += quantity
+        cart_item.save()
+        self.update_total_price()
+
+    def delete_product(self, cart_item):
+        cart_item.delete()
+        self.update_total_price()
+
+    def update_product(self, cart_item, quantity):
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+        else:
+            self.delete_product(cart_item)
+        self.update_total_price()
+
+    def total_quantity(self):
+        return self.cart_items.aggregate(total_quantity=Sum('quantity'))['total_quantity'] or 0
 
 
 class CartItem(models.Model):
@@ -188,9 +225,10 @@ class CartItem(models.Model):
     Модель CartItem связана непосредственно с самой корзиной, описанной выше,
     данная модель обозначает кол-во, сам товар, цену.
     """
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('SellerProduct', on_delete=models.CASCADE, related_name='cart_items')
+    cart = models.ForeignKey('Cart', on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.PositiveIntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.product.name} - {self.quantity}"
+        return f"id: {self.id}. Name: {self.product.product.name} - {self.quantity}"
