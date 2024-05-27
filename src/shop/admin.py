@@ -9,10 +9,30 @@ from .models import (
     SellerProduct,
     Cart,
     CartItem,
+    HistoryProduct,
 
 )
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 
+
+@admin.register(HistoryProduct)
+class HistoryProductAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'created_at']
+    list_select_related = ['product', 'user']
+
+    def has_add_permission(self, request):
+        """
+        Метод запрещает создавать историю просмотра в админ-панели
+        """
+
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        """
+        Метод запрещает изменять историю просмотра в админ-панели.
+        """
+
+        return False
 
 
 @admin.register(Review)
@@ -117,15 +137,15 @@ admin.site.register(CartItem)
 
 @admin.register(Attribute)
 class AttributeAdmin(admin.ModelAdmin):
-    list_display = ['category', 'name', 'unit']
-    list_editable = ['name', 'unit']
+    list_display = ['category', 'name', 'unit', 'attribute_category']
+    list_editable = ['name', 'unit', 'attribute_category']
     list_filter = ['category', ]
     fieldsets = [
         ('Категория', {
             'fields': ('category',)
         }),
         ('Характеристика', {
-            'fields': ('name', 'unit')
+            'fields': ('name', 'unit', 'attribute_category')
         }),
     ]
 

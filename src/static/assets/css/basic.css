@@ -2930,3 +2930,48 @@ button.link {
 .wrap-content {
     margin: 0 auto;
 }
+
+.alert {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #5a7fee;
+    padding: 20px;
+    position: absolute;
+    max-width: 100%;
+    background-color: #d6f4f9;
+    top: -80px;
+    left: 35%;
+}
+
+.pagination {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        margin: 0 2px;
+    }
+
+    .pagination a.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+
+    .pagination a.active {
+        border-radius: 5px;
+    }
+
+    .current_page {
+        background-color: #0063d1;
+        color: #ffffff !important;
+        padding: 8px 16px;
+        border-radius: 5px
+    }

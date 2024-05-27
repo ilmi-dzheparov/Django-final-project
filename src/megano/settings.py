@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'banners.apps.BannersConfig',
     'accounts.apps.AccountsConfig',
     'shop.apps.ProductsConfig',
+    'comparison.apps.ComparisonConfig',
 ]
 
 MIDDLEWARE = [
@@ -183,3 +184,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 DEFAULT_CACHE_TIME = 24 * 60 * 60
 
 AUTH_USER_MODEL = 'accounts.User'
+
