@@ -8,24 +8,37 @@ import json
 import shutil
 
 
-def import_seller_products(import_file_path):
-    logger = logging.getLogger('import_logger')
-    logger.setLevel(logging.INFO)
-    log_dir = os.path.join(settings.BASE_DIR, 'import_logs')
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    fh = logging.FileHandler(os.path.join(log_dir, f'import_{timestamp}.log'))
-    fh.setLevel(logging.INFO)
-
+def setup_logger(name, log_dir, log_file, level=logging.INFO):
+    os.makedirs(log_dir, exist_ok=True)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
 
-    logger.addHandler(fh)
+    handler = logging.FileHandler(os.path.join(log_dir, log_file))
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
+
+
+def import_seller_products(import_file_path):
+    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir = os.path.join(settings.BASE_DIR, 'import_logs')
+    logger = setup_logger('import_logger', log_dir, f'import_{timestamp}.log')
+
 
     import_successful = True
 
-    import_data = json.loads(import_file_path)
+    try:
+        with open(import_file_path, 'r') as file:
+            import_data = json.load(file)
+    except FileNotFoundError:
+        logger.error(f'Файл {import_file_path} не найден.')
+        return
+    except json.JSONDecodeError:
+        logger.error(f'Ошибка декодирования JSON из файла {import_file_path}.')
+        return
 
     for item in import_data:
         try:
@@ -44,19 +57,27 @@ def import_seller_products(import_file_path):
             )
             seller_product.save()
             logger.info(f'Продукт {product} успешно импортирован.')
-        except:
-            logger.error(f"Продавец или продукт с указанными идентификаторами не найден: {item}")
+        except Seller.DoesNotExist:
+            logger.error(f"Продавец с ID {item['seller_id']} не найден.")
+            import_successful = False
+        except Product.DoesNotExist:
+            logger.error(f"Продукт с ID {item['product_id']} не найден.")
+            import_successful = False
+        except KeyError as e:
+            logger.error(f"Отсутствует ключ {e} в данных: {item}")
+            import_successful = False
+        except Exception as e:
+            logger.error(f"Неизвестная ошибка при импорте продукта: {e}")
             import_successful = False
 
-        successful_imports_dir = os.path.join(settings.BASE_DIR, '/successful_imports')
-        failed_imports_dir = os.path.join(settings.BASE_DIR, '/failed_imports')
+        successful_imports_dir = os.path.join(settings.BASE_DIR, 'successful_imports')
+        failed_imports_dir = os.path.join(settings.BASE_DIR, 'failed_imports')
 
-        if import_successful:
-            shutil.move(import_file_path, os.path.join(successful_imports_dir, os.path.basename(import_file_path)))
-        else:
-            shutil.move(import_file_path, os.path.join(failed_imports_dir, os.path.basename(import_file_path)))
+    if import_successful:
+        shutil.move(import_file_path, os.path.join(successful_imports_dir, os.path.basename(import_file_path)))
+    else:
+        shutil.move(import_file_path, os.path.join(failed_imports_dir, os.path.basename(import_file_path)))
 
-        logger.removeHandler(fh)
 
 
 def get_cached_categories():
