@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-
 from .models import User
 
 
@@ -52,44 +51,38 @@ class UserRegisterForm(UserCreationForm):
         return user
 
 
-class UpdateProfileForm(forms.ModelForm):
-    last_name = forms.CharField(required=True)
-    first_name = forms.CharField(required=True)
-    middle_name = forms.CharField(required=True)
+class UserUpdateForm(forms.ModelForm):
+    last_name = forms.CharField(required=False)
+    first_name = forms.CharField(required=False)
+    middle_name = forms.CharField(required=False)
+    email = forms.EmailField(required=False)
+    phone = forms.CharField(required=False)
+    set_password = forms.CharField(required=False)
+    avatar = forms.ImageField(required=False)
 
     class Meta:
         model = User
-        fields = ('last_name', 'first_name', 'middle_name', 'email', 'phone', 'password', 'avatar')
+        fields = ['email', 'first_name', 'last_name']
 
-    def update_profile(self, new_info):
-        errors = self.validate_profile(new_info)
-        if errors:
-            for field, error in errors.items():
-                print(f"Ошибка в поле {field}: {error}")
-        else:
-            new_info.pop('csrfmiddlewaretoken', None)  # Remove CSRF token if present
-            full_name = f"{new_info.get('last_name')} {new_info.get('first_name')} {new_info.get('middle_name')}"
-            self.instance.username = full_name
-            self.instance.email = new_info.get('email')
-            self.instance.phone = new_info.get('phone')
-            self.instance.set_password(new_info.get('password'))
-            self.instance.avatar = new_info.get('avatar')
-            self.instance.save()
-            print("Профиль успешно обновлен")
+    def clean(self):
+        cleaned_data = super().clean()
+        last_name = cleaned_data.get('last_name')
+        first_name = cleaned_data.get('first_name')
+        middle_name = cleaned_data.get('middle_name')
 
-    # Валидация введенных данных и их уникальность
-    def validate_profile(self, new_info):
-        errors = {}
-        if User.objects.filter(email=new_info.get('email')).exclude(pk=self.instance.pk).exists():
-            errors['Email'] = "Данный email уже используется"
-        if User.objects.filter(phone=new_info.get('phone')).exclude(pk=self.instance.pk).exists():
-            errors['Телефон'] = "Данный телефон уже используется"
+        if not last_name or not first_name or not middle_name:
+            raise forms.ValidationError("Пожалуйста, заполните хотя бы одно поле.")
 
-        # Проверка размера фотографии
-        if new_info.get('avatar') and len(new_info['avatar']) > 2 * 1024 * 1024:
-            errors['Аватарка'] = "Размер аватарки должен быть не более 2 Мб"
+        full_name = f"{last_name} {first_name} {middle_name}"
+        cleaned_data['username'] = full_name
+        return cleaned_data
 
-        return errors
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar', False)
+        if avatar:
+            if avatar.size > 2 * 1024 * 1024:
+                raise ValidationError('Размер файла должен быть не более 2 МБ')
+        return avatar
 
 
 class UserLoginForm(AuthenticationForm):
