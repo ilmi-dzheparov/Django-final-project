@@ -34,7 +34,7 @@
 
                     </div>
                     <div class="Cart-block Cart-block_amount">
-                        <form action="{% url 'shop:cart_update' cart_item.id%}" method="post">
+                        <form action="{% url 'shop:cart_update' cart_item.id %}" method="post">
                             {% csrf_token %}
                             <div class="Cart-amount">
                                 <div class="Amount">
@@ -67,7 +67,7 @@
         <div class="Cart-total">
             <div class="Cart-block Cart-block_total">
                 <strong class="Cart-title">Итого:</strong>
-                <span class="Cart-price"> В корзине {{ cart.total_quantity }} товаров на сумму {{ cart.total_price }}$</span>
+                <span class="Cart-price"> В корзине {{ total_quantity }} товаров на сумму {{ total_price }}$</span>
             </div>
             <div class="Cart-block">
                 <a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>

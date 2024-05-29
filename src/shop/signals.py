@@ -3,6 +3,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .models import Category, Product, SellerProduct, Cart, CartItem
 from django.contrib.auth.signals import user_logged_in
+from shop.utils import get_cart_from_session, clear_session_cart
 
 
 @receiver(signal=post_save, sender=Category)
@@ -26,23 +27,10 @@ def clear_product_cache(sender, **kwargs):
 
 @receiver(user_logged_in)
 def merge_carts(sender, user, request, **kwargs):
-    session_token = request.session.get('session_token')
-    if not session_token:
-        return
+    session_cart = get_cart_from_session(request)
 
-    try:
-        session_cart = Cart.objects.get(token=session_token)
-    except Cart.DoesNotExist:
-        return
+    user_cart, created = Cart.objects.get_or_create(user=user)
 
-    try:
-        user_cart = Cart.objects.get(user=user)
-    except Cart.DoesNotExist:
-        session_cart.user = user
-        session_cart.token = None
-        session_cart.save()
-        return
-
-    for item in session_cart.cart_items.all():
+    for item in session_cart:
         user_cart.add_product(item.product, item.quantity)
-    session_cart.delete()
+    clear_session_cart(request)
