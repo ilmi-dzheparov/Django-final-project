@@ -162,6 +162,7 @@ class SellerAdmin(admin.ModelAdmin):
 class SellerProductAdmin(admin.ModelAdmin):
     list_display = ["pk", "product", "price", "quantity"]
     list_display_links = ["product"]
+    change_list_template = "shop/admin/change-list.html"
 
     def get_queryset(self, request):
         """
