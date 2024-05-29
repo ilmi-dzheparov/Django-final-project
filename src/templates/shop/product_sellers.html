@@ -10,10 +10,13 @@
                             {{seller_product.seller.name}}
                         </a>
                         <div class="ProductCard-cartElement" style="margin-top: 10px;">
-                            <a class="btn btn_primary" href="% url '#' product_id=seller_product.product.id seller_id=seller_product.seller.id %">
-                                <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                                <span class="btn-content">Купить</span>
-                            </a>
+                            <form action="{% url 'shop:add_to_cart' pk=seller_product.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn_primary" >
+                                    <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
+                                    <span class="btn-content">Купить</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div class="row-block">
