@@ -6,4 +6,4 @@ class ProductsConfig(AppConfig):
     name = 'shop'
 
     def ready(self):
-        from shop import signals
+        import shop.signals
