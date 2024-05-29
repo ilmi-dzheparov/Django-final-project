@@ -1,14 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
 {% block middle %}
-<div class="Middle Middle_top">
-    <div class="Section">
-        <div class="wrap">
-            <div class="Product">
-                <div class="ProductCard">
-                    <div class="ProductCard-look">
-                        <div class="ProductCard-photo">
-                            <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png"/>
+
+  <div class="Middle Middle_top">
+        <div class="Section">
+            <div class="wrap">
+                <div class="Product">
+                    <div class="ProductCard">
+                        <div class="ProductCard-look">
+                            <div class="ProductCard-photo">
+                                <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png" />
+                            </div>
+                            <div class="ProductCard-picts"><a class="ProductCard-pict ProductCard-pict_ACTIVE" href="assets/img/content/home/bigGoods.png"><img src="assets/img/content/home/bigGoods.png" alt="bigGoods.png" /></a><a class="ProductCard-pict" href="assets/img/content/home/slider.png"><img src="assets/img/content/home/slider.png" alt="slider.png" /></a><a class="ProductCard-pict" href="assets/img/content/home/videoca.png"><img src="assets/img/content/home/videoca.png" alt="videoca.png" /></a>
+                            </div>
                         </div>
                         <div class="ProductCard-picts">
                             <a class="ProductCard-pict ProductCard-pict_ACTIVE"
@@ -57,7 +64,16 @@
                                     <button class="btn btn_primary" type="submit">
                                         <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                                         <span class="btn-content">Купить</span>
-                                    </button>
+                                    </a>
+                                    {% with product.pk as pk %}
+                                        <form method="POST" action="{% url 'comparison:service_add' pk %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn_primary">
+<!--                                                <img class="btn-icon" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg">-->
+                                                <span class="btn-content">Сравнить</span>
+                                            </button>
+                                        </form>
+                                    {% endwith %}
                                 </div>
                             </form>
                             <div id="modal_open" class="my_modal">
@@ -81,69 +97,20 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="Tabs Tabs_default">
-                    <div class="Tabs-links">
-                        <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-                            <span>Описание</span>
-                        </a>
-                        <a class="Tabs-link" href="#sellers">
-                            <span>Продавцы</span>
-                        </a>
-                        <a class="Tabs-link" href="#addit">
-                            <span>Характеристика</span>
-                        </a>
-                        <a class="Tabs-link" href="#reviews">
-                            <span>Отзывы (3)</span>
-                        </a>
-                    </div>
-                    <div class="Tabs-wrap">
-                        <div class="Tabs-block" id="description">
-                            <h2>Megano Store Hystory
-                            </h2>
-                            <p>Lorem ipsum dolor sit amet, consectetuer&#32;
-                                <strong>adipiscing
-                                </strong>&#32;elit doli. Aenean commodo ligula eget dolor. Aenean massa.&#32;<a
-                                        href="#">Cumtipsu</a>&#32;sociis natoque penatibus et magnis dis parturient
-                                montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu,
-                                pretiumem.
-                            </p><img class="pict pict_right" src="assets/img/content/home/bigGoods.png"
-                                     alt="bigGoods.png"/>
-                            <ul>
-                                <li>Lorem ipsum dolor sit amet, consectetuer
-                                </li>
-                                <li>adipiscing elit doli.&#32;<em>Aenean</em>&#32;commodo ligula
-                                </li>
-                                <li>eget dolor. Aenean massa. Cumtipsu sociis
-                                </li>
-                                <li>natoque penatibus et magnis dis parturient
-                                </li>
-                                <li>montesti, nascetur ridiculus mus. Donec
-                                </li>
-                                <li>quam felis, ultricies nec, pellentesque eutu
-                                </li>
-                            </ul>
-                            <div class="clearfix">
-                            </div>
-                            <div class="table">
-                                <table>
-                                    <tr>
-                                        <th>Характеристика
-                                        </th>
-                                        <th>Значение
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td>Тип устройства
-                                        </td>
-                                        <td>Ноутбук
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="Tabs-block" id="sellers">
-                            {% include "shop/product_sellers.html" %}
+                    <div class="Tabs Tabs_default">
+                        <div class="Tabs-links">
+                            <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
+                                <span>Описание</span>
+                            </a>
+                            <a class="Tabs-link" href="#sellers">
+                                <span>Продавцы</span>
+                            </a>
+                            <a class="Tabs-link" href="#addit">
+                                <span>Характеристика</span>
+                            </a>
+                            <a class="Tabs-link" href="#reviews">
+                                <span>Отзывы ({{ product.reviews.count }})</span>
+                            </a>
                         </div>
                         <div class="Tabs-block" id="addit">
                             <div class="Product-props">
@@ -164,55 +131,7 @@
                                     </strong><span> 2–3 jours</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="Tabs-block" id="reviews">
-                            <header class="Section-header">
-                                <h3 class="Section-title">1 отзыв
-                                </h3>
-                            </header>
-                            <div class="Comments">
-                                <div class="Comment">
-                                    <div class="Comment-column Comment-column_pict">
-                                        <div class="Comment-avatar">
-                                        </div>
-                                    </div>
-                                    <div class="Comment-column">
-                                        <header class="Comment-header">
-                                            <div>
-                                                <strong class="Comment-title">Александра Бровина
-                                                </strong><span class="Comment-date">Декабрь 25&#32;&#32;/&#32;&#32;2017&#32;&#32;/&#32;&#32;22:50</span>
-                                            </div>
-                                        </header>
-                                        <div class="Comment-content">Lorem ipsum dolor sit amet, consectetuer adipiscing
-                                            elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu sociis
-                                            natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus.
-                                            Donec quam felis, ultricies nec, pellentesque eutu, pretiumem. Nulla
-                                            consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec,
-                                            vulputate eget, arcu. In enim justotuio, rhoncus ut loret, imperdiet a,
-                                            venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
-                                            tincidunt. Cras dapibus. Vivamus element semper nisi. Aenean vulputate
-                                            eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <header class="Section-header Section-header_product">
-                                <h3 class="Section-title">Добавить отзыв
-                                </h3>
-                            </header>
-                            <div class="Tabs-addComment">
-                                <form class="form" action="#" method="post">
-                                    <div class="form-group">
-                                        <textarea class="form-textarea" name="review" id="review"
-                                                  placeholder="Отзыв"></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn_muted" type="submit">Отправить отзыв
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                            {% include 'includes/reviews.html' %}
                         </div>
                     </div>
                 </div>
@@ -220,5 +139,7 @@
 
         </div>
     </div>
-</div>
-{% endblock middle %}
+{% endblock %}
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}

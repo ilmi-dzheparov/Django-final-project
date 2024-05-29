@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extraStyles %}
+    <style>
+
+        .display_none {
+            display: none;
+        }
+
+        .ProductCard {
+            flex-wrap: wrap;
+        }
+
+        .ProductCard-desc:not(:nth-last-child(-n+2)) {
+            margin-bottom: 50px;
+        }
+
+        .comparison_message_text {
+            width: 100%;
+            margin: 0;
+            text-align: center;
+        }
+
+        .table_message_text {
+            text-align: center;
+        }
+
+        .hidden_attributes {
+            display: none;
+        }
+
+        .table_message {
+            display: table-row !important;
+        }
+
+        .comparison-filters {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            bottom: 50%;
+            padding-left: 49px;
+        }
+
+        .comparison-checkbox-block {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-text {
+            color: #333;
+            text-transform: uppercase;
+            font-family: Roboto, Verdana, Arial, "Helvetica CY", Helvetica, "Nimbus Sans L", sans-serif;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            margin-right: 10px;
+            letter-spacing: 1.4px;
+        }
+
+        .product_cross {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: 10px;
+            top: 10px;
+            border-bottom: none !important;
+        }
+    </style>
+{% endblock %}
+
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block middle %}
+      <div class="Product">
+      <div class="wrap">
+                <div class="ProductCard">
+
+                    {% if message %}
+                        <h2 class="comparison_message_text">
+                            {{ message }}
+                        </h2>
+                    {% endif %}
+                    {% for table in tables %}
+                        <div class="ProductCard-desc">
+                            <div class="ProductCard-header">
+                                <h2 class="ProductCard-title">
+                                    {{ table.product.name }}
+                                </h2>
+                                <div class="ProductCard-look">
+                                    <div class="ProductCard-photo">
+                                        {% with table.product.pk as pk %}
+                                            <form class="product_cross" method="POST" action="{% url 'comparison:service_remove' pk %}">
+                                                {% csrf_token %}
+                                                <button>
+                                                    <img src="{% static 'assets/img/icons/cross.svg' %}">
+                                                </button>
+                                            </form>
+                                        {% endwith %}
+                                        {% if table.product.preview %}
+                                            <img src="{{ table.product.preview.url }}" alt="{{ table.product.name }}.png" />
+                                        {% else %}
+                                            <img src="{% static 'assets/img/logo.png' %}" alt="{{ table.product.name }}.png" />
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="Tabs Tabs_default">
+                                <div class="Tabs-wrap">
+                                    <div class="Tabs-block" id="description">
+                                        <div class="table">
+                                            <table>
+                                                <tr>
+                                                    <th class="hed">Характеристика</th>
+                                                    <th class="hed">Значение</th>
+                                                </tr>
+                                                {% if table.get_message %}
+                                                    <tr data-role="{{ table.msg_css_data_roles }}" class="{{ table.msg_css_classes }}">
+                                                        <th colspan="2" class="table_message_text">
+                                                            {{ table.get_message }}
+                                                        </th>
+                                                    </tr>
+                                                {% endif %}
+                                                {% for category in table.categories %}
+                                                    <tr>
+                                                        <td data-role="{{ category.css_data_role }}" class="{{ category.css_classes }}">
+                                                            <b>{{ category.category_name }}</b>
+                                                        </td>
+                                                        <td data-role="{{ category.css_data_role }}" class="{{ category.css_classes }}"></td>
+                                                    </tr>
+                                                    {% for row in category.rows %}
+                                                        <tr>
+                                                            <td data-role="{{ row.css_data_role }}" class="{{ row.css_classes }}">
+                                                                {{ row.attribute.attribute.name }}
+                                                            </td>
+                                                            <td data-role="{{ row.css_data_role }}" class="{{ row.css_classes }}">
+                                                                {{ row.value }}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="ProductCard-info">
+                                <div class="ProductCard-cost">
+                                    <div class="ProductCard-price">
+                                        ${{ table.avg_price }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ProductCard-cart">
+                                <div class="ProductCard-cartElement">
+                                    <a class="btn btn_primary" href="cart.html">
+                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg" />
+                                        <span class="btn-content">Добавить в корзину</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+      <div class="comparison-filters">
+          <div class="comparison-checkbox-block">
+              <label class="filter-text" for="showAttrs">Показывать одинаковые характеристики</label>
+              <input type="checkbox" id="showAttrs" onclick="showSameAttrs()">
+          </div>
+          <form method="POST" action="{% url 'comparison:service_clear' %}">
+              {% csrf_token %}
+              <input type="submit" value="Очистить">
+          </form>
+      </div>
+      </div>
+
+      <script>
+        function showSameAttrs() {
+            let hidden_attrs = document.querySelectorAll("[data-role='hidden']");
+            let hidden_msg = document.querySelectorAll("[data-role='hidden-message']");
+            let checkbox = document.getElementById("showAttrs");
+
+            console.log(hidden_msg);
+
+            if (checkbox.checked) {
+                hidden_attrs.forEach(function(element) {
+                    element.classList.remove("hidden_attributes");
+                })
+                hidden_msg.forEach(function(element) {
+                    element.classList.remove("table_message");
+                    element.classList.add("display_none");
+                })
+            } else {
+                hidden_attrs.forEach(function(element) {
+                    element.classList.add("hidden_attributes");
+                })
+                hidden_msg.forEach(function(element) {
+                    element.classList.add("table_message");
+                    element.classList.remove("display_none");
+                })
+            }
+        };
+    </script>
+{% endblock %}
+
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
+
+
+
+
