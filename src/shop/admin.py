@@ -10,7 +10,7 @@ from .models import (
     Cart,
     CartItem,
     HistoryProduct,
-
+    Order
 )
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 
@@ -133,6 +133,7 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Cart)
 admin.site.register(CartItem)
+admin.site.register(Order)
 
 
 @admin.register(Attribute)
