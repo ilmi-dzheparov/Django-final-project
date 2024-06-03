@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import F, Sum, DecimalField
 from django.urls import reverse
@@ -264,27 +263,4 @@ class CartItem(models.Model):
         return f"id: {self.id}. Name: {self.product.product.name} -- Cart# {self.cart.id} -- Quantity: {self.quantity} -- Price: {self.price}"
 
 
-class Order(models.Model):
-    """
-    Модель для хранения информации о заказах.
-    Она содержит поля для идентификатора заказа, связь с пользователем,
-    связь с продуктом продавца, статус заказа, общую сумму заказа, дату создания и промокод.
-    """
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    seller_product = models.ForeignKey(SellerProduct, on_delete=models.CASCADE)
-    order_status = models.CharField(max_length=50, default='Pending')
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
-    promocode = models.CharField(max_length=50, null=True, blank=True)
 
-    def __str__(self):
-        return f"Order #{self.id}"
-
-    def mark_as_paid(self):
-        self.order_status = 'Paid'
-        self.save()
-
-    def cancel_order(self):
-        self.order_status = 'Cancelled'
-        self.save()
