@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+{% block middle %}
+
+    <div class="Middle Middle_top">
+        <div class="Section Section_column Section_columnRight Section_columnWide Order">
+            <div class="wrap">
+
+                {% include 'orders/order-navigation.html' %}
+
+                <div class="Section-content">
+
+                    <form class="form" action="{% url 'orders:delivery' %}" method="post">
+                        {% csrf_token %}
+                        <div class="Order-block Order-block_OPEN">
+                            <header class="Section-header Section-header_sm">
+                                <h2 class="Section-title">Шаг 2. Способ доставки
+                                </h2>
+                            </header>
+                            <div class="form-group">
+                                {{ form.as_p }}
+                            </div>
+                            <div class="Order-footer">
+                                <button type="submit" class="btn btn_success">Дальше</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
