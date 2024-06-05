@@ -20,9 +20,8 @@ def reset_cache(sender, instance, **kwargs):
 @receiver(post_save, sender=SellerProduct)
 @receiver(post_delete, sender=SellerProduct)
 def clear_product_cache(sender, **kwargs):
-    keys = cache.keys('products-*')
-    for key in keys:
-        cache.delete(key)
+    cache.delete('products')
+
 
 
 @receiver(user_logged_in)

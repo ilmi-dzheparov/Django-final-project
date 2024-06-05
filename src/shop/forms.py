@@ -7,6 +7,28 @@ from shop.admin_mixin import UniqueAttributeMixin
 from shop.models import Attribute, ProductAttribute, Review
 
 
+
+class ProductFilterForm(forms.Form):
+    price = forms.CharField(widget=forms.TextInput(attrs={
+        'class': 'range-line',
+        'type': 'text',
+        'data-type': 'double',
+        'data-min': '7',
+        'data-max': '50',
+        'data-from': '7',
+        'data-to': '27'
+    }))
+    title = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-input form-input_full',
+        'type': 'text',
+        'placeholder': 'Название'
+    }))
+    in_stock = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
+        'class': 'toggle'
+    }))
+    free_delivery = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
+        'class': 'toggle'
+    }))
 class CustomAttributeAdminForm(forms.ModelForm):
     """
     Переопределяем метод clean для валидации ввода данных (исключить дублирование записей независимо от регистра)
