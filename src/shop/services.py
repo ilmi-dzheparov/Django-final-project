@@ -89,18 +89,13 @@ def get_cached_categories():
     return categories
 
 
-def get_cached_products(tag, sort):
-    cache_key = f'products-{sort}-{tag}'
+def get_cached_products():
+    cache_key = f'products'
     products = cache.get(cache_key)
     if products is None:
 
         products = SellerProduct.objects.all()
 
-        if sort:
-            products = products.order_by(sort)
-
-        if tag:
-            products = products.filter(tags__name=tag)
 
         cache.set(cache_key, products, settings.DEFAULT_CACHE_TIME)
 
