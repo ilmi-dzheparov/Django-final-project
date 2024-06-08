@@ -92,10 +92,11 @@ class UserUpdateForm(forms.ModelForm):
         user = super().save(commit=False)
         password = self.cleaned_data.get('password')
         if password:
-            user.password = make_password(password, salt='A9xt7RvkszaZiC0wJ35eyz', hasher='pbkdf2_sha256')
+            user.set_password(password)
         if commit:
             user.save()
         return user
+
 
 class UserLoginForm(AuthenticationForm):
     class Meta:

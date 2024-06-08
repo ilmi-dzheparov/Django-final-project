@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DetailView
 
 from .models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -17,20 +17,14 @@ class CustomRegistrationView(RegistrationView):
         return reverse_lazy("accounts:account")
 
 
-class PersonalAccountView(LoginRequiredMixin, View):
+class PersonalAccountView(LoginRequiredMixin, DetailView):
     """
     Свободная страница личного кабинета, на которой отображаются данные о пользователе:
     """
     template_name = 'accounts/account.html'
     success_url = reverse_lazy("accounts:account")
     model = User
-
-    def get(self, request, pk):
-        user = get_object_or_404(User, pk=pk)
-        context = {
-            'user': user
-        }
-        return render(request, self.template_name, context)
+    context_object_name = 'user'
 
 
 class ProfileView(UpdateView):
