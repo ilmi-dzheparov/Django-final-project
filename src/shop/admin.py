@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 from .models import (
     Product,
     Review,
@@ -12,7 +14,6 @@ from .models import (
     HistoryProduct,
 
 )
-from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 
 
 @admin.register(HistoryProduct)

@@ -1,11 +1,8 @@
-from decimal import Decimal
-
-from django.contrib.auth.models import User
-from django.db import models
-from django.urls import reverse
 from django.conf import settings
-from taggit.managers import TaggableManager
+from django.db import models
 from django.db.models import F, Sum, DecimalField
+from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 def product_preview_directory_path(instance: "Product", filename: str) -> str:
@@ -209,6 +206,8 @@ class SellerProduct(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    free_delivery = models.BooleanField(default=False)
+
 
     def __str__(self):
         return self.product.name
@@ -264,3 +263,6 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"id: {self.id}. Name: {self.product.product.name} -- Cart# {self.cart.id} -- Quantity: {self.quantity} -- Price: {self.price}"
+
+
+
