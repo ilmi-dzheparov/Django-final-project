@@ -100,3 +100,16 @@ def get_cached_products():
         cache.set(cache_key, products, settings.DEFAULT_CACHE_TIME)
 
     return products
+
+
+def get_cached_popular_products():
+    cache_key = f'popular_products'
+    products = cache.get(cache_key)
+    if products is None:
+
+        products = SellerProduct.objects.all()
+
+
+        cache.set(cache_key, products, settings.DEFAULT_CACHE_TIME)
+
+    return products
