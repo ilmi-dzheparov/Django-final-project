@@ -13,7 +13,7 @@
 
                 <div class="Section-content">
 
-                    <form class="form" action="{% url 'orders:payment' %}" method="post">
+                    <form class="form" action="{% url 'orders:select_payment' %}" method="post">
                         {% csrf_token %}
                         <div class="Order-block Order-block_OPEN">
                             <header class="Section-header Section-header_sm">
