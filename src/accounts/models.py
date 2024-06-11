@@ -48,5 +48,8 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'phone']
 
+    def get_full_name(self):
+        return f"{self.last_name} {self.username} {self.middle_name}"
+
     def __str__(self) -> str:
         return f"User(pk={self.pk}, user={self.username})"
