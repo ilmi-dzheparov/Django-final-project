@@ -14,7 +14,7 @@ class CustomRegistrationView(RegistrationView):
     template_name = 'registration/registration_form.html'
 
     def get_success_url(self, user=None):
-        return reverse_lazy("accounts:account")
+        return reverse_lazy("accounts:login")
 
 
 class PersonalAccountView(LoginRequiredMixin, DetailView):

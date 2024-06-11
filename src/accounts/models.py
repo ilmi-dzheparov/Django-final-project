@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import BaseUserManager
 
@@ -11,7 +11,7 @@ def user_avatar_directory_path(instance: "User", filename: str):
     )
 
 
-class UserManager(BaseUserManager):
+class User(AbstractUser):
     def create_user(self, email, password=None, **extra_fields):
         """
         Создает и сохраняет пользователя с заданным email и паролем.
