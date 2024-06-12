@@ -1,9 +1,11 @@
 from django.contrib.auth import login
-from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import FormView
+from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from orders.models import Order
 from accounts.models import User
@@ -70,7 +72,7 @@ class Step1UserData(FormView):
                 phone=phone
             )
             login(self.request, user)
-            success_url = reverse('orders:delivery')
+            success_url = reverse('orders:select_delivery')
 
             return redirect(success_url)
 
@@ -178,4 +180,11 @@ class Step4OrderConfirmation(FormView):
             address=address,
             comment=comment
         )
-        return super().form_valid(form)
+
+        if payment_method == 'Онлайн картой':
+            return render(self.request, template_name='orders/payment-by-card.html')
+        elif payment_method == 'Онлайн со счета':
+            return render(self.request, template_name='orders/payment-from-account.html')
+        else:
+            messages.error(self.request, "Способ оплаты не установлен.")
+            return HttpResponseRedirect(reverse('orders:confirmation'))

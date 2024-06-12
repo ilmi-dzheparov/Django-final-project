@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from accounts.models import User
 
 
 class UserDataForm(forms.Form):
@@ -16,8 +17,33 @@ class UserDataForm(forms.Form):
         widget=forms.EmailInput(attrs={'class': 'form-input'})
     )
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(UserDataForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if self.user and self.user.is_authenticated:
+            return email
+
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Пользователь с таким email уже существует. Вы можете войти.")
+
+        return email
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if self.user and self.user.is_authenticated:
+            return phone
+
+        if User.objects.filter(phone=phone).exists():
+            raise forms.ValidationError("Пользователь с таким телефоном уже существует.")
+
+        return phone
+
     def clean(self):
         cleaned_data = super().clean()
+
         full_name = cleaned_data.get('full_name')
 
         if full_name:
@@ -27,7 +53,7 @@ class UserDataForm(forms.Form):
                 cleaned_data['username'] = names[1]
                 cleaned_data['middle_name'] = names[2]
             else:
-                raise forms.ValidationError("Пожалуйста, введите Фамилию, Имя и Отчество через пробел.")
+                raise ValidationError("Пожалуйста, введите Фамилию, Имя и Отчество через пробел.")
 
         return cleaned_data
 
@@ -69,7 +95,7 @@ class SelectDeliveryForm(forms.Form):
 class SelectPaymentForm(forms.Form):
     PAYMENT_METHOD_CHOICES = [
         ('card', 'Онлайн картой'),
-        ('account', 'Онлайн со случайного чужого счета'),
+        ('account', 'Онлайн со счета'),
     ]
 
     payment_method = forms.ChoiceField(
