@@ -30,6 +30,8 @@ class User(AbstractUser):
         return self.create_user(email, password, **extra_fields)
 
 
+class User(AbstractUser):
+
     phone_regex = RegexValidator(regex=r'^((\+7)|8)\d{10}$', message='Phone number must be entered in the format: "+79999999999" or "89999999999" ')
 
     email = models.EmailField(unique=True)
@@ -45,6 +47,9 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'phone']
+
+    def get_full_name(self):
+        return f"{self.last_name} {self.username} {self.middle_name}"
 
     def __str__(self) -> str:
         return f"User(pk={self.pk}, user={self.username})"

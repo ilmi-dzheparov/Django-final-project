@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+{% block middle %}
+
+    <div class="Middle Middle_top">
+        <div class="Section Section_column Section_columnRight Section_columnWide Order">
+            <div class="wrap">
+
+                {% include 'orders/order-navigation.html' %}
+
+                <div class="Section-content">
+
+                    <form class="form" action="{% url 'orders:confirmation' %}" method="post">
+                        {% csrf_token %}
+                        <div class="Order-block Order-block_OPEN">
+                            <header class="Section-header Section-header_sm">
+                                <h2 class="Section-title">Шаг 4. Подтверждение заказа
+                                </h2>
+                            </header>
+                            <div class="Order-infoBlock">
+                                <div class="Order-personal">
+                                    <div class="row">
+                                        <div class="row-block">
+                                            <div class="Order-info">
+                                                <div class="Order-infoType">ФИО:
+                                                </div>
+                                                <div class="Order-infoContent">{{ user.get_full_name }}
+                                                </div>
+                                            </div>
+                                            <div class="Order-info">
+                                                <div class="Order-infoType">Телефон:
+                                                </div>
+                                                <div class="Order-infoContent">{{ user.phone }}
+                                                </div>
+                                            </div>
+                                            <div class="Order-info">
+                                                <div class="Order-infoType">E-mail:
+                                                </div>
+                                                <div class="Order-infoContent">{{ user.email }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row-block">
+                                            <div class="Order-info Order-info_delivery">
+                                                <div class="Order-infoType">Тип доставки:
+                                                </div>
+                                                <div class="Order-infoContent">{{ order.delivery_method }}{{ order.get_delivery_method_display }}
+                                                </div>
+                                            </div>
+                                            <div class="Order-info">
+                                                <div class="Order-infoType">Город:
+                                                </div>
+                                                <div class="Order-infoContent">{{ order.city }}
+                                                </div>
+                                            </div>
+                                            <div class="Order-info">
+                                                <div class="Order-infoType">Адрес:
+                                                </div>
+                                                <div class="Order-infoContent">{{ order.address }}
+                                                </div>
+                                            </div>
+                                            <div class="Order-info Order-info_pay">
+                                                <div class="Order-infoType">Оплата:
+                                                </div>
+                                                <div class="Order-infoContent">{{ order.payment_method }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="Cart Cart_order">
+                                    <div class="Cart-total">
+                                        <div class="Cart-block Cart-block_total">
+                                            <strong class="Cart-title">Итого:
+                                            </strong><span class="Cart-price">200.99$</span>
+                                        </div>
+                                        <div class="Cart-block">
+                                            <button class="btn btn_primary btn_lg" type="submit">Оплатить
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {{ form }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
