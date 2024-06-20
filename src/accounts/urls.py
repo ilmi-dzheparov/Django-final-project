@@ -5,7 +5,7 @@ from .views import PersonalAccountView, ProfileView, CustomRegistrationView
 app_name = "accounts"
 
 urlpatterns = [
-    path("login/", LoginView.as_view(), name="login"),
+    path("login/", LoginView.as_view(template_name="registration/login.html"), name="login"),
     path("reset/", PasswordResetView.as_view(template_name="registration/password_reset.html")),
     path("registration/", CustomRegistrationView.as_view(template_name="registration/registration_form.html"),
          name="registration"),

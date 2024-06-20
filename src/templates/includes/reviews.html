@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="Tabs-block" id="reviews">
 
     {% include 'includes/pagination.html' %}
@@ -16,13 +18,17 @@
                 <div class="Comment">
                     <div class="Comment-column Comment-column_pict">
                         <div class="Comment-avatar">
-                            <img src={{review.author.avatar.url}}>
+                            {% if review.author.avatar %}
+                                <img src="{{ review.author.avatar.url }}">
+                            {% else %}
+                                <img src="{% static 'assets/img/icons/user_icon.svg' %}">
+                            {% endif %}
                         </div>
                     </div>
                     <div class="Comment-column">
                         <header class="Comment-header">
                             <div>
-                                <strong class="Comment-title">{{ review.author }}
+                                <strong class="Comment-title">{{ review.author.get_full_name }}
                                 </strong><span class="Comment-date">{{ review.created_at }}</span>
                             </div>
                         </header>
