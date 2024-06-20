@@ -1,9 +1,11 @@
+from random import random
+
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.serializers import serialize, deserialize
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import DetailView, CreateView, DeleteView, ListView, View, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, ListView, View, UpdateView, TemplateView
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
@@ -25,9 +27,23 @@ from shop.models import (
     SellerProduct,
     Cart,
     CartItem,
+    Category,
 )
 from shop.forms import ReviewForm
+from django.db.models import Count
+from shop.services import get_cached_popular_products, get_limited_products
+class IndexView(TemplateView):
+    template_name = 'index.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        popular_categories = Category.objects.annotate(product_count=Count('products')).order_by('-product_count')[:3]
+        limited_products = get_limited_products()
+        context['categories'] = popular_categories
+        context['products'] = random.choice(limited_products)
+        context['seller_products'] = get_cached_popular_products()
+        context['limited_products'] = limited_products
+        return context
 
 class ProductDetailView(DetailView):
     template_name = 'shop/product.html'

@@ -207,7 +207,7 @@ class SellerProduct(models.Model):
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     free_delivery = models.BooleanField(default=False)
-
+    is_limited = models.BooleanField(default=False)
 
     def __str__(self):
         return self.product.name
