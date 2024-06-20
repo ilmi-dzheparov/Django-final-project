@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView, PasswordResetView
 from django.urls import path
-from .views import PersonalAccountView, ProfileView, CustomRegistrationView
+from .views import PersonalAccountView, ProfileView, CustomRegistrationView, UserHistoryView
 
 app_name = "accounts"
 
@@ -11,5 +11,6 @@ urlpatterns = [
          name="registration"),
     path("account/<int:pk>/", PersonalAccountView.as_view(template_name="accounts/account.html"), name="account"),
     path("profile/<int:pk>/", ProfileView.as_view(template_name="accounts/profile.html"), name="profile"),
+    path("history/", UserHistoryView.as_view(), name="history"),
 
 ]
