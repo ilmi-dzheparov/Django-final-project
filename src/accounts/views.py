@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DetailView
 
 from .models import User
+from shop.models import HistoryProduct
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django_registration.backends.activation.views import RegistrationView
@@ -41,5 +42,9 @@ class ProfileView(UpdateView):
         return super().form_valid(form)
 
 
-
-
+class UserHistoryView(View):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        history = HistoryProduct.objects.filter(user=user).order_by("created_at")[:20]
+        return render(request, template_name="includes/history-product.html",
+                      context={"recently_viewed_products": history})
