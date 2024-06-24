@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import F, Sum, DecimalField
 from django.urls import reverse
@@ -208,7 +209,6 @@ class SellerProduct(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     free_delivery = models.BooleanField(default=False)
 
-
     def __str__(self):
         return self.product.name
 
@@ -265,4 +265,24 @@ class CartItem(models.Model):
         return f"id: {self.id}. Name: {self.product.product.name} -- Cart# {self.cart.id} -- Quantity: {self.quantity} -- Price: {self.price}"
 
 
+class SiteSettings(models.Model):
+    delivery_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name='стоимость доставки')
+    support_email = models.EmailField(max_length=254, verbose_name="Электронная почта поддержки", blank=True, null=True)
+    popular_products_count_on_main_page = models.IntegerField(
+        default=8,
+        verbose_name='количество популярных товаров на главной странице',
+        validators=[MaxValueValidator(100)]
+    )
 
+    products_count_in_limited_EDITION = models.IntegerField(
+        default=4,
+        verbose_name='количество товаров в ограниченном тираже',
+        validators=[MaxValueValidator(16)]
+    )
+
+    class Meta:
+        verbose_name = "Настройки сайта"
+        verbose_name_plural = "Настройки сайта"
+
+    def __str__(self):
+        return "Настройки сайта"
