@@ -30,8 +30,6 @@ class User(AbstractUser):
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractUser):
-
     phone_regex = RegexValidator(regex=r'^((\+7)|8)\d{10}$', message='Phone number must be entered in the format: "+79999999999" or "89999999999" ')
 
     email = models.EmailField(unique=True)
