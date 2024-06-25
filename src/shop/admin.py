@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.urls import path
 
 from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
 from .models import (
@@ -14,6 +15,7 @@ from .models import (
     HistoryProduct,
 
 )
+from .utils import import_json, reset_cache_all, reset_cache_products, reset_cache_seller_products
 
 
 @admin.register(HistoryProduct)
@@ -190,3 +192,45 @@ class SellerProductAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return ("seller",)
         return super().get_exclude(request, obj)
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    change_list_template = "shop/admin/settings_changelist.html"
+    list_display = [field.name for field in SiteSettings._meta.get_fields()]
+
+    def has_add_permission(self, request):
+        # Запрет добавление записи, если уже существует одна
+        if SiteSettings.objects.exists():
+            return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        # Запрет удаления записи
+        return False
+
+    def get_urls(self):
+        urls = super().get_urls()
+        new_urls = [
+            path(
+                "import_settings/",
+                import_json,
+                name="import_settings_json",
+            ),
+            path(
+                "reset_cache_all/",
+                reset_cache_all,
+                name="reset_cache_all",
+            ),
+            path(
+                "reset_cache_products/",
+                reset_cache_products,
+                name="reset_cache_products",
+            ),
+            path(
+                "reset_cache_seller_products/",
+                reset_cache_seller_products,
+                name="reset_cache_seller_products",
+            ),
+        ]
+        return new_urls + urls

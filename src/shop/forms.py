@@ -7,7 +7,6 @@ from shop.admin_mixin import UniqueAttributeMixin
 from shop.models import Attribute, ProductAttribute, Review
 
 
-
 class ProductFilterForm(forms.Form):
     price = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'range-line',
@@ -29,6 +28,8 @@ class ProductFilterForm(forms.Form):
     free_delivery = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
         'class': 'toggle'
     }))
+
+
 class CustomAttributeAdminForm(forms.ModelForm):
     """
     Переопределяем метод clean для валидации ввода данных (исключить дублирование записей независимо от регистра)
@@ -100,7 +101,6 @@ class ProductAttributeFormSet(BaseInlineFormSet, UniqueAttributeMixin):
 
 
 class ReviewForm(forms.ModelForm):
-
     class Meta:
         model = Review
         fields = ['text']
@@ -115,3 +115,7 @@ class ReviewForm(forms.ModelForm):
             'class': 'form-textarea'
         })
         self.fields['text'].label = False
+
+
+class JSONImportForm(forms.Form):
+    json_file = forms.FileField(label='Выберите JSON-файл')

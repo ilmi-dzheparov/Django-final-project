@@ -1,6 +1,12 @@
-from shop.models import Cart, CartItem, SellerProduct
-from django.shortcuts import get_object_or_404
+import json
+
+from django.http import HttpRequest, HttpResponse
+from django.contrib import messages
+from django.core.cache import cache
+from shop.models import Cart, CartItem, SellerProduct, Product, SiteSettings
+from django.shortcuts import get_object_or_404, render, redirect
 from decimal import Decimal
+from shop.forms import JSONImportForm
 
 
 """
@@ -69,3 +75,56 @@ def update_session_cart(request, product_id, quantity):
 
 def clear_session_cart(request):
     save_cart_to_session(request, {})
+
+
+def import_json(request: HttpRequest) -> HttpResponse:
+    if request.method == "GET":
+        form = JSONImportForm
+        context = {
+            "form": form,
+        }
+        return render(request, "shop/admin/json_form.html", context)
+
+    form = JSONImportForm(request.POST, request.FILES)
+    if not form.is_valid():
+        context = {
+            "form": form,
+        }
+        return render(request, "shop/admin/json_form.html", context, status=400)
+
+    json_file = form.cleaned_data['json_file']
+    data = json.load(json_file)
+    site_settings, created = SiteSettings.objects.get_or_create()
+    for setting, value in data.items():
+        if hasattr(site_settings, setting):
+            setattr(site_settings, setting, value)
+        else:
+            return HttpResponse(f"Ошибка: Настройка '{setting}' не существует.", status=400)
+    site_settings.save()
+    messages.success(request, "Настройки успешно загружены из JSON файла.")
+    return redirect("..")
+
+
+def reset_cache_all(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        cache.clear()
+        messages.success(request, "Весь кэш успешно сброшен.")
+    return redirect('..')
+
+
+def reset_cache_products(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        for product in Product.objects.all():
+            cache_key = f'product_cache_key:{product.id}'
+            cache.delete(cache_key)
+        messages.success(request, "Кэш для товаров сброшен.")
+    return redirect('..')
+
+
+def reset_cache_seller_products(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        for product in SellerProduct.objects.all():
+            cache_key = f'product_cache_key:{product.id}'
+            cache.delete(cache_key)
+        messages.success(request, "Кэш для товаров продавцов сброшен.")
+    return redirect('..')

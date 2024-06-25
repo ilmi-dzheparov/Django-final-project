@@ -6,7 +6,9 @@ from .views import (
     login_view,
     UserLogoutView,
     send_password_reset_email_view,
-    PasswordView)
+    PasswordView,
+    UserHistoryView,
+)
 
 app_name = "accounts"
 
@@ -19,5 +21,6 @@ urlpatterns = [
          name="registration"),
     path("account/<int:pk>/", PersonalAccountView.as_view(template_name="accounts/account.html"), name="account"),
     path("profile/<int:pk>/", ProfileView.as_view(template_name="accounts/profile.html"), name="profile"),
+    path("history/", UserHistoryView.as_view(), name="history"),
 
 ]
