@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block header %}
-    {% include "header.html" %}
+    {% include "header_alt.html" %}
 {% endblock %}
 
 {% block middle %}
@@ -11,27 +11,28 @@
     <div class="header">
         <h3 class="sign-in">Регистрация</h3>
     </div>
-    <div class="clear"></div>
-    <form action="#">
-        <div>
-            <input class="user-input" type="text" name="name" id="name" placeholder="Имя" />
-        </div>
-        <div>
-            <input class="user-input" type="email" name="login" id="name" placeholder="E-mail" />
-        </div>
-        <div>
-            <input type="password" name="pass" id="name" placeholder="Пароль" />
-        </div>
-        <input type="submit" value="Зарегистрироваться" />
-            <a class="registr" href="login.html">
+        <div class="clear"></div>
+        <form action="{% url 'accounts:registration' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <input class="user-input" type="text" name="username" id="username" placeholder="Имя">
+            </div>
+            <div>
+                <input class="user-input" id="email" name="email" type="text" value="email" data-validate="require" action="{% url 'accounts:registration' %}">
+            </div>
+            <div>
+                <input class="user-input" id="password" name="password" type="password" placeholder="Пароль" data-validate="require" action="{% url 'accounts:registration' %}">
+            </div>
+                <input type="submit" value="Зарегистрироваться" />
+            <a class="registr" href="{% url 'accounts:login' %}">
                 Вход
             </a>
-        <div class="clear"></div>
-    </form>
+    <div class="clear"></div>
+</form>
 </div>
 {% endblock %}
 
 {% block footer %}
-    {% include "footer.html" %}
+    {% include "footer_alt.html" %}
 {% endblock %}
 

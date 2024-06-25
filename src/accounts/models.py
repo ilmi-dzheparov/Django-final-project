@@ -36,7 +36,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=150, unique=False, blank=True, null=True)
     username = models.CharField(max_length=150, unique=False, blank=True, null=True)
     middle_name = models.CharField(max_length=150, unique=False, blank=True, null=True)
-    phone = models.CharField(max_length=12, unique=True, validators=[phone_regex])
+    phone = models.CharField(max_length=12, unique=True, validators=[phone_regex], blank=True, null=True)
     avatar = models.ImageField(null=True, blank=True, upload_to=user_avatar_directory_path)
     birth_date = models.DateField(null=True, blank=True)
     is_seller = models.BooleanField(default=False)
