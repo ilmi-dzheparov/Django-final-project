@@ -8,6 +8,11 @@ PAYMENT_METHOD_CHOICES = [
     ('account', 'Онлайн со счета'),
 ]
 
+DELIVERY_CHOICES = [
+    ('regular', 'Обычная доставка'),
+    ('express', 'Экспресс доставка'),
+]
+
 
 class Order(models.Model):
     """
@@ -15,13 +20,18 @@ class Order(models.Model):
     Она содержит поля для идентификатора заказа, связь с пользователем,
     связь с продуктом продавца, статус заказа, общую сумму заказа, дату создания, промокод и способ оплаты.
     """
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     seller_product = models.ForeignKey(SellerProduct, related_name="orders", on_delete=models.CASCADE)
     order_status = models.CharField(max_length=50, default='Pending')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     promocode = models.CharField(max_length=50, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True)
+    address = models.CharField(max_length=255, null=True)
+    comment = models.CharField(max_length=255, null=True, blank=True)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='card')
+    delivery_method = models.CharField(max_length=50, choices=DELIVERY_CHOICES, default='regular')
 
     def __str__(self):
         return f"Order #{self.pk}"

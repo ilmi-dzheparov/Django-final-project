@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import BaseUserManager
 
@@ -11,7 +11,7 @@ def user_avatar_directory_path(instance: "User", filename: str):
     )
 
 
-class UserManager(BaseUserManager):
+class User(AbstractUser):
     def create_user(self, email, password=None, **extra_fields):
         """
         Создает и сохраняет пользователя с заданным email и паролем.
@@ -36,7 +36,7 @@ class UserManager(BaseUserManager):
     last_name = models.CharField(max_length=150, unique=False, blank=True, null=True)
     username = models.CharField(max_length=150, unique=False, blank=True, null=True)
     middle_name = models.CharField(max_length=150, unique=False, blank=True, null=True)
-    phone = models.CharField(max_length=12, unique=True, validators=[phone_regex])
+    phone = models.CharField(max_length=12, unique=True, validators=[phone_regex], blank=True, null=True)
     avatar = models.ImageField(null=True, blank=True, upload_to=user_avatar_directory_path)
     birth_date = models.DateField(null=True, blank=True)
     is_seller = models.BooleanField(default=False)
@@ -45,6 +45,9 @@ class UserManager(BaseUserManager):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'phone']
+
+    def get_full_name(self):
+        return f"{self.last_name} {self.username} {self.middle_name}"
 
     def __str__(self) -> str:
         return f"User(pk={self.pk}, user={self.username})"

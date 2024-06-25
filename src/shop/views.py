@@ -1,5 +1,6 @@
 from random import choice
 
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.cache import cache
@@ -28,6 +29,7 @@ from shop.models import (
     Cart,
     CartItem,
     Category,
+    HistoryProduct,
 )
 from shop.forms import ReviewForm
 from django.db.models import Count
@@ -49,6 +51,17 @@ class ProductDetailView(DetailView):
     template_name = 'shop/product.html'
     context_object_name = "product"
     model = Product
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            product, created = HistoryProduct.objects.get_or_create(user=request.user, product=self.get_object())
+
+            if not created:
+                product.created_at = datetime.now()
+                product.save()
+        return super().get(request, *args, **kwargs)
+
+    # def get(self, request, *args, **kwargs):
 
     def get_object(self, queryset=None):
         product_id = self.kwargs.get("pk")
