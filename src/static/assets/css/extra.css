@@ -6500,3 +6500,7 @@ input[type="submit"] {
     bottom: 0rem;
     right: 0;
 }
+
+.menu-item.active .menu-link {
+  color: blue;
+}
