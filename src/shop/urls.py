@@ -6,11 +6,13 @@ from shop.views import (
     CartDetailView,
     CartItemDeleteView,
     CartItemUpdateView,
+    IndexView,
 )
 
 app_name = "shop"
 
 urlpatterns = [
+    path('', IndexView.as_view(), name='index'),
     path("product/<int:pk>/", ProductDetailView.as_view(), name="product_detail"),
     path('product/<int:pk>/review/create/', ReviewCreateView.as_view(), name='review_create'),
     path('cart/<int:pk>/add/', AddToCartView.as_view(), name='add_to_cart'),
