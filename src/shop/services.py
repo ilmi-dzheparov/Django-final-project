@@ -108,7 +108,7 @@ def get_cached_popular_products():
     popular_products = cache.get(cache_key)
 
     if popular_products is None:
-        product_sales = SellerProduct.objects.annotate(total_sales=Count('order'))
+        product_sales = SellerProduct.objects.annotate(total_sales=Count('orders'))
 
         popular_products = sorted(product_sales, key=lambda p: p.total_sales, reverse=True)[:8]
 

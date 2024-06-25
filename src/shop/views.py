@@ -1,4 +1,4 @@
-from random import random
+from random import choice
 
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -33,14 +33,14 @@ from shop.forms import ReviewForm
 from django.db.models import Count
 from shop.services import get_cached_popular_products, get_limited_products
 class IndexView(TemplateView):
-    template_name = 'index.html'
+    template_name = 'shop/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         popular_categories = Category.objects.annotate(product_count=Count('products')).order_by('-product_count')[:3]
         limited_products = get_limited_products()
         context['categories'] = popular_categories
-        context['products'] = random.choice(limited_products)
+        context['product'] = choice(limited_products) if len(limited_products) > 0 else None
         context['seller_products'] = get_cached_popular_products()
         context['limited_products'] = limited_products
         return context
