@@ -74,7 +74,7 @@ class ProfileView(UpdateView):
 def send_password_reset_email(user):
     subject = 'Сброс пароля'
     message = 'Здесь ваше сообщение с инструкциями по сбросу пароля.'
-    email_from = 'skitzky@yandex.ru'
+    email_from = os.getenv('EMAIL_HOST_USER')
     recipient_list = [user.email]
 
     smtp_connection = get_connection()
