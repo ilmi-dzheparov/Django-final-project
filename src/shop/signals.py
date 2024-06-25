@@ -22,7 +22,10 @@ def reset_cache(sender, instance, **kwargs):
 def clear_product_cache(sender, **kwargs):
     cache.delete('products')
 
-
+@receiver(post_save, sender=SellerProduct)
+@receiver(post_delete, sender=SellerProduct)
+def clear_popular_product_cache(sender, **kwargs):
+    cache.delete('popular_products')
 
 @receiver(user_logged_in)
 def merge_carts(sender, user, request, **kwargs):

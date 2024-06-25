@@ -6,6 +6,7 @@ import os
 import datetime
 import json
 import shutil
+from django.db.models import Count
 
 
 def setup_logger(name, log_dir, log_file, level=logging.INFO):
@@ -100,3 +101,27 @@ def get_cached_products():
         cache.set(cache_key, products, settings.DEFAULT_CACHE_TIME)
 
     return products
+
+
+def get_cached_popular_products():
+    cache_key = 'popular_products'
+    popular_products = cache.get(cache_key)
+
+    if popular_products is None:
+        product_sales = SellerProduct.objects.annotate(total_sales=Count('orders'))
+
+        popular_products = sorted(product_sales, key=lambda p: p.total_sales, reverse=True)[:8]
+
+        cache.set(cache_key, popular_products, settings.DEFAULT_CACHE_TIME)
+
+    return popular_products
+
+def get_limited_products():
+    cache_key = 'limited_products'
+    limited_products = cache.get(cache_key)
+
+    if limited_products is None:
+        limited_products = SellerProduct.objects.filter(is_limited=True)[:16]
+        cache.set(cache_key, limited_products, settings.DEFAULT_CACHE_TIME)
+
+    return limited_products
