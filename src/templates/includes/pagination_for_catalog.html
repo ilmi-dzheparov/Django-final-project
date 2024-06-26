@@ -1,0 +1,51 @@
+<div class="Pagination">
+    <div class="Pagination-ins">
+        {% if page_obj.paginator.num_pages > 5 %}
+
+            {% if page_obj.number > 3 %}
+                <a class="Pagination-element Pagination-element_prev" href="?page=1">
+                    <img src="assets/img/icons/prevPagination.svg" alt="prevPagination.svg">
+                </a>
+                {% if page_obj.number != 4 %}
+                    <span>...</span>
+                {% endif %}
+            {% endif %}
+
+            {% for page_number in page_obj.paginator.page_range %}
+                {% if page_obj.number == page_number %}
+                    <a class="Pagination-element Pagination-element_current" href="?page={{ page_number }}">
+                        <span class="Pagination-text">{{ page_number }}</span>
+                    </a>
+                {% elif page_number >= page_obj.number|add:'-2' and page_number <= page_obj.number|add:'2' %}
+                    <a class="Pagination-element" href="?page={{ page_number }}">
+                        <span class="Pagination-text">{{ page_number }}</span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                {% if page_obj.number != page_obj.paginator.num_pages|add:'-3' %}
+                    <span>...</span>
+                {% endif %}
+                <a class="Pagination-element Pagination-element_next" href="?page={{ page_obj.paginator.num_pages }}">
+                    <img src="assets/img/icons/nextPagination.svg" alt="nextPagination.svg">
+                </a>
+            {% endif %}
+
+        {% else %}
+
+            {% for page_number in page_obj.paginator.page_range %}
+                {% if page_obj.number == page_number %}
+                    <a class="Pagination-element Pagination-element_current" href="?page={{ page_number }}">
+                        <span class="Pagination-text">{{ page_number }}</span>
+                    </a>
+                {% else %}
+                    <a class="Pagination-element" href="?page={{ page_number }}">
+                        <span class="Pagination-text">{{ page_number }}</span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+    </div>
+</div>

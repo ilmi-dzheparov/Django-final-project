@@ -41,24 +41,26 @@
                                         <label class="form-label" for="avatar">Аватар
                                         </label>
                                         <div class="Profile-avatar Profile-avatar_noimg">
-
-                                            <label class="Profile-fileLabel" for="avatar"><img src="assets/img/icons/upload.png" alt="#.png">Загрузить фото
+                                            <label class="Profile-fileLabel" for="avatar">
+                                                <img src="assets/img/icons/upload.png" alt="#.png">Загрузить фото
                                             </label>
-
                                             <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar" value="{{ user.avatar }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="full_name">ФИО
                                         </label>
-                                        <input class="form-input" id="full_name" name="full_name" type="text" value="{{ user.full_name }}" data-validate="require" action="{% url 'accounts:profile' pk=user.id %}"/>
+                                        <input class="form-input" id="full_name" name="full_name" type="text"
+                                               value="{% if user.last_name %}{{ user.last_name }}{% endif %} {% if user.username %}{{ user.username }}{% endif %} {% if user.middle_name %}{{ user.middle_name }}{% endif %} "
+                                               data-validate="require"
+                                               action="{% url 'accounts:profile' pk=user.id %}"/>
                                     </div>
                                 </div>
                                 <div class="row-block">
                                     <div class="form-group">
                                         <label class="form-label" for="phone">Телефон
                                         </label>
-                                        <input class="form-input" id="phone" name="phone" type="text" value="+70000000000" action="{% url 'accounts:profile' pk=user.id %}">
+                                        <input class="form-input" id="phone" name="phone" type="text" value="{{ user.phone }}" action="{% url 'accounts:profile' pk=user.id %}">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="email">E-mail
@@ -68,12 +70,12 @@
                                     <div class="form-group">
                                         <label class="form-label" for="password">Пароль
                                         </label>
-                                        <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль">
+                                        <input class="form-input" id="password" name="password" value="" type="password" placeholder="Тут можно изменить пароль">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="passwordReply">Подтверждение пароля
                                         </label>
-                                        <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" action="{% url 'accounts:profile' pk=user.id %}">
+                                        <input class="form-input" id="passwordReply" name="passwordReply" type="password" value="" placeholder="Введите пароль повторно" action="{% url 'accounts:profile' pk=user.id %}">
                                     </div>
                                     <div class="form-group">
                                         <div class="Profile-btn">

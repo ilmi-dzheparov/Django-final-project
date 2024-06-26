@@ -12,7 +12,7 @@ from .models import (
     SellerProduct,
     Cart,
     CartItem,
-    HistoryProduct,
+    HistoryProduct, SiteSettings,
 
 )
 from .utils import import_json, reset_cache_all, reset_cache_products, reset_cache_seller_products
