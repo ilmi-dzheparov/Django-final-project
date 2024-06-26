@@ -7,10 +7,12 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.views import LogoutView
 from django.core.mail import send_mail, get_connection
 from django.http import HttpRequest, request
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, DetailView, CreateView
-
+from django.views.generic import UpdateView, DetailView, CreateView, ListView, View
+from orders.models import Order
 from .models import User
 from shop.models import HistoryProduct
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -75,9 +77,11 @@ class ProfileView(UpdateView):
 class UserHistoryView(View):
     def get(self, request, *args, **kwargs):
         user = request.user
-        history = HistoryProduct.objects.filter(user=user).order_by("created_at")[:20]
+        history = HistoryProduct.objects.filter(user=user)[:20]
         return render(request, template_name="includes/history-product.html",
                       context={"recently_viewed_products": history})
+
+
 def send_password_reset_email(user):
     subject = 'Сброс пароля'
     message = 'Здесь ваше сообщение с инструкциями по сбросу пароля.'
@@ -121,3 +125,37 @@ class PasswordView(UpdateView):
         form.save()
         return super().form_valid(form)
 
+
+class UserHistoryProductView(View):
+    """
+    Представление для отображения списка просмотренных товаров.
+    """
+
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        user = request.user.pk
+        history = HistoryProduct.objects.filter(user=user)[:8]
+        return render(request, template_name="accounts/history-product.html",
+                      context={"recently_viewed_products": history})
+
+
+class UserHistoryOrderView(ListView):
+    """
+    Представление для отображения списка заказов пользователя.
+    """
+
+    template_name = 'accounts/history-order.html'
+    model = Order
+    context_object_name = 'orders'
+
+    @method_decorator(never_cache)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Order.objects.filter(user=user).order_by('-created_at')
+        return queryset

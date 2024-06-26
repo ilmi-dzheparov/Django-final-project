@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block header %}
+    {% include "header.html" %}
+{% endblock %}
+
+{% block middle %}
+
+    <div class="Middle Middle_top">
+        <div class="Section Section_column Section_columnLeft">
+            <div class="wrap">
+
+                <div class="Section-column">
+                    <div class="Section-columnSection">
+                        <header class="Section-header">
+                            <strong class="Section-title">Навигация
+                            </strong>
+                        </header>
+                        <div class="Section-columnContent">
+                            <div class="NavigateProfile">
+                                <ul class="menu menu_vt">
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:account' pk=user.pk %}">Личный кабинет</a>
+                                    </li>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:profile' pk=user.pk %}">Профиль</a>
+                                    </li>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:history_of_orders' %}">История заказов</a>
+                                    </li>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:product_viewing_history' %}">История просмотров</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="Section-content">
+                    <div class="Cards">
+
+                        {% for product in recently_viewed_products %}
+
+                            <div class="Card">
+                                <a class="Card-picture"><img src={{product.product.preview.url}} alt="card.jpg">
+                                </a>
+                                <div class="Card-content">
+                                    <strong class="Card-title"><a href="product.html">{{ product.product.name }}</a>
+                                    </strong>
+                                    <div class="Card-description">
+                                        <div class="Card-cost"><span class="Card-price">{{ product.product.description }}</span>
+                                        </div>
+                                        <div class="Card-category">{{ product.product.category }}
+                                        </div>
+                                        <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>У вас не просмотренных товаров</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
