@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.serializers import serialize, deserialize
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import DetailView, CreateView, DeleteView, ListView, View, UpdateView, TemplateView
 from django.urls import reverse
@@ -120,6 +121,13 @@ class ProductDetailView(DetailView):
             context['average_price'] = Decimal(0)
             context['min_price_id'] = min_price_id
         context['product_min_price_id'] = seller_products_qs
+
+        items_per_page = 3
+        page_number = self.request.GET.get('page')
+        paginator = Paginator(self.object.reviews.all(), items_per_page)
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
+        context['form'] = ReviewForm()
         return context
 
 

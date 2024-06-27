@@ -7,7 +7,8 @@ from .views import (
     UserLogoutView,
     send_password_reset_email_view,
     PasswordView,
-    UserHistoryView,
+    UserHistoryProductView,
+    UserHistoryOrderView,
 )
 
 app_name = "accounts"
@@ -21,6 +22,7 @@ urlpatterns = [
          name="registration"),
     path("account/<int:pk>/", PersonalAccountView.as_view(template_name="accounts/account.html"), name="account"),
     path("profile/<int:pk>/", ProfileView.as_view(template_name="accounts/profile.html"), name="profile"),
-    path("history/", UserHistoryView.as_view(), name="history"),
+    path("history/product/", UserHistoryProductView.as_view(), name="product_viewing_history"),
+    path("history/order/", UserHistoryOrderView.as_view(), name="history_of_orders"),
 
 ]
