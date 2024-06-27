@@ -9,6 +9,7 @@ from django.core.mail import send_mail, get_connection
 from django.http import HttpRequest, request
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import UpdateView, DetailView, CreateView
 
 from .models import User
