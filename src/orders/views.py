@@ -1,13 +1,14 @@
 from django.contrib.auth import login
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.core.cache import cache
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from orders.models import Order
+from shop.models import CartItem, Cart, SellerProduct
 from accounts.models import User
 from orders.forms import (
     UserDataForm,
@@ -46,8 +47,9 @@ class Step1UserData(FormView):
                 'full_name': user.get_full_name,
                 'phone': user.phone,
                 'email': user.email,
-            }
 
+            }
+        kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
@@ -147,13 +149,19 @@ class Step4OrderConfirmation(FormView):
 
     template_name = 'orders/step4-order_confirmation.html'
     form_class = CommentOrderForm
-    success_url = reverse_lazy('orders:confirmation')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = User.objects.get(pk=self.request.user.pk)
+
+        # Получаем корзину пользователя
+        cart = Cart.objects.get(user=user)
+        cart_items = CartItem.objects.filter(cart=cart)
+        total_price = cart.total_price()
         order_data = cache.get('order_data', {})
         context['order'] = order_data
+        context['cart_items'] = cart_items
+        context['total_price'] = total_price
         context['user'] = user
         context['form_comment'] = CommentOrderForm()
         context['current_step'] = 'step4'
@@ -172,14 +180,25 @@ class Step4OrderConfirmation(FormView):
         address = order_data.get('address')
         payment_method = order_data.get('payment_method')
         comment = form.cleaned_data['comment']
+
         order, created = Order.objects.get_or_create(
             user=user,
             delivery_method=delivery_method,
             payment_method=payment_method,
             city=city,
             address=address,
-            comment=comment
+            comment=comment,
         )
+
+        # Добавление товаров в заказ
+
+        cart = Cart.objects.get(user=user)
+        cart_items = CartItem.objects.filter(cart=cart)
+
+        for cart_item in cart_items:
+            product = SellerProduct.objects.get(pk=cart_item.product.pk)
+            order.seller_product.add(product)
+            order.save()
 
         if payment_method == 'Онлайн картой':
             return render(self.request, template_name='orders/payment-by-card.html')
@@ -188,3 +207,19 @@ class Step4OrderConfirmation(FormView):
         else:
             messages.error(self.request, "Способ оплаты не установлен.")
             return HttpResponseRedirect(reverse('orders:confirmation'))
+
+
+class OrderDetail(DetailView):
+    model = Order
+    template_name = 'orders/oneorder.html'
+    context_object_name = 'order'
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Order.objects.filter(user=user)
+        return queryset
+
+    def get_object(self, queryset=None):
+        order_id = self.kwargs.get('pk')
+        order = get_object_or_404(Order, pk=order_id, user=self.request.user)
+        return order
