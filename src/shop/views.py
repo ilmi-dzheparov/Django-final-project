@@ -34,6 +34,9 @@ from shop.models import (
 from shop.forms import ReviewForm
 from django.db.models import Count
 from shop.services import get_cached_popular_products, get_limited_products
+from .services import get_cached_products, get_cached_categories
+
+
 class IndexView(TemplateView):
     template_name = 'shop/index.html'
 
@@ -46,6 +49,7 @@ class IndexView(TemplateView):
         context['seller_products'] = get_cached_popular_products()
         context['limited_products'] = limited_products
         return context
+
 
 class ProductDetailView(DetailView):
     template_name = 'shop/product.html'
@@ -238,3 +242,19 @@ class CartItemUpdateView(View):
             update_session_cart(request, product_id, quantity)
 
         return redirect('shop:cart_detail')
+
+
+class Catalog(ListView):
+    template_name = "shop/catalog.html"
+    context_object_name = "products"
+    paginate_by = 4
+
+    def get_queryset(self):
+        products = get_cached_products()
+        return products
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        categories = get_cached_categories()
+        context['categories'] = categories
+        return context
