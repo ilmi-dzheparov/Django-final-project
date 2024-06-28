@@ -253,12 +253,25 @@ class CartItemUpdateView(View):
 
 
 class Catalog(ListView):
+    """
+        Представление: каталог товаров
+    """
     template_name = "shop/catalog.html"
     context_object_name = "products"
     paginate_by = 4
 
     def get_queryset(self):
         products = get_cached_products()
+        sort_param = self.request.GET.get('sort')
+        if sort_param:
+            if sort_param == 'popularity':
+                products = products.order_by('-popularity')
+            elif sort_param == 'price':
+                products = products.order_by('price')
+            elif sort_param == 'reviews':
+                products = products.order_by('-reviews')
+            elif sort_param == 'created_at':
+                products = products.order_by('-created_at')
         return products
 
     def get_context_data(self, **kwargs):
