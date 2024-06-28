@@ -7,8 +7,8 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, DetailView
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
-from orders.models import Order
-from shop.models import CartItem, Cart, SellerProduct
+from orders.models import Order, OrderItem
+from shop.models import CartItem, Cart
 from accounts.models import User
 from orders.forms import (
     UserDataForm,
@@ -196,9 +196,12 @@ class Step4OrderConfirmation(FormView):
         cart_items = CartItem.objects.filter(cart=cart)
 
         for cart_item in cart_items:
-            product = SellerProduct.objects.get(pk=cart_item.product.pk)
-            order.seller_product.add(product)
-            order.save()
+            OrderItem.objects.create(
+                order=order,
+                seller_product=cart_item.product,
+                quantity=cart_item.quantity,
+                price=cart_item.price
+            )
 
         if payment_method == 'Онлайн картой':
             return render(self.request, template_name='orders/payment-by-card.html')
