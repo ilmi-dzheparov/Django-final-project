@@ -28,7 +28,6 @@ def import_seller_products(import_file_path):
     log_dir = os.path.join(settings.BASE_DIR, 'import_logs')
     logger = setup_logger('import_logger', log_dir, f'import_{timestamp}.log')
 
-
     import_successful = True
 
     try:
@@ -80,7 +79,6 @@ def import_seller_products(import_file_path):
         shutil.move(import_file_path, os.path.join(failed_imports_dir, os.path.basename(import_file_path)))
 
 
-
 def get_cached_categories():
     cache_key = 'categories'
     categories = cache.get(cache_key)
@@ -96,7 +94,6 @@ def get_cached_products():
     if products is None:
 
         products = SellerProduct.objects.all()
-
 
         cache.set(cache_key, products, settings.DEFAULT_CACHE_TIME)
 
@@ -115,6 +112,7 @@ def get_cached_popular_products():
         cache.set(cache_key, popular_products, settings.DEFAULT_CACHE_TIME)
 
     return popular_products
+
 
 def get_limited_products():
     cache_key = 'limited_products'

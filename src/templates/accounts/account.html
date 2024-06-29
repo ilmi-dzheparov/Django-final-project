@@ -59,38 +59,40 @@
                                 </div><a class="Account-editLink" href="{% url 'accounts:profile' pk=user.pk %}">Редактировать профиль</a>
                             </div>
                         </div>
-                        <div class="Account-group">
-                            <div class="Account-column Account-column_full">
-                                <div class="Order Order_anons">
-                                    <div class="Order-personal">
-                                        <div class="row">
-                                            <div class="row-block"><a class="Order-title" href="{% url 'orders:order_detail' pk=order.id %}">Заказ <span class="Order-numberOrder">№{{order.id}}</span> от <span class="Order-dateOrder">{{order.created_at}}</span></a>
-                                                <div class="Account-editLink"><a href="{% url 'accounts:history_of_orders' %}">История заказов</a>
-                                                </div>
-                                            </div>
-                                            <div class="row-block">
-                                                <div class="Order-info Order-info_delivery">
-                                                    <div class="Order-infoType">Тип доставки:
-                                                    </div>
-                                                    <div class="Order-infoContent">{{ order.delivery_method }}
+                        {% if order %}
+                            <div class="Account-group">
+                                <div class="Account-column Account-column_full">
+                                    <div class="Order Order_anons">
+                                        <div class="Order-personal">
+                                            <div class="row">
+                                                <div class="row-block"><a class="Order-title" href="{% url 'orders:order_detail' pk=order.id %}">Заказ <span class="Order-numberOrder">№{{order.id}}</span> от <span class="Order-dateOrder">{{order.created_at}}</span></a>
+                                                    <div class="Account-editLink"><a href="{% url 'accounts:history_of_orders' %}">История заказов</a>
                                                     </div>
                                                 </div>
-                                                <div class="Order-info Order-info_pay">
-                                                    <div class="Order-infoType">Оплата:
+                                                <div class="row-block">
+                                                    <div class="Order-info Order-info_delivery">
+                                                        <div class="Order-infoType">Тип доставки:
+                                                        </div>
+                                                        <div class="Order-infoContent">{{ order.delivery_method }}
+                                                        </div>
                                                     </div>
-                                                    <div class="Order-infoContent">{{ order.payment_method }}
+                                                    <div class="Order-info Order-info_pay">
+                                                        <div class="Order-infoType">Оплата:
+                                                        </div>
+                                                        <div class="Order-infoContent">{{ order.payment_method }}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="Order-info">
-                                                    <div class="Order-infoType">Общая стоимость:
+                                                    <div class="Order-info">
+                                                        <div class="Order-infoType">Общая стоимость:
+                                                        </div>
+                                                        <div class="Order-infoContent">200.99$
+                                                        </div>
                                                     </div>
-                                                    <div class="Order-infoContent">200.99$
-                                                    </div>
-                                                </div>
-                                                <div class="Order-info Order-info_status">
-                                                    <div class="Order-infoType">Статус:
-                                                    </div>
-                                                    <div class="Order-infoContent">{{ order.order_status }}
+                                                    <div class="Order-info Order-info_status">
+                                                        <div class="Order-infoType">Статус:
+                                                        </div>
+                                                        <div class="Order-infoContent">{{ order.order_status }}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,7 +100,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
