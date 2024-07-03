@@ -53,8 +53,8 @@ class IndexView(TemplateView):
 
 
 class ProductDetailView(DetailView):
-    template_name = 'shop/product.html'
-    context_object_name = "product"
+    template_name = 'shop/product_detail.html'
+    context_object_name = "product_detail"
     model = Product
 
     def get(self, request, *args, **kwargs):
@@ -173,7 +173,7 @@ class AddToCartView(View):
             return HttpResponseBadRequest("Количество должно быть числом.")
         quantity = int(quantity)
         if quantity <= 0:
-            return HttpResponseBadRequest("Количество должно быть болььше нуля.")
+            return HttpResponseBadRequest("Количество должно быть больше нуля.")
 
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)

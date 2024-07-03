@@ -78,7 +78,7 @@ class UserHistoryView(View):
     def get(self, request, *args, **kwargs):
         user = request.user
         history = HistoryProduct.objects.filter(user=user)[:20]
-        return render(request, template_name="includes/history-product.html",
+        return render(request, template_name="includes/history-product_detail.html",
                       context={"recently_viewed_products": history})
 
 
@@ -138,7 +138,7 @@ class UserHistoryProductView(View):
     def get(self, request, *args, **kwargs):
         user = request.user.pk
         history = HistoryProduct.objects.filter(user=user)[:8]
-        return render(request, template_name="accounts/history-product.html",
+        return render(request, template_name="accounts/history-product_detail.html",
                       context={"recently_viewed_products": history})
 
 
