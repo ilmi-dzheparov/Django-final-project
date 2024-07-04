@@ -54,7 +54,7 @@ class IndexView(TemplateView):
 
 class ProductDetailView(DetailView):
     template_name = 'shop/product_detail.html'
-    context_object_name = "product_detail"
+    context_object_name = "product"
     model = Product
 
     def get(self, request, *args, **kwargs):
