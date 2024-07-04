@@ -83,7 +83,7 @@ def get_cached_categories():
     cache_key = 'categories'
     categories = cache.get(cache_key)
     if categories is None:
-        categories = Category.objects.filter(products__available=True).prefetch_related('products')
+        categories = Category.objects.filter(products__available=True, parent__isnull=True).distinct()
         cache.set(cache_key, categories, settings.DEFAULT_CACHE_TIME)
     return categories
 
