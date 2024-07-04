@@ -47,6 +47,13 @@ class HistoryProduct(models.Model):
     history = HistoryProductManager()
 
 
+def category_icon_directory_path(instance: "Category", filename: str):
+    return 'shop/icon/category_{pk}/{filename}'.format(
+        pk=instance.pk,
+        filename=filename
+    )
+
+
 class Category(models.Model):
     """
       Модель Category представляет категорию
@@ -55,12 +62,12 @@ class Category(models.Model):
 
     class Meta:
         ordering = ['name']
-        verbose_name = "category"
-        verbose_name_plural = 'Categories'
+        verbose_name = 'category'
+        verbose_name_plural = 'categories'
 
     name = models.CharField(max_length=100, db_index=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
-    icon = models.ImageField(upload_to='category_icons/', blank=True, null=True)
+    icon = models.ImageField(null=True, blank=True, upload_to=category_icon_directory_path)
 
     def __str__(self):
         return self.name
