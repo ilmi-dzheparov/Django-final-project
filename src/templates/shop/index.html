@@ -23,7 +23,8 @@
                         </div>
                         <div class="BannersHomeBlock-block">
                             <div class="BannersHomeBlock-img">
-                                <img src="{{ category.icon.url }}" alt="{{ category.name }}" />
+                                <img src="{% if category.icon %}{{ category.icon.url }}{% else %}
+                                {% static 'assets/img/icons/category_default.png' %}{% endif %}" alt="{{ category.name }}" />
                             </div>
                         </div>
                     </div>

@@ -1,35 +1,45 @@
 {% extends "base.html" %}
 {% load static %}
 {% block header %}
-    {% include "header.html" %}
+{% include "header.html" %}
 {% endblock %}
 {% block middle %}
 
-  <div class="Middle Middle_top">
-        <div class="Section">
-            <div class="wrap">
-                <div class="Product">
-                    <div class="ProductCard">
-                        <div class="ProductCard-look">
-                            <div class="ProductCard-photo">
-                                <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png" />
-                            </div>
-                            <div class="ProductCard-picts"><a class="ProductCard-pict ProductCard-pict_ACTIVE" href="assets/img/content/home/bigGoods.png"><img src="assets/img/content/home/bigGoods.png" alt="bigGoods.png" /></a><a class="ProductCard-pict" href="assets/img/content/home/slider.png"><img src="assets/img/content/home/slider.png" alt="slider.png" /></a><a class="ProductCard-pict" href="assets/img/content/home/videoca.png"><img src="assets/img/content/home/videoca.png" alt="videoca.png" /></a>
-                            </div>
+<div class="Middle Middle_top">
+    <div class="Section">
+        <div class="wrap">
+            <div class="Product">
+                <div class="ProductCard">
+                    <div class="ProductCard-look">
+                        <div class="ProductCard-photo">
+                            <img src="{% if product.preview %}{{ product.preview.url }}{% else %}{% static 'assets/img/content/sale/default_product.png' %}{% endif %}"
+                                 alt="product.png"/>
                         </div>
-                        <div class="ProductCard-picts">
-                            <a class="ProductCard-pict ProductCard-pict_ACTIVE"
-                               href="assets/img/content/home/bigGoods.png">
-                                <img src="{{ product.preview.url }}" alt="bigGoods.png"/>
-                            </a>
-                            <a class="ProductCard-pict" href="assets/img/content/home/slider.png">
-                                <img src="assets/img/content/home/slider.png" alt="slider.png"/>
-                            </a>
-                            <a class="ProductCard-pict" href="assets/img/content/home/videoca.png">
-                                <img src="assets/img/content/home/videoca.png" alt="videoca.png"/>
-                            </a>
-                        </div>
+                        <!--                            <div class="ProductCard-picts">-->
+                        <!--                                <a class="ProductCard-pict ProductCard-pict_ACTIVE" href="assets/img/content/home/bigGoods.png">-->
+                        <!--                                    <img src="assets/img/content/home/bigGoods.png" alt="bigGoods.png" />-->
+                        <!--                                </a>-->
+                        <!--                                <a class="ProductCard-pict" href="assets/img/content/home/slider.png">-->
+                        <!--                                    <img src="assets/img/content/home/slider.png" alt="slider.png" />-->
+                        <!--                                </a>-->
+                        <!--                                <a class="ProductCard-pict" href="assets/img/content/home/videoca.png">-->
+                        <!--                                    <img src="assets/img/content/home/videoca.png" alt="videoca.png" />-->
+                        <!--                                </a>-->
+                        <!--                            </div>-->
                     </div>
+                    <!--                        <div class="ProductCard-picts">-->
+                    <!--                            <a class="ProductCard-pict ProductCard-pict_ACTIVE"-->
+                    <!--                               href="assets/img/content/home/bigGoods.png">-->
+                    <!--                                <img src="{% if product.preview %}{{ product.preview.url }}{% else %}{% static 'assets/img/content/sale/default_product.png' %}{% endif %}" alt="product_image"/>-->
+                    <!--                            </a>-->
+                    <!--                            <a class="ProductCard-pict" href="assets/img/content/home/slider.png">-->
+                    <!--                                <img src="assets/img/content/home/slider.png" alt="slider.png"/>-->
+                    <!--                            </a>-->
+                    <!--                            <a class="ProductCard-pict" href="assets/img/content/home/videoca.png">-->
+                    <!--                                <img src="assets/img/content/home/videoca.png" alt="videoca.png"/>-->
+                    <!--                            </a>-->
+                    <!--                        </div>-->
+
                     <div class="ProductCard-desc">
                         <div class="ProductCard-header">
                             <h2 class="ProductCard-title">
@@ -44,102 +54,133 @@
                             </div>
                         </div>
                         <div class="ProductCard-text">
-                            <ul>
-                                {{ product.description }}
-                            </ul>
+                            <!--                            <ul>-->
+                            <!--                                {{ product.description }}-->
+                            <!--                            </ul>-->
                         </div>
-                        <div class="ProductCard-cart">
-                            <form action="{% url 'shop:add_to_cart' min_price_id %}" method="post">
-                                {% csrf_token %}
-                                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                                    <div class="Amount Amount_product">
-                                        <button class="Amount-remove" type="button">
-                                        </button>
-                                        <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                                        <button class="Amount-add" type="button">
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="ProductCard-cartElement">
-                                    <button class="btn btn_primary" type="submit">
-                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                                        <span class="btn-content">Купить</span>
-                                    </a>
-                                    {% with product.pk as pk %}
-                                        <form method="POST" action="{% url 'comparison:service_add' pk %}">
-                                            {% csrf_token %}
-                                            <button class="btn btn_primary">
-<!--                                                <img class="btn-icon" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg">-->
-                                                <span class="btn-content">Сравнить</span>
-                                            </button>
-                                        </form>
-                                    {% endwith %}
-                                </div>
-                            </form>
-                            <div id="modal_open" class="my_modal">
-                                <div class="my_modal-dialog">
-                                    <div class="my_modal-content">
-                                        <div class="my_modal-header">
-                                            <p class="my_modal-title">Поздравляем!</p>
-                                            <a href="#" title="Закрыть модальное окно" class="close">×</a>
-                                        </div>
-                                        <div class="my_modal-body">
-                                            <p>Товар успешно добавлен в корзину!</p>
-                                        </div>
-                                    </div>
+                        <form action="{% url 'shop:add_to_cart' min_price_id %}" method="post" class="ProductCard-cart">
+                            {% csrf_token %}
+                            <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                                <div class="Amount Amount_product">
+                                    <button class="Amount-remove" type="button">
+                                    </button>
+                                    <input class="Amount-input form-input" name="amount" type="text" value="1"/>
+                                    <button class="Amount-add" type="button">
+                                    </button>
                                 </div>
                             </div>
+
+                            <div class="ProductCard-cartElement">
+                                <button class="btn btn_primary" type="submit">
+                                    <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                         alt="cart_white.svg"/>
+                                    <span class="btn-content">Купить</span>
+                                </button>
+                            </div>
+
+                        </form>
+                        <div class="ProductCard-cart">
+                            {% with product.pk as pk %}
+                            <form method="POST" action="{% url 'comparison:service_add' pk %}">
+                                {% csrf_token %}
+                                <button class="btn btn_primary">
+                                    <!--                                                <img class="btn-icon" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg">-->
+                                    <span class="btn-content">Сравнить</span>
+                                </button>
+                            </form>
+                            {% endwith %}
                         </div>
-                        <div class="ProductCard-footer">
-                            <div class="ProductCard-tags">
-                                <strong class="ProductCard-tagsTitle">Тэги:
-                                </strong><a href="#">Аксессуары</a>,<a href="#">Дизайн</a>,<a href="#">Игры</a>
+                        </form>
+                        <div id="modal_open" class="my_modal">
+                            <div class="my_modal-dialog">
+                                <div class="my_modal-content">
+                                    <div class="my_modal-header">
+                                        <p class="my_modal-title">Поздравляем!</p>
+                                        <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                                    </div>
+                                    <div class="my_modal-body">
+                                        <p>Товар успешно добавлен в корзину!</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="Tabs Tabs_default">
-                        <div class="Tabs-links">
-                            <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-                                <span>Описание</span>
-                            </a>
-                            <a class="Tabs-link" href="#sellers">
-                                <span>Продавцы</span>
-                            </a>
-                            <a class="Tabs-link" href="#addit">
-                                <span>Характеристика</span>
-                            </a>
-                            <a class="Tabs-link" href="#reviews">
-                                <span>Отзывы ({{ product.reviews.count }})</span>
-                            </a>
+                    <div class="ProductCard-footer">
+                        <div class="ProductCard-cart ProductCard-tags">
+                            <strong class="ProductCard-tagsTitle">Тэги:</strong>
+                            {% for tag in product.tags.all %}
+                                {{tag.name}}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="Tabs Tabs_default">
+                    <div class="Tabs-links">
+                        <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
+                            <span>Описание</span>
+                        </a>
+                        <a class="Tabs-link" href="#sellers">
+                            <span>Продавцы</span>
+                        </a>
+                        <a class="Tabs-link" href="#addit">
+                            <span>Характеристика</span>
+                        </a>
+                        <a class="Tabs-link" href="#reviews">
+                            <span>Отзывы ({{ product.reviews.count }})</span>
+                        </a>
+                    </div>
+                    <div class="Tabs-wrap">
+                        <div class="Tabs-block" id="description">
+                            <h2>{{ product.name }}</h2>
+
+                            <img class="pict pict_right"
+                                 src="{% if product.preview %}{{ product.preview.url }}{% else %}{% static 'assets/img/content/sale/default_product.png' %}{% endif %}"
+                                 alt="product.png"/>
+                            <p>
+                                {{ product.description|linebreaksbr }}
+                            </p>
+
+                            <div class="clearfix">
+                            </div>
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>Характеристика</th>
+                                        <th>Значение</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Тип устройства</td>
+                                        <td>{{ product.category.name }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="Tabs-block" id="sellers">
+                            {% include "shop/product_sellers.html" %}
                         </div>
                         <div class="Tabs-block" id="addit">
                             <div class="Product-props">
+                                {% for attr in product.attributes.all %}
                                 <div class="Product-prop">
-                                    <strong>Lorem
-                                    </strong><span> Pfizer</span>
+                                    <strong>{{ attr.attribute.name }}</strong>
+                                    <span>{{ attr.value }}</span>
                                 </div>
-                                <div class="Product-prop">
-                                    <strong>ipsum
-                                    </strong><span> Lorem ipsum dolor sit</span>
-                                </div>
-                                <div class="Product-prop">
-                                    <strong>dolor sit
-                                    </strong><span> 5 ans</span>
-                                </div>
-                                <div class="Product-prop">
-                                    <strong>psum dolo
-                                    </strong><span> 2–3 jours</span>
-                                </div>
+                                {% endfor %}
                             </div>
-                            {% include 'includes/reviews.html' %}
+
                         </div>
+
+                        {% include 'includes/reviews.html' %}
+
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+</div>
 {% endblock %}
 {% block footer %}
-    {% include "footer.html" %}
+{% include "footer.html" %}
 {% endblock %}
