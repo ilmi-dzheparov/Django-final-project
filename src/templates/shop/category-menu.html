@@ -7,16 +7,15 @@
     </div>
     <div class="CategoriesButton-content">
         {% for category in categories %}
-            <div class="CategoriesButton-link">
-                <a href="#">
-                    <div class="CategoriesButton-icon">
-                        {% if category.icon.url %}
-                            <img src="{{ category.icon.url }}" alt="{{ category.icon.name }}">
-                        {% endif %}
-                    </div>
-                    <span class="CategoriesButton-text">{{ category.name }}</span>
-                </a>
-            </div>
+        <div class="CategoriesButton-link">
+            <a href="#">
+                <div class="CategoriesButton-icon">
+                    <img src="{% if category.icon %}{{ category.icon.url }}{% else %}{% static 'assets/img/icons/category_default.png' %}{% endif %}"
+                         alt="{{ category.icon.name }}">
+                </div>
+                <span class="CategoriesButton-text">{{ category.name }}</span>
+            </a>
+        </div>
         {% endfor %}
     </div>
 </div>
