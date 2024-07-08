@@ -1,19 +1,23 @@
 {% load static %}
+{% load i18n %}
 <div class="CategoriesButton">
     <div class="CategoriesButton-title">
-        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg"></div>
-        <span class="CategoriesButton-text">Все категории</span>
+        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg">
+        </div>
+        <span class="CategoriesButton-text">{% translate 'Все категории' %}</span>
         <div class="CategoriesButton-arrow"></div>
     </div>
     <div class="CategoriesButton-content">
         {% for category in categories %}
         <div class="CategoriesButton-link">
-            <a href="#">
+            <a href="">
                 <div class="CategoriesButton-icon">
-                    <img src="{% if category.icon %}{{ category.icon.url }}{% else %}{% static 'assets/img/icons/category_default.png' %}{% endif %}"
+                    <img src="{% if category.icon %}{{ category.icon.url }}{% else %}{% static 'assets/img/icons/category_default.svg' %}{% endif %}"
                          alt="{{ category.icon.name }}">
                 </div>
-                <span class="CategoriesButton-text">{{ category.name }}</span>
+                <span class="CategoriesButton-text">
+                        {{ category.name }}
+                    </span>
             </a>
         </div>
         {% endfor %}
