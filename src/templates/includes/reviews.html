@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <div class="Tabs-block" id="reviews">
 
@@ -8,7 +9,7 @@
 
         <header class="Section-header">
             <h3 class="Section-title">
-                {{ page_obj.paginator.count }} отзыв
+                {{ page_obj.paginator.count }} {% translate 'отзыв' %}
             </h3>
         </header>
 
@@ -41,7 +42,8 @@
     {% endif %}
 
     <header class="Section-header Section-header_product">
-        <h3 class="Section-title">Добавить отзыв
+        <h3 class="Section-title">
+            {% translate 'Добавить отзыв' %}
         </h3>
     </header>
 
@@ -52,7 +54,8 @@
                 {{ form }}
             </div>
             <div class="form-group">
-                <button class="btn btn_muted" type="submit">Отправить отзыв
+                <button class="btn btn_muted" type="submit">
+                    {% translate 'Отправить отзыв' %}
                 </button>
             </div>
         </form>

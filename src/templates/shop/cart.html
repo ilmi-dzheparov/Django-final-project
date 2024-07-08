@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 {% block header %}
     {% include "header.html" %}
 {% endblock %}
@@ -16,7 +17,8 @@
                             <div class="Cart-block Cart-block_row">
                                 <div class="Cart-block Cart-block_pict">
                                     <a class="Cart-pict" href="#">
-                                        <img class="Cart-img" src="{{ cart_item.product.product.preview.url }}" alt="card.jpg"/>
+                                        <img class="Cart-img" src="{% if cart_item.product.product.preview %}{{ cart_item.product.product.preview.url }}
+                                        {%else%}{% static 'assets/img/content/sale/default_product.png' %}{%endif%}" alt="card.jpg"/>
                                     </a>
                                 </div>
                                 <div class="Cart-block Cart-block_info">
@@ -68,11 +70,11 @@
 
                     <div class="Cart-total">
                         <div class="Cart-block Cart-block_total">
-                            <strong class="Cart-title">Итого:</strong>
+                            <strong class="Cart-title">{% translate 'Итого' %}:</strong>
                             <span class="Cart-price">{{ total_price }}$</span>
                         </div>
                         <div class="Cart-block">
-                            <a class="btn btn_success btn_lg" href="{% url 'orders:order_create' %}">Оформить заказ</a>
+                            <a class="btn btn_success btn_lg" href="{% url 'orders:order_create' %}">{% translate 'Оформить заказ' %}</a>
                         </div>
                     </div>
                </form>

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
+
 {% block header %}
 {% include "header.html" %}
 {% endblock %}
@@ -74,7 +76,7 @@
                                 <button class="btn btn_primary" type="submit">
                                     <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                                          alt="cart_white.svg"/>
-                                    <span class="btn-content">Купить</span>
+                                    <span class="btn-content">{% translate 'Купить' %}</span>
                                 </button>
                             </div>
 
@@ -85,7 +87,7 @@
                                 {% csrf_token %}
                                 <button class="btn btn_primary">
                                     <!--                                                <img class="btn-icon" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg">-->
-                                    <span class="btn-content">Сравнить</span>
+                                    <span class="btn-content">{% translate 'Сравнить' %}</span>
                                 </button>
                             </form>
                             {% endwith %}
@@ -95,11 +97,11 @@
                             <div class="my_modal-dialog">
                                 <div class="my_modal-content">
                                     <div class="my_modal-header">
-                                        <p class="my_modal-title">Поздравляем!</p>
+                                        <p class="my_modal-title">{% translate 'Поздравляем!' %}</p>
                                         <a href="#" title="Закрыть модальное окно" class="close">×</a>
                                     </div>
                                     <div class="my_modal-body">
-                                        <p>Товар успешно добавлен в корзину!</p>
+                                        <p>{% translate 'Товар успешно добавлен в корзину!' %}</p>
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +109,7 @@
                     </div>
                     <div class="ProductCard-footer">
                         <div class="ProductCard-cart ProductCard-tags">
-                            <strong class="ProductCard-tagsTitle">Тэги:</strong>
+                            <strong class="ProductCard-tagsTitle">{% translate 'Тэги' %}:</strong>
                             {% for tag in product.tags.all %}
                                 {{tag.name}}
                             {% endfor %}
@@ -117,16 +119,16 @@
                 <div class="Tabs Tabs_default">
                     <div class="Tabs-links">
                         <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-                            <span>Описание</span>
+                            <span>{% translate 'Описание' %}</span>
                         </a>
                         <a class="Tabs-link" href="#sellers">
-                            <span>Продавцы</span>
+                            <span>{% translate 'Продавцы' %}</span>
                         </a>
                         <a class="Tabs-link" href="#addit">
-                            <span>Характеристика</span>
+                            <span>{% translate 'Характеристика' %}</span>
                         </a>
                         <a class="Tabs-link" href="#reviews">
-                            <span>Отзывы ({{ product.reviews.count }})</span>
+                            <span>{% translate 'Отзывы' %} ({{ product.reviews.count }})</span>
                         </a>
                     </div>
                     <div class="Tabs-wrap">
@@ -145,11 +147,11 @@
                             <div class="table">
                                 <table>
                                     <tr>
-                                        <th>Характеристика</th>
-                                        <th>Значение</th>
+                                        <th>{% translate 'Характеристика' %}</th>
+                                        <th>{% translate 'Значение' %}</th>
                                     </tr>
                                     <tr>
-                                        <td>Тип устройства</td>
+                                        <td>{% translate 'Категория продукта' %}</td>
                                         <td>{{ product.category.name }}</td>
                                     </tr>
                                 </table>
