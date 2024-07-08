@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <div class="ControlPanel">
     <div class="wrap">
         <div class="row ControlPanel-row">
@@ -33,8 +34,8 @@
             <nav class="row-block">
                 <div class="row ControlPanel-rowSplit">
                     <div class="row-block">
-                        <a class="ControlPanel-title" href="{% url 'accounts:registration' %}">Регистрация</a>
-                        <a class="ControlPanel-title" href="{% url 'accounts:logout' %}">Вход</a>
+                        <a class="ControlPanel-title" href="{% url 'accounts:registration' %}">{% translate 'Регистрация' %}</a>
+                        <a class="ControlPanel-title" href="{% url 'accounts:logout' %}">{% translate 'Вход' %}</a>
                     </div>
                 </div>
             </nav>
@@ -53,14 +54,14 @@
             <div class="menuModal" id="navigate">
                 <ul class="menu menu_main">
                     <li class="menu-item">
-                        <a class="menu-link" href="{% url 'shop:index' %}">Главная</a>
+                        <a class="menu-link" href="{% url 'shop:index' %}">{% translate 'Главная' %}</a>
                     </li>
                     <li class="menu-item">
-                        <span class="menu-label menu-label_success">Скидки</span>
-                        <a class="menu-link" href="{% url 'shop:product_list' %}">Каталог</a>
+                        <span class="menu-label menu-label_success">{% translate 'Скидки' %}</span>
+                        <a class="menu-link" href="{% url 'shop:product_list' %}">{% translate 'Каталог' %}</a>
                     </li>
                     <li class="menu-item">
-                        <a class="menu-link" href="{% url 'comparison:service' %}">Сравнение</a>
+                        <a class="menu-link" href="{% url 'comparison:service' %}">{% translate 'Сравнение' %}</a>
                     </li>
                 </ul>
             </div>
@@ -73,9 +74,9 @@
                         <img class="CartBlock-img" src="{% static 'assets/img/icons/loon-icon.svg' %}" alt="loon-icon.svg"/>
                     </button>
                     <div class="dropdown-content">
-                        <a class="dropdown-content-a" href="{% url 'accounts:account' pk=user.pk %}">Личный кабинет</a>
-                        <a class="dropdown-content-a" href="#">Административный раздел</a>
-                        <a class="dropdown-content-a" href="{% url 'accounts:logout' %}">Выход</a>
+                        <a class="dropdown-content-a" href="{% url 'accounts:account' pk=user.pk %}">{% translate 'Личный кабинет' %}</a>
+                        <a class="dropdown-content-a" href="#">{% translate 'Административный раздел' %}</a>
+                        <a class="dropdown-content-a" href="{% url 'accounts:logout' %}">{% translate 'Выход' %}</a>
                     </div>
                 </div>
                 <a class="CartBlock-block" href="{% url 'shop:cart_detail' %}">
@@ -95,7 +96,7 @@
         <div class="row-block Header-trigger">
             <a class="menuTrigger" href="#">
                 <div class="menuTrigger-content">
-                    Показать навигацию
+                    {% translate 'Показать навигацию' %}
                 </div>
                 <span></span><span></span><span></span>
             </a>
@@ -120,7 +121,7 @@
                            placeholder="NVIDIA GeForce RTX 3060"/>
                     <button class="search-button" type="submit" name="search" id="search">
                         <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>
-                        Поиск
+                        {% translate 'Поиск' %}
                     </button>
                 </form>
             </div>

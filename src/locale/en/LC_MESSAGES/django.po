@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 11:26+0000\n"
+"POT-Creation-Date: 2024-07-07 21:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,10 +17,75 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: megano/settings.py:193
+
+#: megano/settings.py:197
 msgid "English"
 msgstr ""
 
-#: megano/settings.py:194
+#: megano/settings.py:198
 msgid "Russian"
 msgstr ""
+
+#: templates/footer.html:11
+msgid "Навигация"
+msgstr "Navigation"
+
+#: templates/footer.html:14 templates/header.html:57
+msgid "Главная"
+msgstr "Main"
+
+#: templates/footer.html:17 templates/header.html:61
+msgid "Каталог"
+msgstr "Catalog"
+
+#: templates/footer.html:20 templates/header.html:64
+msgid "Сравнение"
+msgstr "Comparison"
+
+#: templates/footer.html:23
+msgid "Профиль"
+msgstr "Profile"
+
+#: templates/footer.html:29
+msgid "Контакты"
+msgstr "Contacts"
+
+#: templates/footer.html:30
+msgid "Телефон"
+msgstr "Phone"
+
+#: templates/header.html:37
+msgid "Регистрация"
+msgstr "Registration"
+
+#: templates/header.html:38
+msgid "Вход"
+msgstr "Log in"
+
+#: templates/header.html:60
+msgid "Скидки"
+msgstr "Discounts"
+
+#: templates/header.html:77
+msgid "Личный кабинет"
+msgstr "Account"
+
+#: templates/header.html:78
+msgid "Административный раздел"
+msgstr "Admin section"
+
+#: templates/header.html:79
+msgid "Выход"
+msgstr "Exit"
+
+#: templates/header.html:99
+msgid "Показать навигацию"
+msgstr "Show navigation"
+
+#: templates/header.html:124
+msgid "Поиск"
+msgstr "Search"
+
+#: templates/shop/category-menu.html:8
+msgid "Все категории"
+msgstr "All categories"
