@@ -11,11 +11,7 @@ class ProductFilterForm(forms.Form):
     price = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'range-line',
         'type': 'text',
-        'data-type': 'double',
-        'data-min': '7',
-        'data-max': '50',
-        'data-from': '7',
-        'data-to': '27'
+        'placeholder': 'Min price;Max price'
     }))
     title = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'class': 'form-input form-input_full',

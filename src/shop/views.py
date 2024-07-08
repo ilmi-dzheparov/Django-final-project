@@ -32,9 +32,10 @@ from shop.models import (
     Category,
     HistoryProduct,
 )
-from shop.forms import ReviewForm
-from django.db.models import Count
-from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
+from shop.forms import ReviewForm, ProductFilterForm
+from django.db.models import Count, Max, Min
+from shop.services import get_cached_popular_products, get_limited_products
+from .services import get_cached_products, get_cached_categories
 
 
 class IndexView(TemplateView):
@@ -212,7 +213,7 @@ class CartDetailView(DetailView):
 
 class CartItemDeleteView(View):
     """
-    Представление: удвление товара из корзины
+    Представление: удаление товара из корзины
     """
 
     def post(self, request, *args, **kwargs):
@@ -254,11 +255,11 @@ class CartItemUpdateView(View):
 
 class Catalog(ListView):
     """
-        Представление: каталог товаров
+    Представление: каталог товаров
     """
     template_name = "shop/catalog.html"
     context_object_name = "products"
-    paginate_by = 4
+    paginate_by = 8
 
     def get_queryset(self):
         products = get_cached_products()
@@ -272,10 +273,35 @@ class Catalog(ListView):
                 products = products.order_by('-reviews')
             elif sort_param == 'created_at':
                 products = products.order_by('-created_at')
+
+        form = ProductFilterForm(self.request.GET)
+        if form.is_valid():
+            price = form.cleaned_data.get('price')
+            title = form.cleaned_data.get('title')
+            in_stock = form.cleaned_data.get('in_stock')
+            free_delivery = form.cleaned_data.get('free_delivery')
+
+            if price:
+                min_price, max_price = map(Decimal, price.split(';'))
+                products = products.filter(price__range=(min_price, max_price))
+            if title:
+                products = products.filter(product__name__icontains=title)
+            if in_stock:
+                products = products.filter(product__seller_products__quantity__gt=0)
+            if free_delivery:
+                products = products.filter(product__seller_products__free_delivery=True)
+
         return products
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = get_cached_categories()
         context['categories'] = categories
+        products = get_cached_products()
+        max_price = products.aggregate(Max('price'))['price__max']
+        min_price = products.aggregate(Min('price'))['price__min']
+        context['data_min'] = min_price
+        context['data_max'] = max_price
+
         return context
+
