@@ -18,28 +18,28 @@
                         </header>
                         <div class="Section-columnContent">
                                 <form class="form" action="{% url 'shop:product_list' %}" method="get">
+
                                     <div class="form-group">
                                         <div class="range Section-columnRange">
-                                                {{ form.price }}
-                                            <div class="range-price">Цена:&#32;
-                                                <div class="rangePrice">
+                                                <input type="text" class="range-line irs-hidden-input" id="price" name="price" data-type="double" data-min="{{ data_min }}" data-max="{{ data_max }}" data-from="{{ data_min }}" data-to="{{ data_max }}" tabindex="-1" readonly style="display: none;">
+                                                <div class="range-price">Цена:
+                                                    <div class="rangePrice">$7 - $27</div>
                                                 </div>
-                                            </div>
                                         </div>
                                     </div>
                                 <div class="form-group">
-                                    {{ form.title }}
+                                    <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="Название">
                                 </div>
                                 <div class="form-group">
                                     <label class="toggle">
-                                        {{ form.in_stock }}
+                                        <input type="checkbox" name="in_stock" value="true">
                                         <span class="toggle-box"></span>
                                         <span class="toggle-text">Только товары в наличии</span>
                                     </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="toggle">
-                                        {{ form.free_delivery }}
+                                        <input type="checkbox" name="free_delivery" value="true">
                                         <span class="toggle-box"></span>
                                         <span class="toggle-text">С бесплатной доставкой</span>
                                     </label>
