@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, ROUND_HALF_UP
 from shop.utils import (
     add_to_session_cart,
     get_cart_from_session,
@@ -110,12 +110,13 @@ class ProductDetailView(DetailView):
                 min_price_id = seller_product.id
                 min_price = price
             elif count > 1:
-                if price < min_price:
-                    min_price = price
+                if seller_product.price < min_price:
+                    min_price = seller_product.price
                     min_price_id = seller_product.id
 
         if count > 0:
-            context['average_price'] = Decimal(price) / count
+            average_price = (price / count).quantize(Decimal('0.00'), rounding=ROUND_HALF_UP)
+            context['average_price'] = Decimal(average_price)
             context['min_price_id'] = min_price_id
         else:
             context['average_price'] = Decimal(0)

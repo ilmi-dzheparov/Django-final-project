@@ -95,7 +95,8 @@
                         {% for product in products %}
                         <div class="Card">
                             <a class="Card-picture" href="{% url 'shop:product_detail' pk=product.product.pk %}">
-                                <img src="{{ product.product.preview.url }}" alt="{{ product.product.name }}" />
+                                <img src="{% if product.product.preview %}{{ product.product.preview.url }}{% else %}
+                                {% static 'assets/img/content/sale/default_product.png' %}{% endif %}" alt="{{ product.product.name }}" />
                             </a>
                             <div class="Card-content">
                                 <strong class="Card-title">
