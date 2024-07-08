@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load i18n %}
 
 {% block header %}
     {% include "header_alt.html" %}
@@ -9,23 +10,23 @@
 {% block middle %}
 <div class="wrapper">
     <div class="header">
-        <h3 class="sign-in">Регистрация</h3>
+        <h3 class="sign-in">{% translate 'Регистрация' %}</h3>
     </div>
         <div class="clear"></div>
         <form action="{% url 'accounts:registration' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
-                <input class="user-input" type="text" name="username" id="username" placeholder="Имя">
+                <input class="user-input" type="text" name="username" id="username" placeholder="{% translate 'Имя' %}">
             </div>
             <div>
                 <input class="user-input" id="email" name="email" type="text" value="email" data-validate="require" action="{% url 'accounts:registration' %}">
             </div>
             <div>
-                <input class="user-input" id="password" name="password" type="password" placeholder="Пароль" data-validate="require" action="{% url 'accounts:registration' %}">
+                <input class="user-input" id="password" name="password" type="password" placeholder="{% translate 'Пароль' %}" data-validate="require" action="{% url 'accounts:registration' %}">
             </div>
-                <input type="submit" value="Зарегистрироваться" />
+                <input type="submit" value="{% translate 'Зарегистрироваться' %}" />
             <a class="registr" href="{% url 'accounts:login' %}">
-                Вход
+                {% translate 'Вход' %}
             </a>
     <div class="clear"></div>
 </form>

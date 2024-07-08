@@ -1,5 +1,6 @@
 from shop.models import Product, ProductAttribute, Attribute
 from .comparison_table import ComparisonTable, ComparisonCategory
+from django.utils.translation import gettext_lazy as _
 
 
 def delete_uniq_attribute(attributes, count):
@@ -87,7 +88,8 @@ class Comparison:
         """
 
         if len(self.comparison_products) < 2:
-            return {"message": f"Недостаточно данных для сравнения. Товаров добавлено: {len(self.comparison_products)}"}
+            message = _("Недостаточно данных для сравнения. Товаров добавлено")
+            return {"message": f"{message}: {len(self.comparison_products)}"}
 
         self.products = Product.objects.filter(id__in=self.comparison_products)
         self.product_attributes = ProductAttribute.objects.filter(product__in=self.products)
