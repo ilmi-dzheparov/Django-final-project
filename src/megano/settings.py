@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'comparison.apps.ComparisonConfig',
     'discounts.apps.DiscountsConfig',
     'orders.apps.OrdersConfig',
+    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +103,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'shop.context_processors.categories',
-                'shop.context_processors.info_cart',
             ],
         },
     },
@@ -205,4 +205,8 @@ EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-SITE_ID = 1
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51OYrCZI4HzTXUyHbf5bSix6J875PaRxoDj7oQPCs5tpk75QzhAxKJXazl4UO841h64nWx3Qbyh2gWEiSqpUTambw00LhUwNrNM'
+STRIPE_SECRET_KEY = 'sk_test_51OYrCZI4HzTXUyHbgDPDFBBg2dpXiHcJfZPZbWnnIVAvY6bo4BuS1Gi3AkEDEKj9soWF8nOg1SL6db9vpDcDgyuJ00fBl8knbT'
+STRIPE_ENDPOINT_SECRET = "whsec_9d695c967fa07bcaf938bcbd9e4d747da7ad4408c11152eddb331a69bd343403"
+
+SITE_ID=1
