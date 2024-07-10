@@ -1,5 +1,5 @@
 from django import forms
-
+from discounts.models import ProductDiscount
 
 # Проверка, чтоб дата окончания скидки была больше даты начала скидки
 def check_dates_of_discount(cleaned_data):
@@ -35,3 +35,30 @@ def check_if_products_belong_to_categories_of_another_group(products, categories
         raise forms.ValidationError(
             f"Products {products_intersection} from group {group_nums[0]} belong to categories of group {group_nums[1]}."
         )
+
+
+def calculate_product_discounts(products):
+    total_discount = 0
+
+    for product in products:
+        # Получаем скидку, связанную с данным продуктом
+        product_discount = ProductDiscount.objects.filter(products__in=[product])
+
+        # Если у продукта нет скидки, проверяем, входит ли он в категорию со скидкой
+        if not product_discount:
+            product_discount = ProductDiscount.objects.filter(categories__in=product.categories.all()).first()
+
+        if product_discount:
+            # Проверяем даты действия скидки
+            check_dates_of_discount({
+                'valid_from': product_discount.valid_from,
+                'valid_to': product_discount.valid_to
+            })
+
+            # Вычисляем сумму скидки для данного продукта и добавляем ее к общей сумме
+            discount_amount = (product.price * product_discount.discount) / 100
+            total_discount += discount_amount
+
+    return total_discount
+
+
