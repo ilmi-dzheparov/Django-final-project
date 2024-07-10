@@ -307,3 +307,34 @@ class Catalog(ListView):
 
         return context
 
+
+class CatalogProduct(ListView):
+    """
+    Представление выводит все продукты переданной категории.
+    """
+
+    model = SellerProduct
+    template_name = "shop/catalog.html"
+    context_object_name = 'products'
+    category = None
+    paginate_by = 8
+    queryset = SellerProduct.objects.all()
+
+    def get_queryset(self):
+        queryset = SellerProduct.objects.all().select_related('product', 'product__category')
+
+        if 'pk' in self.kwargs:
+            category_id = self.kwargs['pk']
+            category = Category.objects.filter(pk=category_id).first()
+
+            if category:
+                # Создаем фильтр по основной категории и подкатегориям
+                subcategories = Category.objects.filter(
+                    Q(pk=category_id) | Q(parent=category)
+                ).values_list('id', flat=True)
+
+                # Фильтруем продукты по категориям
+                product_ids = Product.objects.filter(category__in=subcategories).values_list('id', flat=True)
+                queryset = queryset.filter(product__id__in=product_ids)
+
+        return queryset
