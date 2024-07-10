@@ -73,7 +73,11 @@
                         <img class="CartBlock-img" src="{% static 'assets/img/icons/loon-icon.svg' %}" alt="loon-icon.svg"/>
                     </button>
                     <div class="dropdown-content">
-                        <a class="dropdown-content-a" href="{% url 'accounts:account' pk=user.pk %}">Личный кабинет</a>
+                        {% if user.is_authenticated %}
+                            <a class="dropdown-content-a" href="{% url 'accounts:account' pk=user.pk %}">Личный кабинет</a>
+                        {% else %}
+                            <a class="dropdown-content-a" href="{% url 'accounts:login' %}">Личный кабинет</a>
+                        {% endif %}
                         <a class="dropdown-content-a" href="#">Административный раздел</a>
                         <a class="dropdown-content-a" href="{% url 'accounts:logout' %}">Выход</a>
                     </div>

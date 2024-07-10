@@ -34,8 +34,8 @@ from shop.models import (
 )
 from shop.forms import ReviewForm, ProductFilterForm
 from django.db.models import Count, Max, Min
-from shop.services import get_cached_popular_products, get_limited_products
-from .services import get_cached_products, get_cached_categories
+from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
+
 
 
 class IndexView(TemplateView):
