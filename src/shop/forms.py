@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import BaseInlineFormSet
+from django.utils.translation import gettext_lazy as _
 
 from shop.admin_mixin import UniqueAttributeMixin
 from shop.models import Attribute, ProductAttribute, Review
@@ -11,11 +12,7 @@ class ProductFilterForm(forms.Form):
     price = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'range-line',
         'type': 'text',
-        'data-type': 'double',
-        'data-min': '7',
-        'data-max': '50',
-        'data-from': '7',
-        'data-to': '27'
+        'placeholder': 'Min price;Max price'
     }))
     title = forms.CharField(required=False, widget=forms.TextInput(attrs={
         'class': 'form-input form-input_full',
@@ -111,7 +108,7 @@ class ReviewForm(forms.ModelForm):
         self.fields['text'].widget.attrs.update({
             'name': "review",
             'id': "review",
-            'placeholder': 'Отзывы',
+            'placeholder': _("Отзывы"),
             'class': 'form-textarea'
         })
         self.fields['text'].label = False

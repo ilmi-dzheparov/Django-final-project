@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load i18n %}
 
 {% block header %}
     {% include "header.html" %}
@@ -15,19 +16,32 @@
                 <div class="Section-column">
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">Навигация
+                            <strong class="Section-title">
+                                {% translate 'Навигация' %}
                             </strong>
                         </header>
                         <div class="Section-columnContent">
                             <div class="NavigateProfile">
                                 <ul class="menu menu_vt">
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:account' pk=user.pk %}">Личный кабинет</a>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'accounts:account' pk=user.pk %}">
+                                            {% translate 'Личный кабинет' %}
+                                        </a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:profile' pk=user.pk %}">Профиль</a>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'accounts:profile' pk=user.pk %}">
+                                            {% translate 'Профиль' %}
+                                        </a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:history_of_orders' %}">История заказов</a>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'accounts:history_of_orders' %}">
+                                            {% translate 'История заказов' %}
+                                        </a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'accounts:product_viewing_history' %}">История просмотров</a>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'accounts:product_viewing_history' %}">
+                                            {% translate 'История просмотров' %}
+                                        </a>
                                     </li>
                                 </ul>
                             </div>
@@ -37,45 +51,58 @@
 
                 <div class="Section-content">
                     <div class="Orders">
+                        {% if orders %}
 
-                        {% for order in orders %}
+                            {% for order in orders %}
 
-                            <div class="Order Order_anons">
-                                <div class="Order-personal">
-                                    <div class="row">
-                                        <div class="row-block"><a class="Order-title" href="{% url 'orders:order_detail' pk=order.id %}">Заказ <span class="Order-numberOrder">№{{ order.id }}</span>&#32;от&#32;<span class="Order-dateOrder">{{ order.created_at }}</span></a>
-                                        </div>
-                                        <div class="row-block">
-                                            <div class="Order-info Order-info_delivery">
-                                                <div class="Order-infoType">Тип доставки:
-                                                </div>
-                                                <div class="Order-infoContent">{{ order.delivery_method }}
-                                                </div>
+                                <div class="Order Order_anons">
+                                    <div class="Order-personal">
+                                        <div class="row">
+                                            <div class="row-block">
+                                                <a class="Order-title" href="{% url 'orders:order_detail' pk=order.id %}">
+                                                    {% translate 'Заказ' %}
+                                                    <span class="Order-numberOrder">№{{ order.id }}</span>&#32;{% translate 'от' %}&#32;
+                                                    <span class="Order-dateOrder">{{ order.created_at }}</span>
+                                                </a>
                                             </div>
-                                            <div class="Order-info Order-info_pay">
-                                                <div class="Order-infoType">Оплата:
+                                            <div class="row-block">
+                                                <div class="Order-info Order-info_delivery">
+                                                    <div class="Order-infoType">
+                                                        {% translate 'Тип доставки' %}:
+                                                    </div>
+                                                    <div class="Order-infoContent">{{ order.delivery_method }}
+                                                    </div>
                                                 </div>
-                                                <div class="Order-infoContent">{{ order.payment_method }}
+                                                <div class="Order-info Order-info_pay">
+                                                    <div class="Order-infoType">
+                                                        {% translate 'Оплата' %}:
+                                                    </div>
+                                                    <div class="Order-infoContent">{{ order.payment_method }}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="Order-info">
-                                                <div class="Order-infoType">Общая стоимость:
+                                                <div class="Order-info">
+                                                    <div class="Order-infoType">
+                                                        {% translate 'Общая стоимость' %}:
+                                                    </div>
+                                                    <div class="Order-infoContent"><span class="Order-price">200.99$</span>
+                                                    </div>
                                                 </div>
-                                                <div class="Order-infoContent"><span class="Order-price">200.99$</span>
-                                                </div>
-                                            </div>
-                                            <div class="Order-info Order-info_status">
-                                                <div class="Order-infoType">Статус:
-                                                </div>
-                                                <div class="Order-infoContent">{{ order.order_status }}
+                                                <div class="Order-info Order-info_status">
+                                                    <div class="Order-infoType">
+                                                        {% translate 'Статус' %}:
+                                                    </div>
+                                                    <div class="Order-infoContent">{{ order.order_status }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                        {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            <p>{% translate 'У вас пока нет заказов' %}</p>
+                        {% endif %}
 
                     </div>
                 </div>

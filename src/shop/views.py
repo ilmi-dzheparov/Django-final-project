@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal, ROUND_HALF_UP
 from shop.utils import (
     add_to_session_cart,
     get_cart_from_session,
@@ -32,10 +32,10 @@ from shop.models import (
     Category,
     HistoryProduct,
 )
-from shop.forms import ReviewForm
-from django.db.models import Count
-from shop.services import get_cached_popular_products, get_limited_products
-from .services import get_cached_products, get_cached_categories
+from shop.forms import ReviewForm, ProductFilterForm
+from django.db.models import Count, Max, Min
+from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
+
 
 
 class IndexView(TemplateView):
@@ -53,7 +53,7 @@ class IndexView(TemplateView):
 
 
 class ProductDetailView(DetailView):
-    template_name = 'shop/product.html'
+    template_name = 'shop/product_detail.html'
     context_object_name = "product"
     model = Product
 
@@ -110,12 +110,13 @@ class ProductDetailView(DetailView):
                 min_price_id = seller_product.id
                 min_price = price
             elif count > 1:
-                if price < min_price:
-                    min_price = price
+                if seller_product.price < min_price:
+                    min_price = seller_product.price
                     min_price_id = seller_product.id
 
         if count > 0:
-            context['average_price'] = Decimal(price) / count
+            average_price = (price / count).quantize(Decimal('0.00'), rounding=ROUND_HALF_UP)
+            context['average_price'] = Decimal(average_price)
             context['min_price_id'] = min_price_id
         else:
             context['average_price'] = Decimal(0)
@@ -173,7 +174,7 @@ class AddToCartView(View):
             return HttpResponseBadRequest("Количество должно быть числом.")
         quantity = int(quantity)
         if quantity <= 0:
-            return HttpResponseBadRequest("Количество должно быть болььше нуля.")
+            return HttpResponseBadRequest("Количество должно быть больше нуля.")
 
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
@@ -212,7 +213,7 @@ class CartDetailView(DetailView):
 
 class CartItemDeleteView(View):
     """
-    Представление: удвление товара из корзины
+    Представление: удаление товара из корзины
     """
 
     def post(self, request, *args, **kwargs):
@@ -254,11 +255,11 @@ class CartItemUpdateView(View):
 
 class Catalog(ListView):
     """
-        Представление: каталог товаров
+    Представление: каталог товаров
     """
     template_name = "shop/catalog.html"
     context_object_name = "products"
-    paginate_by = 4
+    paginate_by = 8
 
     def get_queryset(self):
         products = get_cached_products()
@@ -272,10 +273,35 @@ class Catalog(ListView):
                 products = products.order_by('-reviews')
             elif sort_param == 'created_at':
                 products = products.order_by('-created_at')
+
+        form = ProductFilterForm(self.request.GET)
+        if form.is_valid():
+            price = form.cleaned_data.get('price')
+            title = form.cleaned_data.get('title')
+            in_stock = form.cleaned_data.get('in_stock')
+            free_delivery = form.cleaned_data.get('free_delivery')
+
+            if price:
+                min_price, max_price = map(Decimal, price.split(';'))
+                products = products.filter(price__range=(min_price, max_price))
+            if title:
+                products = products.filter(product__name__icontains=title)
+            if in_stock:
+                products = products.filter(product__seller_products__quantity__gt=0)
+            if free_delivery:
+                products = products.filter(product__seller_products__free_delivery=True)
+
         return products
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         categories = get_cached_categories()
         context['categories'] = categories
+        products = get_cached_products()
+        max_price = products.aggregate(Max('price'))['price__max']
+        min_price = products.aggregate(Min('price'))['price__min']
+        context['data_min'] = min_price
+        context['data_max'] = max_price
+
         return context
+

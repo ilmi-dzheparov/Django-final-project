@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load i18n %}
 
 {% block header %}
     {% include "header_alt.html" %}
@@ -9,7 +10,7 @@
 {% block middle %}
     <div class="wrapper">
         <div class="header">
-            <h3 class="sign-in">Вход</h3>
+            <h3 class="sign-in">{% translate 'Вход' %}</h3>
         </div>
         <div class="clear"></div>
         <form action="{% url 'accounts:login' %}" method="POST" enctype="multipart/form-data">
@@ -21,17 +22,17 @@
                 <input type="password" name="password" id="password" placeholder="*********" data-validate="require">
             </div>
             <div>
-                <input type="submit" value="Войти" />
+                <input type="submit" value="{% translate 'Войти' %}" />
             </div>
-            <a class="forgot-label" href="{% url 'accounts:email' %}">Забыли пароль?</a>
+            <a class="forgot-label" href="{% url 'accounts:email' %}">{% translate 'Забыли пароль' %}?</a>
             <a class="registr" href="{% url 'accounts:registration' %}">
-                Регистрация
+                {% translate 'Регистрация' %}
             </a>
         </form>
     </div>
 {% endblock %}
 
 {% block footer %}
-    {% include "footer_alt.html" %}
+    {% include "footer.html" %}
 {% endblock %}
 

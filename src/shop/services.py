@@ -83,7 +83,7 @@ def get_cached_categories():
     cache_key = 'categories'
     categories = cache.get(cache_key)
     if categories is None:
-        categories = Category.objects.filter(products__available=True).prefetch_related('products')
+        categories = Category.objects.filter(products__available=True, parent__isnull=True).distinct()
         cache.set(cache_key, categories, settings.DEFAULT_CACHE_TIME)
     return categories
 
@@ -105,7 +105,7 @@ def get_cached_popular_products():
     popular_products = cache.get(cache_key)
 
     if popular_products is None:
-        product_sales = SellerProduct.objects.annotate(total_sales=Count('orders'))
+        product_sales = SellerProduct.objects.annotate(total_sales=Count('order_items'))
 
         popular_products = sorted(product_sales, key=lambda p: p.total_sales, reverse=True)[:8]
 
