@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'comparison.apps.ComparisonConfig',
     'discounts.apps.DiscountsConfig',
     'orders.apps.OrdersConfig',
-    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -103,6 +102,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'shop.context_processors.categories',
+                'shop.context_processors.info_cart',
             ],
         },
     },
@@ -180,8 +180,6 @@ MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOCALE_PATHS = [BASE_DIR / 'locale']
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -207,7 +205,6 @@ EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-STRIPE_PUBLISHABLE_KEY = '<your key>'
-STRIPE_SECRET_KEY = '<your key>'
+SITE_ID = 1
 
-SITE_ID=1
+LOGOUT_REDIRECT_URL = '/accounts/login/'
