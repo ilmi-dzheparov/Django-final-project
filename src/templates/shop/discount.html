@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Скидки</h1>
+{% for discount in discounts %}
+<div class="discount">
+    <h3><a href="{% url 'discount-detail' pk=discount.pk %}">{{ discount.name }}</a></h3>
+    <p>{{ discount.description }}</p>
+    {% if discount.valid_from and discount.valid_to %}
+    <div class="valid-dates">
+        {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
+    </div>
+    {% endif %}
+</div>
+{% empty %}
+<p>На данный момент нет активных скидок.</p>
+{% endfor %}
+{% endblock %}
