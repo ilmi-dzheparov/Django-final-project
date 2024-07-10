@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load i18n %}
 
 {% block extraStyles %}
     <style>
@@ -114,8 +115,8 @@
                                         <div class="table">
                                             <table>
                                                 <tr>
-                                                    <th class="hed">Характеристика</th>
-                                                    <th class="hed">Значение</th>
+                                                    <th class="hed">{% translate 'Характеристика' %}</th>
+                                                    <th class="hed">{% translate 'Значение' %}</th>
                                                 </tr>
                                                 {% if table.get_message %}
                                                     <tr data-role="{{ table.msg_css_data_roles }}" class="{{ table.msg_css_classes }}">
@@ -159,7 +160,7 @@
                                 <div class="ProductCard-cartElement">
                                     <a class="btn btn_primary" href="cart.html">
                                         <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg" />
-                                        <span class="btn-content">Добавить в корзину</span>
+                                        <span class="btn-content">{% translate 'Добавить в корзину' %}</span>
                                     </a>
                                 </div>
                             </div>
@@ -169,12 +170,12 @@
             </div>
       <div class="comparison-filters">
           <div class="comparison-checkbox-block">
-              <label class="filter-text" for="showAttrs">Показывать одинаковые характеристики</label>
+              <label class="filter-text" for="showAttrs">{% translate 'Показывать одинаковые характеристики' %}</label>
               <input type="checkbox" id="showAttrs" onclick="showSameAttrs()">
           </div>
           <form method="POST" action="{% url 'comparison:service_clear' %}">
               {% csrf_token %}
-              <input type="submit" value="Очистить">
+              <input type="submit" value="{% translate 'Очистить' %}">
           </form>
       </div>
       </div>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <div class="Header-slider">
     <div class="Slider Slider_main">
@@ -15,7 +16,9 @@
                     <div class="Slider-text">
                         {{ banner.text }}
                     </div>
-                    <div class="Slider-footer"><a class="btn btn_primary" href="#">Get Started</a>
+                    <div class="Slider-footer"><a class="btn btn_primary" href="#">
+                        {% translate 'Начать' %}
+                    </a>
                     </div>
                   </div>
                   <div class="row-block">
