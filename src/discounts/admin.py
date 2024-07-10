@@ -22,7 +22,7 @@ class ProductDiscountAdmin(admin.ModelAdmin):
 @admin.register(CartDiscount)
 class ProductDiscountAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'valid_from', 'valid_to', 'active', 'weight', 'min_quantity', 'max_quantity',
-                    'min_total', 'max_total']
+                    'min_total', 'max_total', 'cart']
     list_display_links = ["name"]
 
     form = CartDiscountForm

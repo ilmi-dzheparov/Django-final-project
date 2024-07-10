@@ -85,7 +85,7 @@ class CartDiscountForm(forms.ModelForm):
     class Meta:
         model = CartDiscount
         fields = ['name', 'description', 'valid_from', 'valid_to', 'active', 'weight', 'min_quantity', 'max_quantity',
-                  'min_total', 'max_total', 'discount_price']
+                  'min_total', 'max_total', 'discount_price', 'cart']
 
     def clean(self):
         cleaned_data = super().clean()
