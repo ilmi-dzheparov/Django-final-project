@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block middle %}
+<div class="Middle Middle_top">
+    <div class="wrap">
+        <div class="Middle-top">
+            <h1 class="Middle-title">Скидки
+            </h1>
+            <ul class="breadcrumbs Middle-breadcrumbs">
+                <li class="breadcrumbs-item"><a href="#">Главная</a>
+                </li>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Скидки</span>
+                </li>
+            </ul>
+        </div>
+        <div class="Section">
+            <div class="Cards">
+                {% for product in products %}
+                <div class="Card"><a class="Card-picture" href="{{ product.url }}"><img src="{{ product.image }}"
+                                                                                        alt="{{ product.name }}"/></a>
+                    <div class="Card-date">
+                        <strong class="Card-date-number">{{ product.date.day }}
+                        </strong><span class="Card-date-month">{{ product.date.strftime('%b') }}</span>
+                    </div>
+                    <div class="Card-content">
+                        <strong class="Card-title"><a href="{{ product.url }}">{{ product.name }}</a>
+                        </strong>
+                        <div class="Card-description">{{ product.description }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="Pagination">
+    <div class="Pagination-ins">
+        {% if page > 1 %}
+        <a class="Pagination-element Pagination-element_prev" href="?page={{ page - 1 }}"><img
+                src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/></a>
+        {% endif %}
+        <a class="Pagination-element Pagination-element_current" href="#"><span
+                class="Pagination-text">{{ page }}</span></a>
+        {% if has_next %}
+        <a class="Pagination-element" href="?page={{ page + 1 }}"><span
+                class="Pagination-text">{{ page + 1 }}</span></a>
+        {% endif %}
+        {% if has_next %}
+        <a class="Pagination-element Pagination-element_prev" href="?page={{ page + 1 }}"><img
+                src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/></a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
