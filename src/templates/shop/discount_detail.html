@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ discount.name }}</h1>
+<p>{{ discount.description }}</p>
+{% if discount.valid_from and discount.valid_to %}
+<div class="valid-dates">
+    {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
+</div>
+{% endif %}
+{% endblock %}
