@@ -95,7 +95,7 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs={"pk": self.pk})
+        return reverse("shop:product_detail", kwargs={"pk": self.pk})
 
 
 class Review(models.Model):

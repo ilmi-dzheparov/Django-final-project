@@ -35,9 +35,9 @@ from shop.models import (
     HistoryProduct,
 )
 from shop.forms import ReviewForm, ProductFilterForm
+from shop.mixins import NonCachingMixin
 from django.db.models import Count, Max, Min, Q
 from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
-
 
 
 class IndexView(TemplateView):
@@ -54,7 +54,7 @@ class IndexView(TemplateView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(NonCachingMixin, DetailView):
     template_name = 'shop/product_detail.html'
     context_object_name = "product"
     model = Product
@@ -151,7 +151,7 @@ class ReviewCreateView(PermissionRequiredMixin, CreateView):
         return redirect(review.product.get_absolute_url())
 
     def handle_no_permission(self):
-        login_url = reverse('login')
+        login_url = reverse('accounts:login')
         message = mark_safe(
             f"<p>Необходимо авторизоваться для добавления комментариев</p>"
             f"<a href='{login_url}'>авторизоваться</a>"

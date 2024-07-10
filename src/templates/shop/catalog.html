@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% load static %}
 
 {% block header %}
@@ -87,9 +87,9 @@
                                 <a class="Sort-sortBy Sort-sortBy_dec" href="?sort={{ '-reviews' }}&tag={{ request.GET.tag }}">{% translate 'отзывам' %}</a>
                             {% endif %}
                             {% if request.GET.sort == '-created_at' %}
-                                <a class="Sort-sortBy Sort-sortBy_dec" href="?sort={{ 'created_at' }}&tag={{ request.GET.tag }}">{% translate 'Новизне' %}</a>
+                                <a class="Sort-sortBy Sort-sortBy_dec" href="?sort={{ 'created_at' }}&tag={{ request.GET.tag }}">Новизне</a>
                             {% else %}
-                                <a class="Sort-sortBy Sort-sortBy_dec" href="?sort={{ '-created_at' }}&tag={{ request.GET.tag }}">{% translate 'Новизне' %}</a>
+                                <a class="Sort-sortBy Sort-sortBy_dec" href="?sort={{ '-created_at' }}&tag={{ request.GET.tag }}">Новизне</a>
                             {% endif %}
                         </div>
                     </div>

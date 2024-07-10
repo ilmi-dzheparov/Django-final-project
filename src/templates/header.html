@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 <div class="ControlPanel">
     <div class="wrap">
@@ -57,7 +58,7 @@
                     </li>
                     <li class="menu-item">
                         <span class="menu-label menu-label_success">{% translate 'Скидки' %}</span>
-                        <a class="menu-link" href="{% url 'shop:discount-list' %}">{% translate 'Скидки' %}</a>
+                        <a class="menu-link" href="#">{% translate 'Скидки' %}</a>
                         <a class="menu-link" href="{% url 'shop:product_list' %}">{% translate 'Каталог' %}</a>
                     </li>
                     <li class="menu-item">
@@ -80,8 +81,8 @@
                             <a class="dropdown-content-a" href="{% url 'accounts:login' %}">{% translate 'Вход' %}</a>
                         {% endif %}
                         {% if user.is_staff %}
-                        <a class="dropdown-content-a" href="{% url 'admin:admin' %}">{% translate 'Административный раздел' %}</a>
-                        {% endif %)
+                            <a class="dropdown-content-a" href="#">{% translate 'Административный раздел' %}</a>
+                        {% endif %}
                         <a class="dropdown-content-a" href="{% url 'accounts:logout' %}">{% translate 'Выход' %}<</a>
                     </div>
                 </div>
@@ -94,7 +95,6 @@
                 <div class="CartBlock-block"><span class="CartBlock-price">
                     {{ total_price|default:"0.00" }}$
                 </span>
-
 
                 </div>
             </div>
