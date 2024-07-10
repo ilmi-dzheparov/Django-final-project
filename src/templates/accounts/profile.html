@@ -37,85 +37,96 @@
                                     </a>
                                 </li>
 
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="Section-content">
-                <div class="Profile">
-                    <form class="form Profile-form" action="{% url 'accounts:profile' pk=user.id %}" method="POST"
-                          enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="row-block">
-                                <div class="form-group">
-                                    <label class="form-label" for="avatar">
-                                        {% translate 'Аватар' %}
-                                    </label>
-                                    <div class="Profile-avatar Profile-avatar_noimg">
-                                        <label class="Profile-fileLabel" for="avatar">
-                                            <img src="assets/img/icons/upload.png" alt="#.png">
-                                            {% translate 'Загрузить фото' %}
+                <div class="Section-content">
+                    <div class="Profile">
+                        <form class="form Profile-form" action="{% url 'accounts:profile' pk=user.id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="row-block">
+                                    <div class="form-group">
+                                        <label class="form-label" for="avatar">{% translate 'Аватар' %}
                                         </label>
-                                        <input class="Profile-file form-input" id="avatar" name="avatar" type="file"
-                                               data-validate="onlyImgAvatar" value="{{ user.avatar }}">
+                                        <div class="Profile-avatar Profile-avatar_noimg">
+                                            <label class="Profile-fileLabel" for="avatar">
+                                                <img src="assets/img/icons/upload.png" alt="#.png">{% translate 'Загрузить фото' %}
+                                            </label>
+                                            <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar" value="{{ user.avatar }}">
+                                        </div>
+                                        <div>
+                                            {% if form.errors.avatar %}
+                                                <span style="color: red">{{ form.errors.avatar }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="full_name">{% translate 'ФИО' %}
+                                        </label>
+                                        <input class="form-input" id="full_name" name="full_name" type="text"
+                                               value="{% if user.last_name %}{{ user.last_name }}{% endif %} {% if user.username %}{{ user.username }}{% endif %} {% if user.middle_name %}{{ user.middle_name }}{% endif %} "
+                                               data-validate="require"
+                                               action="{% url 'accounts:profile' pk=user.id %}"/>
+                                    </div>
+                                    <div>
+                                        {% if form.errors.full_name %}
+                                            <span style="color: red">{{ form.errors.full_name }}</span>
+                                        {% endif %}
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="full_name">
-                                        {% translate 'ФИО' %}
-                                    </label>
-                                    <input class="form-input" id="full_name" name="full_name" type="text"
-                                           value="{% if user.last_name %}{{ user.last_name }}{% endif %} {% if user.username %}{{ user.username }}{% endif %} {% if user.middle_name %}{{ user.middle_name }}{% endif %} "
-                                           data-validate="require"
-                                           action="{% url 'accounts:profile' pk=user.id %}"/>
-                                </div>
-                            </div>
-                            <div class="row-block">
-                                <div class="form-group">
-                                    <label class="form-label" for="phone">
-                                        {% translate 'Телефон' %}
-                                    </label>
-                                    <input class="form-input" id="phone" name="phone" type="text"
-                                           value="{{ user.phone }}" action="{% url 'accounts:profile' pk=user.id %}">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="email">E-mail</label>
-                                    <input class="form-input" id="email" name="email" type="text"
-                                           value="{{ user.email }}" data-validate="require"
-                                           action="{% url 'accounts:profile' pk=user.id %}">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="password">
-                                        {% translate 'Пароль' %}
-                                    </label>
-                                    <input class="form-input" id="password" name="password" value="" type="password"
-                                           placeholder="{% translate 'Тут можно изменить пароль' %}">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="passwordReply">
-                                        {% translate 'Подтверждение пароля' %}
-                                    </label>
-                                    <input class="form-input" id="passwordReply" name="passwordReply" type="password"
-                                           value="" placeholder="{% translate 'Введите пароль повторно' %}"
-                                           action="{% url 'accounts:profile' pk=user.id %}">
-                                </div>
-                                <div class="form-group">
-                                    <div class="Profile-btn">
-                                        <button class="btn btn_success" type="submit">
-                                            {% translate 'Сохранить' %}
-                                        </button>
+                                <div class="row-block">
+                                    <div class="form-group">
+                                        <label class="form-label" for="phone">{% translate 'Телефон' %}
+                                        </label>
+                                        <input class="form-input" id="phone" name="phone" type="text" value="{{ user.phone }}" action="{% url 'accounts:profile' pk=user.id %}">
+                                    </div>
+                                    <div>
+                                        {% if form.errors.phone %}
+                                            <span style="color: red">{{ form.errors.phone }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="email">E-mail
+                                        </label>
+                                        <input class="form-input" id="email" name="email" type="text" value="{{ user.email }}" data-validate="require" action="{% url 'accounts:profile' pk=user.id %}">
+                                    </div>
+                                    <div>
+                                        {% if form.errors.email %}
+                                            <span style="color: red">{{ form.errors.email }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="password">{% translate 'Пароль' %}
+                                        </label>
+                                        <input class="form-input" id="password" name="password" value="" type="password" placeholder="Тут можно изменить пароль" action="{% url 'accounts:profile' pk=user.id %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="password_reply">{% translate 'Подтверждение пароля' %}
+                                        </label>
+                                        <input class="form-input" id="password_reply" name="password_reply" type="password" value="" placeholder="Введите пароль повторно" action="{% url 'accounts:profile' pk=user.id %}">
+                                    </div>
+                                    <div class="form-group">
+                                        {% if form.errors.password %}
+                                            <span style="color: red">{{ form.errors.password }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="Profile-btn">
+                                            <button class="btn btn_success" type="submit">{% translate 'Сохранить' %}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block footer %}
