@@ -1,8 +1,10 @@
 {% load static %}
+{% load i18n %}
 <div class="CategoriesButton">
     <div class="CategoriesButton-title">
-        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg"></div>
-        <span class="CategoriesButton-text">Все категории</span>
+        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg">
+        </div>
+        <span class="CategoriesButton-text">{% translate 'Все категории' %}</span>
         <div class="CategoriesButton-arrow"></div>
     </div>
     <div class="CategoriesButton-content">
@@ -16,8 +18,7 @@
                     <a href="{% url 'shop:catalog_products_list' category.pk %}">
                         <div class="CategoriesButton-icon">
                             {% if category.icon %}
-                                <img src="{% if category.icon %}{{ category.icon.url }}{% else %}{% static 'assets/img/icons/category_default.png' %}{% endif %}"
-                                     alt="{{ category.icon.name }}">
+                                <img src="{{ category.icon.url }}" alt="{{ category.icon.name }}">
                             {% endif %}
                         </div>
                         <span class="CategoriesButton-text">{{ category.name }}</span>

@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n %}
+
 <div class="wrap">
     <div class="row Footer-main">
         <div class="row-block">
@@ -18,15 +20,7 @@
                 <li class="menu-item">
                     <a class="menu-link" href="{% url 'comparison:service' %}">{% translate 'Сравнение' %}</a>
                 </li>
-                {% if user.is_authenticated %}
-                    <li class="menu-item">
-                        <a class="menu-link" href="{% url 'accounts:profile' pk=user.pk %}">{% translate 'Профиль' %}</a>
-                    </li>
-                {% else %}
-                    <li class="menu-item">
-                        <a class="menu-link" href="{% url 'accounts:login' %}">{% translate 'Вход' %}</a>
-                    </li>
-                {% endif %}
+
 
             </ul>
         </div>
