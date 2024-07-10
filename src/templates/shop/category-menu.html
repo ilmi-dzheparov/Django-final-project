@@ -6,16 +6,43 @@
         <div class="CategoriesButton-arrow"></div>
     </div>
     <div class="CategoriesButton-content">
+
         {% for category in categories %}
-        <div class="CategoriesButton-link">
-            <a href="#">
-                <div class="CategoriesButton-icon">
-                    <img src="{% if category.icon %}{{ category.icon.url }}{% else %}{% static 'assets/img/icons/category_default.png' %}{% endif %}"
-                         alt="{{ category.icon.name }}">
-                </div>
-                <span class="CategoriesButton-text">{{ category.name }}</span>
-            </a>
-        </div>
+
+            <div class="CategoriesButton-link">
+
+                {% if not category.parent %}
+
+                    <a href="{% url 'shop:catalog_products_list' category.pk %}">
+                        <div class="CategoriesButton-icon">
+                            {% if category.icon %}
+                                <img src="{% if category.icon %}{{ category.icon.url }}{% else %}{% static 'assets/img/icons/category_default.png' %}{% endif %}"
+                                     alt="{{ category.icon.name }}">
+                            {% endif %}
+                        </div>
+                        <span class="CategoriesButton-text">{{ category.name }}</span>
+                        {% if category.children.all %}
+                            <a class="CategoriesButton-arrow" href="#"></a>
+                        {% endif %}
+                    </a>
+                    <div class="CategoriesButton-submenu">
+
+                        {% for child in category.children.all %}
+                            {% if child in categories %}
+                                <div class="CategoriesButton-link">
+                                    <a href="{% url 'shop:catalog_products_list' child.pk %}">
+                                        <span>{{ child.name }}</span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
         {% endfor %}
     </div>
 </div>

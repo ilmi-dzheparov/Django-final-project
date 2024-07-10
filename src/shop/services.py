@@ -83,7 +83,21 @@ def get_cached_categories():
     cache_key = 'categories'
     categories = cache.get(cache_key)
     if categories is None:
-        categories = Category.objects.filter(products__available=True, parent__isnull=True).distinct()
+        # Получаем категории через связь Product
+        categories = Category.objects.filter(
+            id__in=SellerProduct.objects.values_list('product__category_id', flat=True)
+        ).distinct()
+
+        # Добавляем родительские категории
+        parent_categories = Category.objects.filter(
+            id__in=categories.values_list('parent_id', flat=True)
+        ).distinct()
+
+        # Объединяем два QuerySet
+        categories = categories | parent_categories
+        categories = categories.distinct()
+
+        # Кэшируем результат
         cache.set(cache_key, categories, settings.DEFAULT_CACHE_TIME)
     return categories
 
