@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import BaseInlineFormSet
+from django.utils.translation import gettext_lazy as _
 
 from shop.admin_mixin import UniqueAttributeMixin
 from shop.models import Attribute, ProductAttribute, Review
@@ -107,7 +108,7 @@ class ReviewForm(forms.ModelForm):
         self.fields['text'].widget.attrs.update({
             'name': "review",
             'id': "review",
-            'placeholder': 'Отзывы',
+            'placeholder': _("Отзывы"),
             'class': 'form-textarea'
         })
         self.fields['text'].label = False

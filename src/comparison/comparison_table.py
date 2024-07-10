@@ -1,5 +1,7 @@
 from shop.models import Product, ProductAttribute, Attribute
 from typing import List
+from django.utils.translation import gettext_lazy as _
+from django.http import HttpResponse
 
 
 class ComparisonTable:
@@ -25,7 +27,8 @@ class ComparisonTable:
 
         # Если у переданных в сессию товаров нет ни одного общего атрибута
         if len(self.categories) == 0:
-            return "Нет подходящих полей для сравнения"
+            message = _("Нет подходящих полей для сравнения")
+            return f"{message}"
         # Если в таблице есть скрытая категория (все её атрибуты одинаковы для всех продуктов),
         # то об этом выводится сообщение
         else:
@@ -35,7 +38,7 @@ class ComparisonTable:
                     break
             self.msg_css_data_roles = "hidden-message"
             self.msg_css_classes = "table_message"
-            return "Одинаковые поля скрыты"
+            return _("Одинаковые поля скрыты")
 
     def set_average_price(self):
         """
