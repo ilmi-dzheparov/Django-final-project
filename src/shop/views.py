@@ -35,7 +35,7 @@ from shop.models import (
     HistoryProduct,
 )
 from shop.forms import ReviewForm, ProductFilterForm
-from django.db.models import Count, Max, Min
+from django.db.models import Count, Max, Min, Q
 from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
 
 
