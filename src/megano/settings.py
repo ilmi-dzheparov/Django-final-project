@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'comparison.apps.ComparisonConfig',
     'discounts.apps.DiscountsConfig',
     'orders.apps.OrdersConfig',
+    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
@@ -207,6 +208,10 @@ EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-SITE_ID = 1
+STRIPE_PUBLISHABLE_KEY = '<your key>'
+STRIPE_SECRET_KEY = '<your key>'
+
+SITE_ID=1
 
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
