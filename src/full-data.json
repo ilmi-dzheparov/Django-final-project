@@ -1,29 +1,6 @@
 [
 {
     "model": "accounts.user",
-    "pk": 2,
-    "fields": {
-        "password": "pbkdf2_sha256$600000$FovrcYJ3WPajX6S5XH4wxU$y19q9jySTejyUjonNOZogvjAvpQ2WFylufs8Tq8WW08=",
-        "last_login": null,
-        "is_superuser": false,
-        "first_name": "",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2024-07-04T20:06:04.067Z",
-        "email": "user1@example.com",
-        "username": "Иванов",
-        "last_name": "Иван",
-        "middle_name": "Иванович",
-        "phone": "89999999999",
-        "avatar": "",
-        "birth_date": null,
-        "is_seller": false,
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
-    "model": "accounts.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$600000$OeOwxxwBWltLzYaGyfStnY$boASyUw4V8NOc7n8Pim838nirIR/nD0CjUvLI1vFnnU=",

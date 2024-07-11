@@ -47,7 +47,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         popular_categories = Category.objects.annotate(product_count=Count('products')).order_by('-product_count')[:3]
         limited_products = get_limited_products()
-        context['categories'] = popular_categories
+        context['popular_categories'] = popular_categories
         context['product'] = choice(limited_products) if len(limited_products) > 0 else None
         context['seller_products'] = get_cached_popular_products()
         context['limited_products'] = limited_products
