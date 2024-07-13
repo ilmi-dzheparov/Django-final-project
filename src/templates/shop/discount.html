@@ -1,17 +1,52 @@
 {% extends 'base.html' %}
-{% block content %}
-<h1>Скидки</h1>
-{% for discount in discounts %}
-<div class="discount">
-    <h3><a href="{% url 'discount-detail' pk=discount.pk %}">{{ discount.name }}</a></h3>
-    <p>{{ discount.description }}</p>
-    {% if discount.valid_from and discount.valid_to %}
-    <div class="valid-dates">
-        {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
+{% block middle %}
+<h1>Скидки:</h1>
+{% if product_discount_list %}
+    <h2>Скидки на товары</h2>
+    {% for discount in product_discount_list %}
+    <div class="discount">
+        <h3><a href="{% url 'discounts:product-discount-detail' pk=discount.pk %}"> {{ discount.name }}</a></h3>
+        <p>{{ discount.description }}</p>
+        {% if discount.valid_from and discount.valid_to %}
+        <div class="valid-dates">
+            {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
-{% empty %}
-<p>На данный момент нет активных скидок.</p>
-{% endfor %}
+    {% endfor %}
+{% endif %}
+
+{% if bundle_discount_list %}
+    <h2>Скидки на наборы товаров</h2>
+    {% for discount in bundle_discount_list %}
+    <div class="discount">
+        <h3><a href="{% url 'discounts:bundle-discount-detail' pk=discount.pk %}"> {{ discount.name }}</a></h3>
+        <p>{{ discount.description }}</p>
+        {% if discount.valid_from and discount.valid_to %}
+        <div class="valid-dates">
+            {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% endif %}
+
+{% if cart_discount_list %}
+    <h2>Скидки на корзины товаров</h2>
+    {% for discount in cart_discount_list %}
+    <div class="discount">
+        <h3><a href="{% url 'discounts:cart-discount-detail' pk=discount.pk %}"> {{ discount.name }}</a></h3>
+        <p>{{ discount.description }}</p>
+        {% if discount.valid_from and discount.valid_to %}
+        <div class="valid-dates">
+            {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% endif %}
+
+{% if not product_discount_list and not bundle_discount_lis and not cart_discount_list %}
+    <p>На данный момент нет активных скидок.</p>
+{% endif %}
 {% endblock %}

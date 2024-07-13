@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
-{% block content %}
-<h1>{{ discount.name }}</h1>
-<p>{{ discount.description }}</p>
-{% if discount.valid_from and discount.valid_to %}
-<div class="valid-dates">
-    {{ discount.valid_from|date:"d/m/Y" }} - {{ discount.valid_to|date:"d/m/Y" }}
-</div>
-{% endif %}
+{% block middle %}
+    <h1>{{ object.name }}</h1>
+    <p>{{ object.description }}</p>
+    {% if object.valid_from and object.valid_to %}
+    <div class="valid-dates">
+        {{ object.valid_from|date:"d/m/Y" }} - {{ object.valid_to|date:"d/m/Y" }}
+    </div>
+    {% endif %}
+    <p>Скидка:</p>
+    {% if object.discount %}
+        {{ object.discount }} %
+    {% elif object.discount_amount %}
+        {{ object.discount_amount }} %
+    {% elif object.discount_price %}
+        {{ object.discount_price }} руб
+    {% endif %}
 {% endblock %}
