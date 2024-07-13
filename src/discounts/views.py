@@ -1,10 +1,10 @@
 from django.views.generic import ListView, DetailView
 
-from .models import BaseDiscount
+from .models import BaseDiscount, ProductDiscount
 
 
 class DiscountListView(ListView):
-    model = BaseDiscount
+    model = ProductDiscount
     template_name = 'shop/discount.html'
 
 
