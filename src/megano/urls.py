@@ -28,6 +28,7 @@ urlpatterns = [
     path("orders/", include('orders.urls')),
     path("payments/", include("payments.urls", namespace="payments")),
     path("comparison/", include("comparison.urls", namespace="comparison")),
+    path("", include("discounts.urls", namespace="discounts")),
 ]
 
 urlpatterns += i18n_patterns(

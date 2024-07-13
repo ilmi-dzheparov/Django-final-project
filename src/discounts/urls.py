@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import DiscountListView, DiscountDetailView
 
+app_name = "discounts"
 
 urlpatterns = [
     path('discounts/', DiscountListView.as_view(), name='discount-list'),
