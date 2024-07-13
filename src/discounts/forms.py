@@ -7,9 +7,11 @@ from .utils import (
     check_if_products_categories_exist,
 )
 
-PRODUCTS = forms.ModelMultipleChoiceField(queryset=Product.objects.all(), widget=forms.CheckboxSelectMultiple,
+PRODUCTS = forms.ModelMultipleChoiceField(queryset=Product.objects.filter(seller_products__isnull=False).distinct(),
+                                          widget=forms.CheckboxSelectMultiple,
                                           required=False)
-CATEGORIES = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple,
+CATEGORIES = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
+                                            widget=forms.CheckboxSelectMultiple,
                                             required=False)
 
 
