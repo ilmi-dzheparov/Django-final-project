@@ -15,7 +15,7 @@ app_name = "accounts"
 
 urlpatterns = [
     path("login/", login_view, name="login"),
-    path("login/", UserLogoutView.as_view(), name="logout"),
+    path("logout/", UserLogoutView.as_view(), name="logout"),
     path("email/", send_password_reset_email_view, name="email"),
     path("password_reset/<int:pk>/", PasswordView.as_view(), name="password_reset"),
     path("registration/", CustomRegistrationView.as_view(template_name="registration/registration_form.html"),
