@@ -27,6 +27,7 @@ urlpatterns = [
     path("banners/", include('banners.urls')),
     path("orders/", include('orders.urls')),
     path("comparison/", include("comparison.urls", namespace="comparison")),
+    path("", include("discounts.urls", namespace="discounts")),
 ]
 
 urlpatterns += i18n_patterns(
