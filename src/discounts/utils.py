@@ -39,10 +39,13 @@ def check_if_products_belong_to_categories_of_another_group(products, categories
         )
 
 
-def calculate_product_discounts(products):
+def calculate_product_discounts(cart_items):
     total_discount = 0
 
-    for product in products:
+    for item in cart_items:
+        product = item.product
+        quantity = item.quantity
+
         # Получаем скидку, связанную с данным продуктом
         product_discount = ProductDiscount.objects.filter(products__in=[product.product]).first()
 
@@ -58,10 +61,11 @@ def calculate_product_discounts(products):
             })
 
             # Вычисляем сумму скидки для данного продукта и добавляем ее к общей сумме
-            discount_amount = (product.price * product_discount.discount) / 100
+            discount_amount = (product.price * product_discount.discount * quantity) / 100
             total_discount += discount_amount
 
     return total_discount
+
 
 
 def calculate_cart_discount(cart):
@@ -106,9 +110,9 @@ def apply_best_bundle_discount(cart):
     return best_discount_amount
 
 
-def calculate_best_discount(cart, products):
+def calculate_best_discount(cart, cart_items):
     # Вычисляем сумму каждой скидки
-    product_discount = calculate_product_discounts(products)
+    product_discount = calculate_product_discounts(cart_items)
     cart_discount = calculate_cart_discount(cart)
     bundle_discount = apply_best_bundle_discount(cart)
 

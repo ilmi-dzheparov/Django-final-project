@@ -205,7 +205,7 @@ class CartDetailView(DetailView):
         if self.request.user.is_authenticated:
             cart = context['cart']
             context['cart_items'] = cart.cart_items.all().prefetch_related('product')
-            discount = calculate_best_discount(cart, [item.product for item in context['cart_items']])
+            discount = calculate_best_discount(cart, cart.cart_items.all())
             context['total_price'] = cart.total_price() - discount
             context['total_quantity'] = cart.total_quantity()
         else:
