@@ -1,72 +1,36 @@
-version: '3.9'
-
 services:
-  app:
-    build:
-      dockerfile: ./Dockerfile
-    command:
-      - gunicorn,
-      - megano.wsgi:application,
-      - --bind,
-      - '0.0.0.0:8000'
-    ports:
-      - '8000:8000'
-    restart: always
-    logging:
-      driver: 'json-file'
-      options:
-        max-file: '10'
-        max-size: '200k'
+    web:
+        build:
+            dockerfile: ./Dockerfile
+        command: >
+            sh -c "
+            gunicorn --bind 0.0.0.0:8000 myblog.wsgi:application
+            "
+        volumes:
+            - ./myblog:/app
+        ports:
+           - 8000:8000
+        env_file:
+             - .env
+        environment:
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+        depends_on:
+            - db
 
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydatabase
-
-
-
-version: "3.9"
-services:
-  app:
-    build:
-      dockerfile: ./Dockerfile
-    command:
-      - 'python'
-      - 'manage.py'
-      - 'runserver'
-      - '0.0.0.0:8080'
-    ports:
-      - '8000:8080'
-
-    logging:
-      driver: loki
-      options:
-        loki-url: http://localhost:3100/loki/api/v1/push
-#        loki-url: http://host.docker.internal:3100/loki/api/v1/push
-
-  grafana:
-    image: grafana/grafana:9.2.15
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-    ports:
-      - '3000:3000'
-
-  loki:
-    image: grafana/loki:2.8.0
-    ports:
-      - '3100:3100'
+    db:
+        image: postgres:16
+        container_name: my_postgres
+        env_file:
+            - .env
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        ports:
+            - 5433:5433
+volumes:
+    postgres_data:
