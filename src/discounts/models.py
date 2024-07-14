@@ -1,5 +1,5 @@
 from django.db import models
-from shop.models import Product, Category, Cart
+from shop.models import Product, Category
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 DISCOUNT_WEIGHTS = [
@@ -51,4 +51,3 @@ class CartDiscount(BaseDiscount):
     max_total = models.DecimalField(max_digits=10, decimal_places=2, default=0,
                                     help_text="Максимальная общая стоимость товаров в корзине")
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, help_text="Итоговая стоимость корзины")
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='discounts', null=True)

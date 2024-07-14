@@ -1,5 +1,7 @@
 from django import forms
-from discounts.models import ProductDiscount
+from discounts.models import ProductDiscount, CartDiscount, BundleDiscount
+from shop.models import Product
+
 
 # Проверка, чтоб дата окончания скидки была больше даты начала скидки
 def check_dates_of_discount(cleaned_data):
@@ -42,11 +44,11 @@ def calculate_product_discounts(products):
 
     for product in products:
         # Получаем скидку, связанную с данным продуктом
-        product_discount = ProductDiscount.objects.filter(products__in=[product])
+        product_discount = ProductDiscount.objects.filter(products__in=[product.product]).first()
 
         # Если у продукта нет скидки, проверяем, входит ли он в категорию со скидкой
         if not product_discount:
-            product_discount = ProductDiscount.objects.filter(categories__in=product.categories.all()).first()
+            product_discount = ProductDiscount.objects.filter(categories__in=[product.product.category]).first()
 
         if product_discount:
             # Проверяем даты действия скидки
@@ -62,3 +64,55 @@ def calculate_product_discounts(products):
     return total_discount
 
 
+def calculate_cart_discount(cart):
+    # Получаем активную скидку на данную корзину
+    cart_discount = CartDiscount.objects.filter(carts=cart, active=True).first()
+
+    if cart_discount:
+        # Проверяем даты действия скидки
+        check_dates_of_discount({
+            'valid_from': cart_discount.valid_from,
+            'valid_to': cart_discount.valid_to
+        })
+
+        # Проверяем, соответствует ли корзина условиям скидки
+        if (cart_discount.min_quantity <= cart.total_quantity() <= cart_discount.max_quantity and
+                cart_discount.min_total <= cart.total_price() <= cart_discount.max_total):
+            # Вычисляем сумму скидки
+            discount_amount = max(cart.total_price() - cart_discount.discount_price, 0)
+            return discount_amount
+
+    return 0
+
+
+def apply_best_bundle_discount(cart):
+    # Получаем все активные скидки на наборы
+    bundle_discounts = BundleDiscount.objects.filter(active=True)
+
+    best_discount_amount = 0
+
+    # Проходим по всем скидкам на наборы
+    for discount in bundle_discounts:
+        # Получаем все товары в корзине из первой и второй группы товаров
+        cart_items_group_1 = cart.cart_items.filter(product__product__in=discount.product_group_1.all())
+        cart_items_group_2 = cart.cart_items.filter(product__product__in=discount.product_group_2.all())
+
+        # Если в корзине есть товары из обеих групп, то скидка может быть применена
+        if cart_items_group_1.exists() and cart_items_group_2.exists():
+            # Если сумма скидки больше, чем у предыдущей лучшей скидки, то обновляем лучшую скидку
+            if discount.discount_amount > best_discount_amount:
+                best_discount_amount = discount.discount_amount
+
+    return best_discount_amount
+
+
+def calculate_best_discount(cart, products):
+    # Вычисляем сумму каждой скидки
+    product_discount = calculate_product_discounts(products)
+    cart_discount = calculate_cart_discount(cart)
+    bundle_discount = apply_best_bundle_discount(cart)
+
+    # Находим максимальную сумму скидки
+    max_discount = max(product_discount, cart_discount, bundle_discount)
+
+    return max_discount
