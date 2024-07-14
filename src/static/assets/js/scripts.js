@@ -650,29 +650,50 @@ var Cart = function(){
     };
 };
 Cart().init();
-var Amount = function(){
-    var $amount = $('.Amount');
-    var $add = $('.Amount-add');
-    var $input = $('.Amount-input');
-    var $remove = $('.Amount-remove');
+var Amount = function() {
     return {
-        init: function(){
-            $add.on('click', function(e){
+        init: function() {
+            $('.Amount-add').on('click', function(e) {
                 e.preventDefault();
-                var $inputThis = $(this).siblings($input).filter($input);
+                console.log('Add button clicked');
+                var $inputThis = $(this).siblings('.Amount-input');
                 var value = parseFloat($inputThis.val());
-                $inputThis.val( value + 1);
+                $inputThis.val(value + 1);
+
+                var $form = $(this).closest('form'); // Найти ближайшую форму
+                console.log('Submitting form');
+                if ($(this).attr('type') === 'submit') {
+                    $form.submit();
+                }
             });
-            $remove.on('click', function(e){
+
+            $('.Amount-remove').on('click', function(e) {
                 e.preventDefault();
-                var $inputThis = $(this).siblings($input).filter($input);
+                console.log('Remove button clicked');
+                var $inputThis = $(this).siblings('.Amount-input');
                 var value = parseFloat($inputThis.val());
-                $inputThis.val(value>0?value - 1:0);
+
+                // Предотвращение уменьшения значения меньше единицы
+                if (value > 1) {
+                    $inputThis.val(value - 1);
+                } else {
+                    $inputThis.val(1); // Установка минимального значения 1
+                }
+
+                var $form = $(this).closest('form'); // Найти ближайшую форму
+                console.log('Submitting form');
+                if ($(this).attr('type') === 'submit') {
+                    $form.submit();
+                }
+
             });
         }
     };
 };
-Amount().init();
+
+$(document).ready(function() {
+    Amount().init(); // Инициализация скрипта после загрузки документа
+});
 var Order = function(){
     var $next = $('.Order-next'),
         $blocks = $('.Order-block'),
