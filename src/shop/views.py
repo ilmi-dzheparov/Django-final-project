@@ -38,6 +38,8 @@ from shop.forms import ReviewForm, ProductFilterForm
 from shop.mixins import NonCachingMixin
 from django.db.models import Count, Max, Min, Q
 from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
 
 
 class IndexView(TemplateView):
@@ -186,7 +188,7 @@ class AddToCartView(View):
 
         return redirect('shop:product_detail', product.product.id)
 
-
+@method_decorator(never_cache, name='dispatch')
 class CartDetailView(DetailView):
     model = Cart
     context_object_name = 'cart'
