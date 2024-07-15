@@ -31,7 +31,7 @@ git clone https://github.com/VladiFinogenov/DRF-myblog.git
 ## Шаг 2: Переход в директорию проекта
 
 ```bash
-cd DRF-myblog
+cd teamproject_41
 ```
 
 ## Шаг 3: Настройка переменных окружения
