@@ -26,13 +26,16 @@ urlpatterns = [
     path("accounts/", include("accounts.urls", namespace="accounts")),
     path("banners/", include('banners.urls')),
     path("orders/", include('orders.urls')),
+    path("payments/", include("payments.urls", namespace="payments")),
     path("comparison/", include("comparison.urls", namespace="comparison")),
     path("", include("discounts.urls", namespace="discounts")),
 ]
 
 urlpatterns += i18n_patterns(
     path("", include("shop.urls")),
-)
+    path("comparison/", include("comparison.urls", namespace="comparison")),
+    path("", include("discounts.urls", namespace="discounts")),
+]
 
 if settings.DEBUG:
     urlpatterns += static(

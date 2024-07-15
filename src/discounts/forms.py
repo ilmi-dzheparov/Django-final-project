@@ -7,8 +7,12 @@ from .utils import (
     check_if_products_categories_exist,
 )
 
-PRODUCTS = forms.ModelMultipleChoiceField(queryset=Product.objects.all(), required=False)
-CATEGORIES = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), required=False)
+PRODUCTS = forms.ModelMultipleChoiceField(queryset=Product.objects.filter(seller_products__isnull=False).distinct(),
+                                          widget=forms.CheckboxSelectMultiple,
+                                          required=False)
+CATEGORIES = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
+                                            widget=forms.CheckboxSelectMultiple,
+                                            required=False)
 
 
 class ProductDiscountForm(forms.ModelForm):

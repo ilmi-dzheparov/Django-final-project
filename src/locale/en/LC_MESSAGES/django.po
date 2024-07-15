@@ -19,12 +19,388 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: megano/settings.py:197
+
+#: comparison/comparison.py:91
+msgid "Недостаточно данных для сравнения. Товаров добавлено"
+msgstr "There is not enough data for comparison. Products added"
+
+#: comparison/comparison_table.py:30
+msgid "Нет подходящих полей для сравнения"
+msgstr "There are no suitable fields for comparison"
+
+#: comparison/comparison_table.py:41
+msgid "Одинаковые поля скрыты"
+msgstr "Identical fields are hidden"
+
+#: megano/settings.py:197
 msgid "English"
 msgstr ""
 
 #: megano/settings.py:198
 msgid "Russian"
 msgstr ""
+
+#: shop/forms.py:115 templates/shop/product_detail.html:131
+msgid "Отзывы"
+msgstr "Feedbacks"
+
+#: templates/accounts/account.html:18 templates/accounts/history-order.html:20
+#: templates/accounts/history-product.html:20
+#: templates/accounts/profile.html:18 templates/footer.html:11
+#: templates/footer_alt.html:12
+msgid "Навигация"
+msgstr "Navigation"
+
+#: templates/accounts/account.html:26 templates/accounts/history-order.html:28
+#: templates/accounts/history-product.html:28
+#: templates/accounts/profile.html:26 templates/header.html:77
+msgid "Личный кабинет"
+msgstr "Account"
+
+#: templates/accounts/account.html:30 templates/accounts/history-order.html:33
+#: templates/accounts/history-product.html:33
+#: templates/accounts/profile.html:31 templates/footer.html:23
+msgid "Профиль"
+msgstr "Profile"
+
+#: templates/accounts/account.html:35 templates/accounts/account.html:91
+#: templates/accounts/history-order.html:38
+#: templates/accounts/history-product.html:38
+#: templates/accounts/profile.html:36
+msgid "История заказов"
+msgstr "Order history"
+
+#: templates/accounts/account.html:40 templates/accounts/history-order.html:43
+#: templates/accounts/history-product.html:43
+msgid "История просмотров"
+msgstr "Views history"
+
+#: templates/accounts/account.html:74
+msgid "Редактировать профиль"
+msgstr "Edit profile"
+
+#: templates/accounts/account.html:86 templates/accounts/history-order.html:63
+msgid "Заказ"
+msgstr "Order"
+
+#: templates/accounts/account.html:87 templates/accounts/history-order.html:64
+#: templates/shop/index.html:21
+msgid "от"
+msgstr "from"
+
+#: templates/accounts/account.html:98 templates/accounts/history-order.html:71
+#: templates/shop/product_sellers.html:26
+msgid "Тип доставки"
+msgstr "Type of delivery"
+
+#: templates/accounts/account.html:105 templates/accounts/history-order.html:78
+#: templates/shop/product_sellers.html:34
+msgid "Оплата"
+msgstr "Payment"
+
+#: templates/accounts/account.html:113 templates/accounts/history-order.html:85
+msgid "Общая стоимость"
+msgstr "Total cost"
+
+#: templates/accounts/account.html:120 templates/accounts/history-order.html:92
+msgid "Статус"
+msgstr "Status"
+
+#: templates/accounts/history-order.html:104
+msgid "У вас пока нет заказов"
+msgstr "You don't have any orders yet"
+
+#: templates/accounts/history-product.html:78
+msgid "У вас нет просмотренных товаров"
+msgstr "You don't have any viewed products"
+
+#: templates/accounts/profile.html:54
+msgid "Аватар"
+msgstr "Avatar"
+
+#: templates/accounts/profile.html:59
+msgid "Загрузить фото"
+msgstr "Upload foto"
+
+#: templates/accounts/profile.html:67
+msgid "ФИО"
+msgstr "Full name"
+
+#: templates/accounts/profile.html:78 templates/footer.html:30
+#: templates/footer_alt.html:29
+msgid "Телефон"
+msgstr "Phone"
+
+#: templates/accounts/profile.html:91
+#: templates/registration/password_reset.html:20
+#: templates/registration/registration_form.html:25
+msgid "Пароль"
+msgstr "Password"
+
+#: templates/accounts/profile.html:94
+msgid "Тут можно изменить пароль"
+msgstr "Change the password here"
+
+#: templates/accounts/profile.html:98
+msgid "Подтверждение пароля"
+msgstr "Password confirmation"
+
+#: templates/accounts/profile.html:101
+msgid "Введите пароль повторно"
+msgstr "Enter new password"
+
+#: templates/accounts/profile.html:107
+msgid "Сохранить"
+msgstr "Save"
+
+#: templates/banners/banner.html:20
+msgid "Начать"
+msgstr "Get started"
+
+#: templates/footer.html:14 templates/footer_alt.html:15
+#: templates/header.html:57
+msgid "Главная"
+msgstr "Main"
+
+#: templates/footer.html:17 templates/footer_alt.html:18
+#: templates/header.html:61
+msgid "Каталог"
+msgstr "Catalog"
+
+#: templates/footer.html:20 templates/footer_alt.html:21
+#: templates/header.html:64
+msgid "Сравнение"
+msgstr "Comparison"
+
+#: templates/footer.html:29 templates/footer_alt.html:28
+msgid "Контакты"
+msgstr "Contacts"
+
+#: templates/header.html:37 templates/header_alt.html:40
+#: templates/registration/login.html:29
+#: templates/registration/registration_form.html:13
+msgid "Регистрация"
+msgstr "Registration"
+
+#: templates/header.html:38 templates/header_alt.html:39
+#: templates/registration/login.html:13
+#: templates/registration/registration_form.html:29
+msgid "Вход"
+msgstr "Log in"
+
+#: templates/header.html:60
+msgid "Скидки"
+msgstr "Discounts"
+
+#: templates/header.html:78
+msgid "Административный раздел"
+msgstr "Admin section"
+
+#: templates/header.html:79
+msgid "Выход"
+msgstr "Exit"
+
+#: templates/header.html:99
+msgid "Показать навигацию"
+msgstr "Show navigation"
+
+#: templates/header.html:124
+msgid "Поиск"
+msgstr "Search"
+
+#: templates/includes/reviews.html:12
+msgid "отзыв"
+msgstr "feedback(s)"
+
+#: templates/includes/reviews.html:46
+msgid "Добавить отзыв"
+msgstr "Add feedback"
+
+#: templates/includes/reviews.html:58
+msgid "Отправить отзыв"
+msgstr "Send feedback"
+
+#: templates/registration/email.html:13
+#: templates/registration/password_reset.html:13
+msgid "Восстановление пароля"
+msgstr "Password Recovery"
+
+#: templates/registration/email.html:14
+msgid ""
+"Для восстановления пароля введите адрес электронной почты, на которую "
+"зарегистрирована учетная запись"
+msgstr ""
+"To restore the password, enter the email address to which the account is "
+"registered"
+
+#: templates/registration/email.html:23
+msgid "Получить проверочный код"
+msgstr "Get the verification code"
+
+#: templates/registration/login.html:25
+msgid "Войти"
+msgstr "Log in"
+
+#: templates/registration/login.html:27
+msgid "Забыли пароль"
+msgstr "Forgot your password"
+
+#: templates/registration/password_reset.html:14
+msgid "Придумайте новый пароль для учетной записи"
+msgstr "Create a new password for your account"
+
+#: templates/registration/password_reset.html:23
+msgid "Сохранить пароль"
+msgstr "Save password"
+
+#: templates/registration/registration_form.html:19
+msgid "Имя"
+msgstr "Name"
+
+#: templates/registration/registration_form.html:27
+msgid "Зарегистрироваться"
+msgstr "Register"
+
+#: templates/shop/cart.html:73
+msgid "Итого"
+msgstr "Total"
+
+#: templates/shop/cart.html:77
+msgid "Оформить заказ"
+msgstr "Place the order"
+
+#: templates/shop/catalog.html:18 templates/shop/catalog.html:51
+msgid "Фильтр"
+msgstr "Filter"
+
+#: templates/shop/catalog.html:26
+msgid "Цена"
+msgstr "Price"
+
+#: templates/shop/catalog.html:39
+msgid "Только товары в наличии"
+msgstr "Only products in stock"
+
+#: templates/shop/catalog.html:46
+msgid "С бесплатной доставкой"
+msgstr "With free delivery"
+
+#: templates/shop/catalog.html:59
+msgid "Популярные тэги"
+msgstr "Popular tags"
+
+#: templates/shop/catalog.html:72
+msgid "Сортировать по"
+msgstr "Sort by"
+
+#: templates/shop/catalog.html:75 templates/shop/catalog.html:77
+msgid "Популярности"
+msgstr "Popularity"
+
+#: templates/shop/catalog.html:80 templates/shop/catalog.html:82
+msgid "цене"
+msgstr "price"
+
+#: templates/shop/catalog.html:85 templates/shop/catalog.html:87
+msgid "отзывам"
+msgstr "feedbacks"
+
+#: templates/shop/catalog.html:90 templates/shop/catalog.html:92
+msgid "Новизне"
+msgstr "New coming"
+
+#: templates/shop/category-menu.html:7
+msgid "Все категории"
+msgstr "All categories"
+
+#: templates/shop/comparison.html:118 templates/shop/product_detail.html:128
+#: templates/shop/product_detail.html:150
+msgid "Характеристика"
+msgstr "Attribute"
+
+#: templates/shop/comparison.html:119 templates/shop/product_detail.html:151
+msgid "Значение"
+msgstr "Value"
+
+#: templates/shop/comparison.html:163
+msgid "Добавить в корзину"
+msgstr "Add to cart"
+
+#: templates/shop/comparison.html:173
+msgid "Показывать одинаковые характеристики"
+msgstr "Show the same characteristics"
+
+#: templates/shop/comparison.html:178
+msgid "Очистить"
+msgstr "Clear"
+
+#: templates/shop/index.html:59
+msgid "дней"
+msgstr "days"
+
+#: templates/shop/index.html:65
+msgid "часов"
+msgstr "hours"
+
+#: templates/shop/index.html:71
+msgid "минут"
+msgstr "mins"
+
+#: templates/shop/index.html:77
+msgid "секунд"
+msgstr "secs"
+
+#: templates/shop/index.html:87
+msgid "Популярные товары"
+msgstr "Popular products"
+
+#: templates/shop/index.html:112
+msgid "Ограниченный тираж"
+msgstr "Limited edition"
+
+#: templates/shop/product_detail.html:79 templates/shop/product_sellers.html:18
+msgid "Купить"
+msgstr "Buy"
+
+#: templates/shop/product_detail.html:90
+msgid "Сравнить"
+msgstr "Compare"
+
+#: templates/shop/product_detail.html:100
+msgid "Поздравляем!"
+msgstr "Congratulations!"
+
+#: templates/shop/product_detail.html:104
+msgid "Товар успешно добавлен в корзину!"
+msgstr "The product has been successfully added to the cart!"
+
+#: templates/shop/product_detail.html:112
+msgid "Тэги"
+msgstr "Tags"
+
+#: templates/shop/product_detail.html:122
+msgid "Описание"
+msgstr "Description"
+
+#: templates/shop/product_detail.html:125
+msgid "Продавцы"
+msgstr "Sellers"
+
+#: templates/shop/product_detail.html:154
+msgid "Категория продукта"
+msgstr "Product Category"
+
+#: templates/shop/product_sellers.html:29
+msgid "Обычная доставка"
+msgstr "Custom delivery"
+
+#: templates/shop/product_sellers.html:37
+msgid "Онлайн картой"
+msgstr "Online by card"
+
+#: templates/shop/product_sellers.html:42
+msgid "Стоимость"
+msgstr "Cost"
 
 #: templates/footer.html:11
 msgid "Навигация"
