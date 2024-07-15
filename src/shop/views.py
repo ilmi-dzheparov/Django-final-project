@@ -13,6 +13,7 @@ from django.utils.safestring import mark_safe
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
 from decimal import Decimal, ROUND_HALF_UP
+from discounts.utils import calculate_best_discount
 from shop.utils import (
     add_to_session_cart,
     get_cart_from_session,
@@ -204,7 +205,8 @@ class CartDetailView(DetailView):
         if self.request.user.is_authenticated:
             cart = context['cart']
             context['cart_items'] = cart.cart_items.all().prefetch_related('product')
-            context['total_price'] = cart.total_price()
+            discount = calculate_best_discount(cart, cart.cart_items.all())
+            context['total_price'] = cart.total_price() - discount
             context['total_quantity'] = cart.total_quantity()
         else:
             context['cart_items'] = get_cart_from_session(self.request)
