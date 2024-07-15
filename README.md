@@ -38,53 +38,46 @@ cd DRF-myblog
 
 `Создайте файл .env в корневой директории проекта и добавьте в него необходимые переменные окружения. Для этого скопируйте и заполните из empty_env переменные. Пример:`
 ```bash
-DEBUG = True
-SECRET_KEY = 'django-insecure-xxxxxxxxxxxx'
-DJANGO_ALLOWED_HOSTS = '127.0.0.1'
-CSRF_TRUSTED_ORIGINS = 'http://127.0.0.1'
-INTERNAL_IPS = '127.0.0.1'
-
-POSTGRES_USER = 'blog'
-POSTGRES_PASSWORD = 'new_password'
-POSTGRES_DB = 'your_database'
+DB_HOST = 'db'
+DB_PORT = '5432'
+DB_NAME = meganodatabase
+DB_USER = megano
+DB_PASS = pass_megano
 ```
 ## Шаг 4: Сборка и запуск контейнеров Docker
 
 `Соберите и запустите контейнеры Docker с помощью docker-compose:`
 ```bash
-docker compose up --build
+sudo docker compose up --build
 ```
 `Эта команда соберет образы Docker и запустит контейнеры в соответствии с конфигурацией, указанной в файле docker-compose.yml.`
 
 ## Шаг 5: Создание миграций
 
-`Создайте миграции с помошью команд:`
+`Создайте миграции с помошью команды:`
 ```bash
-docker compose run web python manage.py makemigrations
-```
-```bash
-docker compose run web python manage.py migrate
+sudo docker compose run web python manage.py migrate
 ```
 
 ## Шаг 6: Сборка статики
 
 `Загрузите статику с помошью команды:`
 ```bash
-docker compose run web python manage.py collectstatic --noinput
+sudo docker compose run web python manage.py collectstatic --noinput
 ```
 
 ## Шаг 7: Создание суперпользователя
 
 `Создайте суперпользователя для доступа к административной панели:`
-`Для этого откройте второй терминал и введите команду:`
 ```bash
-docker compose run web python manage.py createsuperuser
+sudo docker compose run web python manage.py createsuperuser
 ```
 
-# Запуск тестов
+# Загрузка фикстур
 
-`Запустите проект через docker compose см. шаг 4, откройте второй терминал и введите команду`
-
+* `!!! Загружайте фикстуры только после создания суперпользователя`
+* `!!! Добавляйте других пользователей только после загрузки фикстур`
+`Загрузите фикстуры с помошью команды:`
 ```bash
-docker compose run web python manage.py test
+sudo docker compose run web python manage.py loaddata fixtures/full-data.json
 ```

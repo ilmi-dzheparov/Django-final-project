@@ -1,6 +1,29 @@
 [
 {
     "model": "accounts.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$600000$OeOwxxwBWltLzYaGyfStnY$boASyUw4V8NOc7n8Pim838nirIR/nD0CjUvLI1vFnnU=",
+        "last_login": null,
+        "is_superuser": false,
+        "first_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-07-04T20:06:04.069Z",
+        "email": "user1@example.com",
+        "username": "Иван",
+        "last_name": "Иванович",
+        "middle_name": "Иванов",
+        "phone": 89996663322,
+        "avatar": "",
+        "birth_date": null,
+        "is_seller": true,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "accounts.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$600000$OeOwxxwBWltLzYaGyfStnY$boASyUw4V8NOc7n8Pim838nirIR/nD0CjUvLI1vFnnU=",
@@ -120,7 +143,7 @@
     "fields": {
         "name": "Телевизоры",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/1.svg"
     }
 },
 {
@@ -129,7 +152,7 @@
     "fields": {
         "name": "Наушники",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/2.svg"
     }
 },
 {
@@ -138,7 +161,7 @@
     "fields": {
         "name": "Техника для дома",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/3.svg"
     }
 },
 {
@@ -147,7 +170,7 @@
     "fields": {
         "name": "Электроинструмент",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/13.svg"
     }
 },
 {
@@ -156,7 +179,7 @@
     "fields": {
         "name": "Ноутбуки и компьютеры",
         "parent": null,
-        "icon": "2.svg"
+        "icon": "catalog-menu/1.svg"
     }
 },
 {
@@ -165,7 +188,7 @@
     "fields": {
         "name": "Фотоаппараты",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/6.svg"
     }
 },
 {
@@ -174,7 +197,7 @@
     "fields": {
         "name": "Смартфоны и гаджеты",
         "parent": null,
-        "icon": "1.svg"
+        "icon": "catalog-menu/8.svg"
     }
 },
 {
@@ -183,7 +206,7 @@
     "fields": {
         "name": "Микроволновые печи",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/7.svg"
     }
 },
 {
@@ -192,7 +215,7 @@
     "fields": {
         "name": "Кухонная техника",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/7.svg"
     }
 },
 {
@@ -201,7 +224,7 @@
     "fields": {
         "name": "Светильники напольные",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/11.svg"
     }
 },
 {
@@ -210,7 +233,7 @@
     "fields": {
         "name": "Радиоуправляемые устройства",
         "parent": null,
-        "icon": ""
+        "icon": "catalog-menu/14.svg"
     }
 },
 {

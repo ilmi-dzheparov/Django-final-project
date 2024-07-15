@@ -9,14 +9,14 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Копируем файлы requirements.txt в контейнер
-COPY requirements.txt /app/
+COPY requirements.txt /app
 
 # Устанавливаем зависимости Python
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Копируем весь проект в контейнер
-COPY src . /app/
+COPY . /app/
 
 # Указываем, что контейнер будет слушать на порту 8000
 EXPOSE 8000
