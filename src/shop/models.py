@@ -5,7 +5,6 @@ from django.db.models import F, Sum, DecimalField
 from django.urls import reverse
 from taggit.managers import TaggableManager
 
-
 def product_preview_directory_path(instance: "Product", filename: str) -> str:
     return "shop/product_{pk}/preview/{filename}".format(
         pk=instance.pk,
@@ -226,6 +225,7 @@ class Cart(models.Model):
     Модель Cart представляет корзину, в которую можно добавлять товары.
     """
     user = models.OneToOneField('accounts.User', on_delete=models.CASCADE)
+    discount = models.ForeignKey('discounts.CartDiscount', on_delete=models.SET_NULL, related_name='carts', null=True, blank=True)
 
     def __str__(self):
         return f"Cart number {self.id} -- User: {self.user.email} -- Total price: {self.total_price()}"
