@@ -1,5 +1,5 @@
 from django.db import models
-from shop.models import Product, Category, Cart
+from shop.models import Product, Category
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 DISCOUNT_WEIGHTS = [

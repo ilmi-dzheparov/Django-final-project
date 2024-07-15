@@ -21,19 +21,17 @@ class ProductDiscountForm(forms.ModelForm):
 
     class Meta:
         model = ProductDiscount
-        fields = ['name', 'description', 'valid_from', 'valid_to', 'active', 'weight', 'discount', 'products',
+        fields = ['name', 'discount', 'description', 'valid_from', 'valid_to', 'active', 'weight', 'discount', 'products',
                   'categories']
 
     def clean(self):
         cleaned_data = super().clean()
-
-        # Проверка, чтоб дата окончания скидки была больше даты начала скидки
         check_dates_of_discount(cleaned_data)
-        products = cleaned_data.get("products")
-        categories = cleaned_data.get("categories")
-
-        # Проверка наличия продуктов в скидке
-        check_if_products_categories_exist(products, categories)
+        # products = cleaned_data.get("products")
+        # categories = cleaned_data.get("categories")
+        #
+        # # Проверка наличия продуктов в скидке
+        # check_if_products_categories_exist(products, categories)
         return cleaned_data
 
 
