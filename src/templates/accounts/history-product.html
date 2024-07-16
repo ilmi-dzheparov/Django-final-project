@@ -17,7 +17,7 @@
                     <div class="Section-columnSection">
                         <header class="Section-header">
                             <strong class="Section-title">
-                                {% trans 'Навигация' %}
+                                {% translate 'Навигация' %}
                             </strong>
                         </header>
                         <div class="Section-columnContent">
@@ -59,10 +59,10 @@
                                                              {% else %}{% static 'assets/img/content/sale/default_product.png' %}{% endif %}" alt="card.jpg">
                                 </a>
                                 <div class="Card-content">
-                                    <strong class="Card-title"><a href="product.html">{{ product.product.name }}</a>
+                                    <strong class="Card-title"><a href="{% url 'shop:product_detail' pk=product.product.pk %}">{{ product.product.name }}</a>
                                     </strong>
                                     <div class="Card-description">
-                                        <div class="Card-cost"><span class="Card-price">{{ product.product.description }}</span>
+                                        <div class="Card-cost"><span class="Card-price"></span>
                                         </div>
                                         <div class="Card-category">{{ product.product.category }}
                                         </div>

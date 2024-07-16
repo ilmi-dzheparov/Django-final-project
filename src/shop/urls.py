@@ -8,6 +8,7 @@ from .views import (
     CartItemUpdateView,
     IndexView,
     Catalog,
+    CatalogProduct
 )
 
 app_name = "shop"
@@ -21,4 +22,5 @@ urlpatterns = [
     path('cart/item/<int:pk>/delete/', CartItemDeleteView.as_view(), name='cart_delete'),
     path('cart/item/<int:pk>/update/', CartItemUpdateView.as_view(), name='cart_update'),
     path('catalog/', Catalog.as_view(), name='product_list'),
+    path('catalog/<int:pk>/', CatalogProduct.as_view(), name='catalog_products_list'),
 ]

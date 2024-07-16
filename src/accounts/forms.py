@@ -1,5 +1,4 @@
 from django import forms
-from django.core.validators import validate_email, RegexValidator, EmailValidator
 from django.utils.translation import gettext as _
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm
@@ -9,9 +8,6 @@ from .models import User
 
 
 class UserRegisterForm(forms.ModelForm):
-    """
-    Форма регистрации пользователя
-    """
     username = forms.CharField(label='Username')
     email = forms.EmailField(label='Email')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -39,22 +35,14 @@ class UserRegisterForm(forms.ModelForm):
 
 
 class UserUpdateForm(forms.ModelForm):
-    """
-    Форма обновления данных пользователя
-    """
     full_name = forms.CharField(label='ФИО', required=False)
     email = forms.EmailField(label='Email', required=False)
     phone = forms.CharField(label='Телефон', required=False)
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput, required=False)
-    password_reply = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput(), required=False)
     avatar = forms.ImageField(label='Аватар', required=False)
     last_name = forms.CharField(widget=forms.HiddenInput(), required=False)
     username = forms.CharField(widget=forms.HiddenInput(), required=False)
     middle_name = forms.CharField(widget=forms.HiddenInput(), required=False)
-
-    phone_regex = RegexValidator(regex=r'^((\+7)|8)\d{10}$',
-                                 message="Номер телефона должен быть в формате: '+79999999999'")
-    email_validator = EmailValidator(message="Пожалуйста, укажите корректный адрес электронной почты.")
 
     class Meta:
         model = User
@@ -82,30 +70,6 @@ class UserUpdateForm(forms.ModelForm):
                 raise forms.ValidationError("Размер аватара не должен превышать 2MB.")
         return avatar
 
-    def clean_phone(self):
-        phone = self.cleaned_data.get('phone')
-        if phone:
-            self.phone_regex(phone)
-        return phone
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email:
-            validate_email(email)
-        return email
-
-    def clean_password(self):
-        password = self.cleaned_data.get('password')
-        password_reply = self.cleaned_data.get('password_reply')
-
-        if not password_reply:
-            raise ValidationError("Это поле обязательно для заполнения.")
-
-        if password and password_reply and password != password_reply:
-            raise ValidationError("Пароли не совпадают.")
-
-        return password
-
     def save(self, commit=True):
         user = super().save(commit=False)
         password = self.cleaned_data.get('password')
@@ -117,9 +81,6 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class PasswordChangeForm(forms.ModelForm):
-    """
-    Форма изменения пароля пользователем
-    """
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput, required=False)
 
     class Meta:

@@ -21,9 +21,6 @@ from django.core.mail.backends.smtp import EmailBackend
 
 
 def login_view(request: HttpRequest):
-    """
-    Представление входа в аккаунт
-    """
     if request.method == "GET":
         return render(request, 'registration/login.html')
 
@@ -38,9 +35,6 @@ def login_view(request: HttpRequest):
 
 
 class CustomRegistrationView(CreateView):
-    """
-    Представление регистрации пользователя
-    """
     model = User
     template_name = 'accounts/registration_form.html'
     form_class = UserRegisterForm
@@ -53,9 +47,6 @@ class CustomRegistrationView(CreateView):
 
 
 class UserLogoutView(LogoutView):
-    """
-    Представление выхода из аккаунта
-    """
     next_page = reverse_lazy("accounts:login")
 
 
@@ -70,9 +61,6 @@ class PersonalAccountView(LoginRequiredMixin, DetailView):
 
 
 class ProfileView(UpdateView):
-    """
-    Представление профиля пользователя
-    """
     model = User
     template_name = 'accounts/profile.html'
     form_class = UserUpdateForm
@@ -87,9 +75,6 @@ class ProfileView(UpdateView):
 
 
 class UserHistoryView(View):
-    """
-    Представление истории просмотров продуктов пользователем
-    """
     def get(self, request, *args, **kwargs):
         user = request.user
         history = HistoryProduct.objects.filter(user=user)[:20]
@@ -98,9 +83,6 @@ class UserHistoryView(View):
 
 
 def send_password_reset_email(user):
-    """
-    Представление для формирования сообщения со ссылкой на сброс пароля
-    """
     subject = 'Сброс пароля'
     message = 'Здесь ваше сообщение с инструкциями по сбросу пароля.'
     email_from = os.getenv('EMAIL_HOST_USER')
@@ -118,9 +100,6 @@ def send_password_reset_email(user):
 
 
 def send_password_reset_email_view(request):
-    """
-    Представление запроса e-mail для отправки сообщения со сбросом пароля
-    """
     if request.method == 'POST':
         email = request.POST.get('email')
         try:
@@ -134,9 +113,6 @@ def send_password_reset_email_view(request):
 
 
 class PasswordView(UpdateView):
-    """
-    Представление на сброс пароля
-    """
     model = User
     template_name = 'registration/password_reset.html'
     form_class = PasswordChangeForm

@@ -65,7 +65,7 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
 
     name = models.CharField(max_length=100, db_index=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name='children', null=True, blank=True)
     icon = models.ImageField(null=True, blank=True, upload_to=category_icon_directory_path)
 
     def __str__(self):
@@ -94,7 +94,7 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs={"pk": self.pk})
+        return reverse("shop:product_detail", kwargs={"pk": self.pk})
 
 
 class Review(models.Model):
