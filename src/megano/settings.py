@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
-import sys
 from pathlib import Path
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy
@@ -57,6 +56,7 @@ INSTALLED_APPS = [
     'discounts.apps.DiscountsConfig',
     'orders.apps.OrdersConfig',
     'payments.apps.PaymentsConfig',
+    # 'django_redis',
 ]
 
 MIDDLEWARE = [
@@ -117,30 +117,23 @@ WSGI_APPLICATION = "megano.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-#         'LOCATION': '127.0.0.1:11211',
-#     }
-# }
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASS"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "HOST": os.getenv("DB_HOST"),
+#         "PORT": os.getenv("DB_PORT"),
+#         "NAME": os.getenv("DB_NAME"),
+#         "USER": os.getenv("DB_USER"),
+#         "PASSWORD": os.getenv("DB_PASS"),
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -180,12 +173,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# if sys.argv[1] == 'runserver':
-#     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
-# else:
-#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -207,6 +194,7 @@ LANGUAGES = [
     ('en', gettext_lazy('English')),
     ('ru', gettext_lazy('Russian')),
 ]
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -215,7 +203,28 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Celery and Redis sittings
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = DEFAULT_CACHE_TIME
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": 'redis://redis:6379/1',
+#     }
+# }
+
 
 STRIPE_PUBLISHABLE_KEY = '<your key>'
 STRIPE_SECRET_KEY = '<your key>'

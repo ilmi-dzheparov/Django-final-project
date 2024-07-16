@@ -14,3 +14,7 @@ gunicorn==22.0.0
 psycopg==3.1.12
 psycopg-binary==3.1.12
 python-dotenv==1.0.1
+celery==5.3.6
+redis==5.0.3
+django-redis==5.4.0
+async-timeout==4.0.3
