@@ -35,7 +35,7 @@ urlpatterns += i18n_patterns(
     path("", include("shop.urls")),
     path("comparison/", include("comparison.urls", namespace="comparison")),
     path("", include("discounts.urls", namespace="discounts")),
-]
+)
 
 if settings.DEBUG:
     urlpatterns += static(
