@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from decimal import Decimal, ROUND_HALF_UP
 from discounts.utils import calculate_best_discount
 from shop.utils import (
@@ -34,11 +36,11 @@ from shop.models import (
     HistoryProduct,
 )
 from shop.forms import ReviewForm, ProductFilterForm
-from django.db.models import Count, Max, Min
+from shop.mixins import NonCachingMixin
+from django.db.models import Count, Max, Min, Q
 from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
 from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
-
 
 
 class IndexView(TemplateView):
@@ -48,14 +50,14 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         popular_categories = Category.objects.annotate(product_count=Count('products')).order_by('-product_count')[:3]
         limited_products = get_limited_products()
-        context['categories'] = popular_categories
+        context['popular_categories'] = popular_categories
         context['product'] = choice(limited_products) if len(limited_products) > 0 else None
         context['seller_products'] = get_cached_popular_products()
         context['limited_products'] = limited_products
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(NonCachingMixin, DetailView):
     template_name = 'shop/product_detail.html'
     context_object_name = "product"
     model = Product
@@ -152,7 +154,7 @@ class ReviewCreateView(PermissionRequiredMixin, CreateView):
         return redirect(review.product.get_absolute_url())
 
     def handle_no_permission(self):
-        login_url = reverse('login')
+        login_url = reverse('accounts:login')
         message = mark_safe(
             f"<p>Необходимо авторизоваться для добавления комментариев</p>"
             f"<a href='{login_url}'>авторизоваться</a>"
@@ -309,3 +311,34 @@ class Catalog(ListView):
 
         return context
 
+
+class CatalogProduct(ListView):
+    """
+    Представление выводит все продукты переданной категории.
+    """
+
+    model = SellerProduct
+    template_name = "shop/catalog.html"
+    context_object_name = 'products'
+    category = None
+    paginate_by = 8
+    queryset = SellerProduct.objects.all()
+
+    def get_queryset(self):
+        queryset = SellerProduct.objects.all().select_related('product', 'product__category')
+
+        if 'pk' in self.kwargs:
+            category_id = self.kwargs['pk']
+            category = Category.objects.filter(pk=category_id).first()
+
+            if category:
+                # Создаем фильтр по основной категории и подкатегориям
+                subcategories = Category.objects.filter(
+                    Q(pk=category_id) | Q(parent=category)
+                ).values_list('id', flat=True)
+
+                # Фильтруем продукты по категориям
+                product_ids = Product.objects.filter(category__in=subcategories).values_list('id', flat=True)
+                queryset = queryset.filter(product__id__in=product_ids)
+
+        return queryset
