@@ -43,6 +43,8 @@ from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 from taggit.models import Tag
 
+
+@method_decorator(decorator=never_cache, name="get")
 class IndexView(TemplateView):
     template_name = 'shop/index.html'
 
