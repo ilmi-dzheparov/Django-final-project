@@ -31,6 +31,10 @@ class ProductFilterForm(forms.Form):
     }))
 
 
+class TagsForm(forms.Form):
+    tags = forms.CharField(required=False)
+
+
 class CustomAttributeAdminForm(forms.ModelForm):
     """
     Переопределяем метод clean для валидации ввода данных (исключить дублирование записей независимо от регистра)
