@@ -1,8 +1,11 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.generic import ListView, DetailView, TemplateView
 
 from .models import BaseDiscount, ProductDiscount, BundleDiscount, CartDiscount
 
 
+@method_decorator(decorator=never_cache, name="get")
 class DiscountListView(TemplateView):
     template_name = 'shop/discount.html'
 
