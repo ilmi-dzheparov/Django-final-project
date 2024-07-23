@@ -14,12 +14,12 @@
         <div class="wrap">
             <div class="BannersHome">
                 {% for category in popular_categories %}
-                <a class="BannersHomeBlock" href="#">
+                <a class="BannersHomeBlock" href="{% url 'shop:catalog_products_list' category.pk %}">
                     <div class="BannersHomeBlock-row">
                         <div class="BannersHomeBlock-block">
                             <strong class="BannersHomeBlock-title">{{ category.name }}</strong>
-                            <div class="BannersHomeBlock-content">{% translate 'от' %}&#32;
-                                <span class="BannersHomeBlock-price">${{ category.price }}</span>
+                            <div class="BannersHomeBlock-content">{% translate 'от' %}
+                                <span class="BannersHomeBlock-price">${{ category.min_price }}</span>
                             </div>
                         </div>
                         <div class="BannersHomeBlock-block">
@@ -39,20 +39,23 @@
             <div class="Section-column">
                 <div class="Section-columnSection Section-columnSection_mark">
                     <header class="Section-columnHeader">
-                        <strong class="Section-columnTitle">{{ product.name }}</strong>
+                        <strong class="Section-columnTitle">Ограниченные предложения</strong>
                     </header>
                     <div class="Card">
-                        <a class="Card-picture" href="#"><img src="{% static 'img/content/home/card.jpg' %}" alt="{{ product.name }}" /></a>
+                        <a class="Card-picture" href="{% url 'shop:product_detail' pk=product.product.pk %}"><img src="{% if product.product.preview %}{{ product.product.preview.url }}{% else %}
+                                {% static 'assets/img/content/sale/default_product.png' %}{% endif %}"
+                                alt="{{ product.product.name }}"></a>
                         <div class="Card-content">
-                            <strong class="Card-title"><a href="#">{{ product.name }}</a></strong>
+                            <strong class="Card-title"><a href="{% url 'shop:product_detail' pk=product.product.pk %}">{{ product.product.name }}</a></strong>
                             <div class="Card-description">
                                 <div class="Card-cost">
                                     <span class="Card-priceOld">${{ product.price }}</span>
-                                    <span class="Card-price">${{ product.discounted_price }}</span>
+                                    <span class="Card-price">${{ product.price_after_discount }}</span>
                                 </div>
-                                <div class="Card-category">{{ product.category }}</div>
+                                <div class="Card-category">{{ product.product.category }}
+                                </div>
                             </div>
-                            <div class="CountDown" data-date="31.09.2020 03:59">
+                            <div class="CountDown" data-date="{{ product.product.discounts.first.valid_to|date:'d.m.Y H:i' }}">
                                 <div class="CountDown-block">
                                     <div class="CountDown-wrap">
                                         <div class="CountDown-days"></div>
@@ -89,18 +92,30 @@
                 <div class="Cards">
                     {% for seller_product in seller_products %}
                     <div class="Card">
-                        <a class="Card-picture" href="#"><img src="{{ seller_product.product.image.url }}" alt="{{ seller_product.product.name }}" /></a>
+                        <a class="Card-picture" href="{% url 'shop:product_detail' pk=seller_product.product.pk %}">
+                            <img src="{% if seller_product.product.preview %}{{ seller_product.product.preview.url }}{% else %}
+                            {% static 'assets/img/content/sale/default_product.png' %}{% endif %}"
+                            alt="{{ seller_product.product.name }}">
+                        </a>
                         <div class="Card-content">
-                            <strong class="Card-title"><a href="#">{{ seller_product.product.name }}</a></strong>
+                            <strong class="Card-title"><a href="{% url 'shop:product_detail' pk=seller_product.product.pk %}">{{ seller_product.product.name }}</a></strong>
                             <div class="Card-description">
                                 <div class="Card-cost"><span class="Card-price">${{ seller_product.price }}</span></div>
                                 <div class="Card-category">{{ seller_product.product.category }}</div>
-                                <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a></div>
+                                <div class="Card-hover">
+                                    <form action="{% url 'shop:add_to_cart' pk=seller_product.product.pk %}" method="post">
+                                        {% csrf_token %}
+                                            <button type="submit" class="Card-btn">
+                                                <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" />
+                                            </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+
             </div>
         </div>
     </div>
@@ -111,7 +126,8 @@
                     <header class="Section-header Section-header_close">
                         <h2 class="Section-title">{% translate 'Ограниченный тираж' %}</h2>
                         <div class="Section-control">
-                            <div class="Slider-navigate"></div>
+                            <div class="Slider-navigate">
+                            </div>
                         </div>
                     </header>
                     <div class="Slider-box Cards">
@@ -119,16 +135,29 @@
                         <div class="Slider-item">
                             <div class="Slider-content">
                                 <div class="Card">
-                                    <a class="Card-picture" href="#"><img src="{ product.product.preview.url }" alt="{{ product.name }}" /></a>
+                                    <a class="Card-picture" href="{% url 'shop:product_detail' pk=product.product.pk %}">
+                                        <img src="{% if product.product.preview %}{{ product.product.preview.url }}{% else %}
+                                        {% static 'assets/img/content/sale/default_product.png' %}{% endif %}"
+                                        alt="{{ product.product.name }}">
+                                    </a>
                                     <div class="Card-content">
-                                        <strong class="Card-title"><a href="#">{{ product.name }}</a></strong>
+                                        <strong class="Card-title">
+                                            <a href="{% url 'shop:product_detail' pk=product.product.pk %}">
+                                                {{ product.product.name }}
+                                            </a>
+                                        </strong>
                                         <div class="Card-description">
                                             <div class="Card-cost">
                                                 <span class="Card-price">${{ product.price }}</span>
                                             </div>
-                                            <div class="Card-category">{{ product.category }}</div>
+                                            <div class="Card-category">{{ product.product.category }}</div>
                                             <div class="Card-hover">
-                                                <a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
+                                                <form action="{% url 'shop:add_to_cart' pk=product.product.pk %}" method="post">
+                                                    {% csrf_token %}
+                                                        <button type="submit" class="Card-btn">
+                                                            <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" />
+                                                        </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
