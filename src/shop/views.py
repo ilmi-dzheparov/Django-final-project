@@ -46,16 +46,46 @@ from taggit.models import Tag
 
 @method_decorator(decorator=never_cache, name="get")
 class IndexView(TemplateView):
+    """
+        Главная страница сайта
+    """
     template_name = 'shop/index.html'
+    paginate_by = 3
+
+@method_decorator(decorator=never_cache, name="get")
+class IndexView(TemplateView):
+    """
+        Главная страница сайта
+    """
+    template_name = 'shop/index.html'
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        popular_categories = Category.objects.annotate(product_count=Count('products')).order_by('-product_count')[:3]
+        popular_categories = (
+            Category.objects
+            .annotate(
+                product_count=Count('products'),
+                min_price=Min('products__seller_products__price')
+            )
+            .order_by('-product_count')[:3]
+        )
         limited_products = get_limited_products()
+        products_with_discount = [
+            product for product in limited_products
+            if product.product.discounts.exists()
+        ]
+        for product in products_with_discount:
+            discount = product.product.discounts.first()
+            if discount:
+                discount_value = Decimal(discount.discount)
+                product.price_after_discount = round(product.price * (1 - discount_value / Decimal(100)), 2)
+
         context['popular_categories'] = popular_categories
-        context['product'] = choice(limited_products) if len(limited_products) > 0 else None
+        context['product'] = choice(products_with_discount) if products_with_discount else None
         context['seller_products'] = get_cached_popular_products()
         context['limited_products'] = limited_products
+
         return context
 
 
@@ -344,6 +374,8 @@ class CatalogProduct(ListView):
     def get_queryset(self):
         queryset = get_cached_products()
         sort_param = self.request.GET.get('sort')
+        selected_category_id = self.kwargs.get('pk')
+        queryset = queryset.filter(product__category_id=selected_category_id)
 
         if sort_param:
             if sort_param == 'popularity':
