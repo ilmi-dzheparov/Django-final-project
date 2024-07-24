@@ -14,7 +14,7 @@
         <div class="wrap">
             <div class="BannersHome">
                 {% for category in popular_categories %}
-                <a class="BannersHomeBlock" href="{% url 'shop:catalog_products_list' category.pk %}">
+                <a class="BannersHomeBlock" href="{% if category %}{% url 'shop:catalog_products_list' category.pk %}{% endif %}">
                     <div class="BannersHomeBlock-row">
                         <div class="BannersHomeBlock-block">
                             <strong class="BannersHomeBlock-title">{{ category.name }}</strong>
@@ -42,11 +42,11 @@
                         <strong class="Section-columnTitle">Ограниченные предложения</strong>
                     </header>
                     <div class="Card">
-                        <a class="Card-picture" href="{% url 'shop:product_detail' pk=product.product.pk %}"><img src="{% if product.product.preview %}{{ product.product.preview.url }}{% else %}
+                        <a class="Card-picture" href="{% if product.product %}{% url 'shop:product_detail' pk=product.product.pk %}{% endif %}"><img src="{% if product.product.preview %}{{ product.product.preview.url }}{% else %}
                                 {% static 'assets/img/content/sale/default_product.png' %}{% endif %}"
                                 alt="{{ product.product.name }}"></a>
                         <div class="Card-content">
-                            <strong class="Card-title"><a href="{% url 'shop:product_detail' pk=product.product.pk %}">{{ product.product.name }}</a></strong>
+                            <strong class="Card-title"><a href="{% if product.product %}{% url 'shop:product_detail' pk=product.product.pk %}{% endif %}">{{ product.product.name }}</a></strong>
                             <div class="Card-description">
                                 <div class="Card-cost">
                                     <span class="Card-priceOld">${{ product.price }}</span>
