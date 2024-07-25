@@ -17,7 +17,6 @@ from .models import User
 from shop.models import HistoryProduct
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegisterForm, UserUpdateForm, PasswordChangeForm
-from django.core.mail.backends.smtp import EmailBackend
 
 
 def login_view(request: HttpRequest):
@@ -84,7 +83,11 @@ class UserHistoryView(View):
 
 def send_password_reset_email(user):
     subject = 'Сброс пароля'
-    message = 'Здесь ваше сообщение с инструкциями по сбросу пароля.'
+    password_reset_link = f"http://127.0.0.1:8000{reverse('accounts:password_reset', kwargs={'pk': user.pk})}"
+
+    message = (f'Здравствуйте, это сообщение пришло вам, так как вы запросили сброс пароля.'
+               f' Если это не вы, можете не реагировать на это сообщение. Для изменения пароля перейдите по ссылке.\n'
+               f'\nСсылка для сброса пароля: {password_reset_link}')
     email_from = os.getenv('EMAIL_HOST_USER')
     recipient_list = [user.email]
 
@@ -100,16 +103,18 @@ def send_password_reset_email(user):
 
 
 def send_password_reset_email_view(request):
+    message = None
+
     if request.method == 'POST':
         email = request.POST.get('email')
         try:
             user = User.objects.get(email=email)
             send_password_reset_email(user)
-            return render(request, 'registration/password_reset.html', {'pk': user.pk})
+            message = "Письмо успешно отправлено, перейдите по ссылке в письме для сброса пароля."
         except User.DoesNotExist:
-            return render(request, 'registration/email.html')
+            message = "Пользователь не найден."
 
-    return render(request, 'registration/email.html')
+    return render(request, 'registration/email.html', {'message': message})
 
 
 class PasswordView(UpdateView):
