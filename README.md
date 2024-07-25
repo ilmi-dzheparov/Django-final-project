@@ -43,7 +43,20 @@ DB_PORT = '5432'
 DB_NAME = meganodatabase
 DB_USER = megano
 DB_PASS = pass_megano
+EMAIL_HOST='smtp.yandex.ru'
+EMAIL_PORT=465
+EMAIL_HOST_USER='example@email.com'
+EMAIL_HOST_PASSWORD='you_password'
+DOMEN_APP='http://127.0.0.1:8000'
 ```
+`Для отправки писем со ссылкой на изменение пароля необходимо заполнить значения EMAIL. Также необходимо заменить при 
+необходимости значения EMAIL_USE_TLS и EMAIL_USE_SSL в settings.py. 
+В DOMEN_APP необходимо ввести фактический домен вашего приложения.` 
+`Ознакомление с ними выходит за рамки данной инструкции, но с подробностями можно ознакомиться 
+здесь:` https://ilyakhasanov.ru/baza-znanij/prochee/nuzhno-znat/139-nastrojki-otpravki-pochty-cherez-smtp.
+`Стоит учитывать, что не все почтовые ящики дают заполнять в качестве пароля, большинство (яндекс, гугл и т.д.) 
+генерируют пароль самостоятельно. Для ознакомления с особенностями подключения smtp обращайтесь 
+к документации почтового сервиса.`
 ## Шаг 4: Сборка и запуск контейнеров Docker
 
 `Соберите и запустите контейнеры Docker с помощью docker-compose:`
