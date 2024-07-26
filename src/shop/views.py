@@ -43,14 +43,8 @@ from django.views.decorators.cache import never_cache
 from django.utils.decorators import method_decorator
 from taggit.models import Tag
 
+from banners.models import Banner
 
-@method_decorator(decorator=never_cache, name="get")
-class IndexView(TemplateView):
-    """
-        Главная страница сайта
-    """
-    template_name = 'shop/index.html'
-    paginate_by = 3
 
 @method_decorator(decorator=never_cache, name="get")
 class IndexView(TemplateView):
@@ -85,6 +79,7 @@ class IndexView(TemplateView):
         context['product'] = choice(products_with_discount) if products_with_discount else None
         context['seller_products'] = get_cached_popular_products()
         context['limited_products'] = limited_products
+        context['banners'] = Banner.objects.filter(active=True)
 
         return context
 
