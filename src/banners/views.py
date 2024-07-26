@@ -12,24 +12,19 @@ class BannerListView(ListView):
         """
 
         if 'banners' in cache:
-            # Если баннеры уже находятся в кэше, используем их
             banners = cache.get('banners')
         else:
-            # Считаем сколько всего баннеров
             total_count = Banner.objects.filter(active=True).count()
 
             if total_count < 3:
-                # Если меньше 3 активных, то выбираем все активные баннеры, что есть
                 banners = Banner.objects.filter(active=True)
             else:
-                # Иначе выбираем 3 случайных активных баннера
                 banners = Banner.objects.filter(active=True).order_by("?")[:3]
 
-        # Сохраняем баннеры в кэше
-        cache.set('banners', banners, 600)  # кэширование на 10 минут
+        cache.set('banners', banners, 600)
 
         context = {
             "banners": banners,
         }
 
-        return render(request, "banner.html", context)
+        return render(request, "banners/banner.html", context)

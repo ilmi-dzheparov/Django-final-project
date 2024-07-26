@@ -16,7 +16,7 @@
                     <div class="Slider-text">
                         {{ banner.text }}
                     </div>
-                    <div class="Slider-footer"><a class="btn btn_primary" href="#">
+                    <div class="Slider-footer"><a class="btn btn_primary" href="{% if product.product %}{% url 'shop:product_detail' pk=product.product.pk %}{% endif %}">
                         {% translate 'Начать' %}
                     </a>
                     </div>
