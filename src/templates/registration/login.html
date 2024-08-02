@@ -24,6 +24,9 @@
             <div>
                 <input type="submit" value="{% translate 'Войти' %}" />
             </div>
+             {% if error %}
+                 <div style="color: red">{{ error }}</div>
+             {% endif %}
             <a class="forgot-label" href="{% url 'accounts:email' %}">{% translate 'Забыли пароль' %}?</a>
             <a class="registr" href="{% url 'accounts:registration' %}">
                 {% translate 'Регистрация' %}
