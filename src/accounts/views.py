@@ -23,14 +23,21 @@ def login_view(request: HttpRequest):
     if request.method == "GET":
         return render(request, 'registration/login.html')
 
-    email = request.POST["email"]
-    password = request.POST["password"]
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+
+    if not email:
+        return render(request, 'registration/login.html', {"error": "Необходимо ввести электронную почту"})
+
+    if not password:
+        return render(request, 'registration/login.html', {"error": "Необходимо ввести пароль"})
 
     user = authenticate(request, email=email, password=password)
     if user is not None:
         login(request, user)
         return redirect("accounts:account", pk=user.pk)
-    return render(request, 'registration/login.html', {"error": "Invalid login"})
+
+    return render(request, 'registration/login.html', {"error": "Не получилось войти, проверьте логин или пароль"})
 
 
 class CustomRegistrationView(CreateView):

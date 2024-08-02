@@ -39,6 +39,7 @@ class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField(label='Email', required=False)
     phone = forms.CharField(label='Телефон', required=False)
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput, required=False)
+    password_reply = forms.CharField(label='Подтверждение пароля', widget=forms.PasswordInput, required=False)
     avatar = forms.ImageField(label='Аватар', required=False)
     last_name = forms.CharField(widget=forms.HiddenInput(), required=False)
     username = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -46,11 +47,23 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['full_name', 'email', 'phone', 'password', 'avatar', 'last_name', 'username', 'middle_name']
+        fields = [
+            'full_name',
+            'email',
+            'phone',
+            'password',
+            'password_reply',
+            'avatar',
+            'last_name',
+            'username',
+            'middle_name'
+        ]
 
     def clean(self):
         cleaned_data = super().clean()
         full_name = cleaned_data.get('full_name')
+        password = cleaned_data.get('password')
+        password_reply = cleaned_data.get('password_reply')
 
         if full_name:
             names = full_name.split()
@@ -60,6 +73,10 @@ class UserUpdateForm(forms.ModelForm):
                 cleaned_data['middle_name'] = names[2]
             else:
                 raise forms.ValidationError("Пожалуйста, введите Фамилию, Имя и Отчество через пробел.")
+
+        # Проверка на совпадение паролей
+        if password and password_reply and password != password_reply:
+            raise forms.ValidationError("Пароли не совпадают.")
 
         return cleaned_data
 
