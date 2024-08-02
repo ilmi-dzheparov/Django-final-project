@@ -53,15 +53,49 @@
                                         </label>
                                         <div class="Profile-avatar Profile-avatar_noimg">
                                             <label class="Profile-fileLabel" for="avatar">
-                                                <img src="assets/img/icons/upload.png" alt="#.png">{% translate 'Загрузить фото' %}
+                                                <img id="avatarImage" src="{% static 'assets/img/icons/upload.png' %}" alt="#.png" style="max-width: 400px; max-height: 400px; object-fit: cover;">
+                                                <span id="uploadText">{% translate 'Загрузить фото' %}</span>
                                             </label>
-                                            <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar" value="{{ user.avatar }}">
+                                            <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar" onchange="previewAvatar(event)">
                                         </div>
                                         <div>
                                             {% if form.errors.avatar %}
                                                 <span style="color: red">{{ form.errors.avatar }}</span>
                                             {% endif %}
                                         </div>
+                                        <script>
+                                        function previewAvatar(event) {
+                                            const input = event.target;
+                                            const avatarImage = document.getElementById('avatarImage');
+                                            const uploadText = document.getElementById('uploadText');
+
+                                            // Проверяем, что файл выбран и его тип корректный
+                                            if (input.files && input.files[0]) {
+                                                const file = input.files[0];
+
+                                                // Проверка на тип файла (например, только изображения)
+                                                const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+                                                if (validImageTypes.includes(file.type)) {
+                                                    const reader = new FileReader();
+
+                                                    reader.onload = function(e) {
+                                                        avatarImage.src = e.target.result; // Изменяем src на загруженное изображение
+                                                        uploadText.style.display = 'none'; // Скрываем текст загрузки
+                                                    }
+
+                                                    reader.readAsDataURL(file); // Читаем файл как URL
+                                                } else {
+                                                    // Если файл не изображение
+                                                    uploadText.style.display = 'inline'; // Показываем текст загрузки
+                                                    alert('Пожалуйста, выберите изображение формата JPEG, PNG или GIF.'); // Сообщение об ошибке
+                                                    avatarImage.src = '{% static "assets/img/icons/upload.png" %}'; // Возвращаем исходное изображение
+                                                    input.value = ''; // Сбрасываем поле ввода
+                                                }
+                                            } else {
+                                                uploadText.style.display = 'inline'; // Если файл не выбран, показываем текст
+                                            }
+                                        }
+                                        </script>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="full_name">{% translate 'ФИО' %}
@@ -70,11 +104,6 @@
                                                value="{% if user.last_name %}{{ user.last_name }}{% endif %} {% if user.username %}{{ user.username }}{% endif %} {% if user.middle_name %}{{ user.middle_name }}{% endif %} "
                                                data-validate="require"
                                                action="{% url 'accounts:profile' pk=user.id %}"/>
-                                    </div>
-                                    <div>
-                                        {% if form.errors.full_name %}
-                                            <span style="color: red">{{ form.errors.full_name }}</span>
-                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="row-block">
@@ -108,10 +137,12 @@
                                         </label>
                                         <input class="form-input" id="password_reply" name="password_reply" type="password" value="" placeholder="Введите пароль повторно" action="{% url 'accounts:profile' pk=user.id %}">
                                     </div>
+                                    {% if form.non_field_errors %}
+                                        <div style="color: red">
+                                            {{ form.non_field_errors }}
+                                        </div>
+                                    {% endif %}
                                     <div class="form-group">
-                                        {% if form.errors.password %}
-                                            <span style="color: red">{{ form.errors.password }}</span>
-                                        {% endif %}
                                     </div>
                                     <div class="form-group">
                                         <div class="Profile-btn">
