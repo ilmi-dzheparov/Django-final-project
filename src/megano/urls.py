@@ -22,13 +22,10 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("shop.urls")),
     path("accounts/", include("accounts.urls", namespace="accounts")),
     path("banners/", include('banners.urls')),
     path("orders/", include('orders.urls')),
     path("payments/", include("payments.urls", namespace="payments")),
-    path("comparison/", include("comparison.urls", namespace="comparison")),
-    path("", include("discounts.urls", namespace="discounts")),
 ]
 
 urlpatterns += i18n_patterns(
@@ -45,7 +42,7 @@ if settings.DEBUG:
     urlpatterns.extend(
         static(
             settings.STATIC_URL,
-            document_root=settings.STATICFILES_DIRS[0]
+            document_root=settings.STATIC_ROOT
         )
     )
     urlpatterns.append(
