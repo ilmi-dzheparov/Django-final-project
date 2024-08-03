@@ -40,7 +40,7 @@ cd teamproject_41
 ```
 DEBUG = True
 DJANGO_SECRET_KEY = 'django-insecure-xxxxxxxxxxxx'
-DJANGO_ALLOWED_HOSTS = ['*']
+DJANGO_ALLOWED_HOSTS = *
 
 DB_ENGINE = "django.db.backends.postgresql"  # замените это значение если хотите использовать SQlite3 'django.db.backends.sqlite3'
 DB_HOST = 'db'
@@ -82,6 +82,9 @@ docker compose -f docker-compose.yml up -d --build
 ## Шаг 5: Создание миграций
 
 `Создайте миграции с помошью команды:`
+```bash
+docker compose -f docker-compose.yml exec web python manage.py makemigrations --no-input
+```
 ```bash
 docker compose -f docker-compose.yml exec web python manage.py migrate --no-input
 ```

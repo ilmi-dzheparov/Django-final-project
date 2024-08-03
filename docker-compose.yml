@@ -1,27 +1,35 @@
 # Задаём имя проекта
-name: megano-test
+name: megano-test2
 
 services:
     web:
-        # Указываем директорию ./src, в которой содержится Dockerfile для сборки образа
+        # Указываем директорию в которой содержится Dockerfile для сборки образа
         build:
-            context: ./src
             dockerfile: Dockerfile
         # Запускаем встроенный сервер Django
-        command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+        command: >
+            sh -c "
+            ls megano && gunicorn megano.wsgi:application --bind 0.0.0.0:8001
+            "
+        volumes:
+            - ./src:/app
         # Пробрасываем 8000 порт контейнера на 8000 порт локалхоста(127.0.0.1:8001)
         ports:
-            - 127.0.0.1:8000:8000
+            - 127.0.0.1:8001:8001
         # Файл содержащий переменные окружения для контейнера
         env_file:
             - .env
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
         # Дожидаемся запуска контейнера db
         depends_on:
             - db
 
     redis:
         image: "redis:alpine"
-        container_name: redis
+        container_name: redis2
         ports:
             - "6379:6379"
 
@@ -51,22 +59,24 @@ services:
 
     celery:
         build:
-            context: ./src
             dockerfile: Dockerfile
         command: celery -A megano worker --loglevel=info
+        volumes:
+            - ./src:/app
         env_file:
-            - .env.prod
+            - .env
         depends_on:
             - db
             - redis
 
     celery-beat:
         build:
-            context: ./src
             dockerfile: Dockerfile
         command: celery -A megano beat --loglevel=info
+        volumes:
+            - ./src:/app
         env_file:
-            - .env.prod
+            - .env
         depends_on:
             - db
             - redis
