@@ -1,14 +1,16 @@
-import stripe
 from decimal import Decimal
+
+import stripe
 from django.conf import settings
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView, View
-from shop.models import CartItem, Cart
-from accounts.models import User
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView, View
+
+from accounts.models import User
+from shop.models import Cart, CartItem
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
