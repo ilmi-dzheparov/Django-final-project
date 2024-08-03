@@ -1,6 +1,7 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from shop.models import Product, Category
-from django.core.validators import MinValueValidator, MaxValueValidator
+
+from shop.models import Category, Product
 
 DISCOUNT_WEIGHTS = [
     (1, 'Вес скидки низкий'),

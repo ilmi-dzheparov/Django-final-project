@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.core.validators import MaxValueValidator
 from django.db import models
-from django.db.models import F, Sum, DecimalField
+from django.db.models import DecimalField, F, Sum
 from django.urls import reverse
 from taggit.managers import TaggableManager
+
 
 def product_preview_directory_path(instance: "Product", filename: str) -> str:
     return "shop/product_{pk}/preview/{filename}".format(

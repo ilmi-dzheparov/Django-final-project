@@ -1,8 +1,8 @@
 from django.urls import path
+
 from .views import BannerListView
 
 app_name = "banners"
-
 
 
 urlpatterns = [

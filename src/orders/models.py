@@ -1,8 +1,8 @@
 from django.db import models
+from django.db.models import DecimalField, F, Sum
+
 from megano import settings
 from shop.models import SellerProduct
-from django.db.models import Sum, F, DecimalField
-
 
 PAYMENT_METHOD_CHOICES = [
     ('card', 'Онлайн картой'),

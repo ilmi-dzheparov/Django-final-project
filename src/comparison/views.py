@@ -1,11 +1,10 @@
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.cache import never_cache
-from django.shortcuts import render, redirect
-from django.views.generic import ListView
 
 from .comparison import Comparison
-from django.urls import reverse
-from django.views import View
 
 
 @method_decorator(decorator=never_cache, name="get")
@@ -38,4 +37,3 @@ class ComparisonClearView(View):
         service.clear()
 
         return redirect(reverse("comparison:service"))
-

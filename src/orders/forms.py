@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+
 from accounts.models import User
 
 
@@ -56,6 +57,24 @@ class UserDataForm(forms.Form):
                 raise ValidationError("Пожалуйста, введите Фамилию, Имя и Отчество через пробел.")
 
         return cleaned_data
+
+    def save(self, commit=True):
+        user = self.user
+        if not user:
+            raise ValueError("User instance must be provided to save the form data.")
+
+        cleaned_data = self.cleaned_data
+
+        user.last_name = cleaned_data.get('last_name')
+        user.username = cleaned_data.get('username')
+        user.middle_name = cleaned_data.get('middle_name')
+        user.phone = cleaned_data.get('phone')
+        user.email = cleaned_data.get('email')
+
+        if commit:
+            user.save()
+
+        return user
 
 
 class PasswordForm(forms.Form):

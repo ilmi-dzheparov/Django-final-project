@@ -1,12 +1,14 @@
-from django.core.cache import cache
-from django.conf import settings
-from .models import Category, SellerProduct, Seller, Product
-import logging
-import os
 import datetime
 import json
+import logging
+import os
 import shutil
+
+from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Count
+
+from .models import Category, Product, Seller, SellerProduct
 
 
 def setup_logger(name, log_dir, log_file, level=logging.INFO):
@@ -103,7 +105,7 @@ def get_cached_categories():
 
 
 def get_cached_products():
-    cache_key = f'products'
+    cache_key = 'products'
     products = cache.get(cache_key)
     if products is None:
 

@@ -1,6 +1,6 @@
 from django import forms
-from discounts.models import ProductDiscount, CartDiscount, BundleDiscount
-from shop.models import Product
+
+from discounts.models import BundleDiscount, CartDiscount, ProductDiscount
 
 
 # Проверка, чтоб дата окончания скидки была больше даты начала скидки
@@ -67,7 +67,6 @@ def calculate_product_discounts(cart_items):
     return total_discount
 
 
-
 def calculate_cart_discount(cart):
     # Получаем активную скидку на данную корзину
     cart_discount = CartDiscount.objects.filter(carts=cart, active=True).first()
@@ -78,7 +77,6 @@ def calculate_cart_discount(cart):
             'valid_from': cart_discount.valid_from,
             'valid_to': cart_discount.valid_to
         })
-
         # Проверяем, соответствует ли корзина условиям скидки
         if (cart_discount.min_quantity <= cart.total_quantity() <= cart_discount.max_quantity and
                 cart_discount.min_total <= cart.total_price() <= cart_discount.max_total):

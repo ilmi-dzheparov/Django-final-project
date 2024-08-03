@@ -1,22 +1,18 @@
+from django.contrib import messages
 from django.contrib.auth import login
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render, get_object_or_404
 from django.core.cache import cache
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from django.views.generic import FormView, DetailView
-from django.contrib import messages
-from django.urls import reverse, reverse_lazy
-from orders.models import Order, OrderItem
-from shop.models import CartItem, Cart
+from django.views.generic import DetailView, FormView
+
 from accounts.models import User
-from orders.forms import (
-    UserDataForm,
-    PasswordForm,
-    SelectDeliveryForm,
-    SelectPaymentForm,
-    CommentOrderForm
-)
+from orders.forms import (CommentOrderForm, PasswordForm, SelectDeliveryForm,
+                          SelectPaymentForm, UserDataForm)
+from orders.models import Order, OrderItem
+from shop.models import Cart, CartItem
 
 
 class Step1UserData(FormView):
@@ -54,6 +50,7 @@ class Step1UserData(FormView):
 
     def form_valid(self, form):
         if self.request.user.is_authenticated:
+            form.save(self.request.user)
             success_url = reverse('orders:select_delivery')
             return redirect(success_url)
         else:

@@ -1,9 +1,6 @@
 from django import forms
 from django.utils.translation import gettext as _
-from django.contrib.auth import authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm
+
 from .models import User
 
 
@@ -112,5 +109,3 @@ class PasswordChangeForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-

@@ -1,8 +1,8 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import DetailView, TemplateView
 
-from .models import BaseDiscount, ProductDiscount, BundleDiscount, CartDiscount
+from .models import BundleDiscount, CartDiscount, ProductDiscount
 
 
 @method_decorator(decorator=never_cache, name="get")
