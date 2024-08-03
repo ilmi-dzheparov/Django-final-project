@@ -1,20 +1,23 @@
+# Задаём имя проекта
+name: megano-test
+
 services:
     web:
+        # Указываем директорию ./src, в которой содержится Dockerfile для сборки образа
         build:
-            dockerfile: ./Dockerfile
-        command: >
-            sh -c "
-            gunicorn megano.wsgi:application --bind 0.0.0.0:8000
-            "
-        volumes:
-            - ./src:/app
+            context: ./src
+            dockerfile: Dockerfile
+        # Запускаем встроенный сервер Django
+        command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+        # Пробрасываем 8000 порт контейнера на 8000 порт локалхоста(127.0.0.1:8001)
         ports:
-            - 8000:8000
+            - 127.0.0.1:8000:8000
+        # Файл содержащий переменные окружения для контейнера
         env_file:
-             - .env.docker
+            - .env
+        # Дожидаемся запуска контейнера db
         depends_on:
             - db
-            - redis
 
     redis:
         image: "redis:alpine"
@@ -23,39 +26,51 @@ services:
             - "6379:6379"
 
     db:
+        # Берём образ БД PostgreSQL версии 16
         image: postgres:16
-        container_name: my_postgres_db
+        # Примонтируем том postgres-data к директории /var/lib/postgresql/data контейнера db
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        # Файл содержащий переменные окружения для контейнера
         env_file:
-            - .env.docker
+            - .env
+        # Используем значения переменных окружения из .env файла
         environment:
             - POSTGRES_DB=${DB_NAME}
             - POSTGRES_USER=${DB_USER}
             - POSTGRES_PASSWORD=${DB_PASS}
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
+        # Проверяем готовность сервера и пробуем перезапустить в случае неудачи.
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres_user -d postgres_db" ]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+        restart: unless-stopped
+        tty: true
+        stdin_open: true
 
     celery:
         build:
-            dockerfile: ./Dockerfile
+            context: ./src
+            dockerfile: Dockerfile
         command: celery -A megano worker --loglevel=info
-        volumes:
-            - ./src:/app
         env_file:
-            - .env.docker
+            - .env.prod
         depends_on:
             - db
             - redis
 
     celery-beat:
         build:
-            dockerfile: ./Dockerfile
+            context: ./src
+            dockerfile: Dockerfile
         command: celery -A megano beat --loglevel=info
-        volumes:
-            - ./src:/app
         env_file:
-            - .env.docker
+            - .env.prod
         depends_on:
             - db
             - redis
+
 volumes:
-    postgres_data:
+    # Объявляем том postgres-data для хранения данных PostgreSQL
+    postgres-data:

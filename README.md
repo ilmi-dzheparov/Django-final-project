@@ -25,7 +25,7 @@ git push -uf origin master
 `Сначала клонируйте репозиторий на ваш локальный компьютер. Для этого выполните следующую команду:`
 
 ```bash
-git clone https://github.com/VladiFinogenov/DRF-myblog.git
+git clone https://gitlab.skillbox.ru/pythondjango_team41/teamproject_41.git
 ```
 
 ## Шаг 2: Переход в директорию проекта
@@ -36,32 +36,46 @@ cd teamproject_41
 
 ## Шаг 3: Настройка переменных окружения
 
-`Создайте файл .env.docker в корневой директории проекта и добавьте в него необходимые переменные окружения. Пример:`
-```bash
+`Создайте файл .env в корневой директории проекта и добавьте в него необходимые переменные окружения:`
+```
+DEBUG = True
+DJANGO_SECRET_KEY = 'django-insecure-xxxxxxxxxxxx'
+DJANGO_ALLOWED_HOSTS = ['*']
+
+DB_ENGINE = "django.db.backends.postgresql"  # замените это значение если хотите использовать SQlite3 'django.db.backends.sqlite3'
 DB_HOST = 'db'
-DB_PORT = '5432'
-DB_NAME = meganodatabase
+DB_PORT = '5433'
+DB_NAME = megano
 DB_USER = megano
-DB_PASS = pass_megano
+DB_PASS = user1234!
+
+DATABASE = postgress  # при использовании PostgreSQL
+
+CACHES_BACKEND = "django_redis.cache.RedisCache",
+CACHES_LOCATION = 'redis://redis:6379/1',
+
 EMAIL_HOST='smtp.yandex.ru'
 EMAIL_PORT=465
 EMAIL_HOST_USER='example@email.com'
 EMAIL_HOST_PASSWORD='you_password'
 DOMEN_APP='http://127.0.0.1:8000'
+
+STRIPE_PUBLISHABLE_KEY = '' # добавьте свой публичный ключ от сервиса
+STRIPE_SECRET_KEY = '' # добавьте свой приватный ключ от сервиса
 ```
-`Для отправки писем со ссылкой на изменение пароля необходимо заполнить значения EMAIL. Также необходимо заменить при 
-необходимости значения EMAIL_USE_TLS и EMAIL_USE_SSL в settings.py. 
-В DOMEN_APP необходимо ввести фактический домен вашего приложения.` 
-`Ознакомление с ними выходит за рамки данной инструкции, но с подробностями можно ознакомиться 
+`Для отправки писем со ссылкой на изменение пароля необходимо заполнить значения EMAIL. Также необходимо заменить при
+необходимости значения EMAIL_USE_TLS и EMAIL_USE_SSL в settings.py.
+В DOMEN_APP необходимо ввести фактический домен вашего приложения.`
+`Ознакомление с ними выходит за рамки данной инструкции, но с подробностями можно ознакомиться
 здесь:` https://ilyakhasanov.ru/baza-znanij/prochee/nuzhno-znat/139-nastrojki-otpravki-pochty-cherez-smtp.
-`Стоит учитывать, что не все почтовые ящики дают заполнять в качестве пароля, большинство (яндекс, гугл и т.д.) 
-генерируют пароль самостоятельно. Для ознакомления с особенностями подключения smtp обращайтесь 
+`Стоит учитывать, что не все почтовые ящики дают заполнять в качестве пароля, большинство (яндекс, гугл и т.д.)
+генерируют пароль самостоятельно. Для ознакомления с особенностями подключения smtp обращайтесь
 к документации почтового сервиса.`
 ## Шаг 4: Сборка и запуск контейнеров Docker
 
 `Соберите и запустите контейнеры Docker с помощью docker-compose:`
 ```bash
-sudo docker compose up --build
+docker compose -f docker-compose.yml up -d --build
 ```
 `Эта команда соберет образы Docker и запустит контейнеры в соответствии с конфигурацией, указанной в файле docker-compose.yml.`
 
@@ -69,14 +83,14 @@ sudo docker compose up --build
 
 `Создайте миграции с помошью команды:`
 ```bash
-sudo docker compose run web python manage.py migrate
+docker compose -f docker-compose.yml exec web python manage.py migrate --no-input
 ```
 
 ## Шаг 6: Сборка статики
 
 `Загрузите статику с помошью команды:`
 ```bash
-sudo docker compose run web python manage.py collectstatic --noinput
+docker compose -f docker-compose.yml exec web python manage.py collectstatic --no-input
 ```
 
 ## Шаг 7: Создание суперпользователя
