@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+import sys
 from pathlib import Path
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy
@@ -24,18 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-ew#o(-glp(5b906c3k1o&syu&e+*-k-hvke=3*x)icr%@u-h&o",
-)
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", )
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DJANGO_DEBUG", "1") == "1"
 
-ALLOWED_HOSTS = [
-                    "127.0.0.1",
-                    "0.0.0.0",
-                ] + os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
 
 # Application definition
 
@@ -56,7 +51,7 @@ INSTALLED_APPS = [
     'discounts.apps.DiscountsConfig',
     'orders.apps.OrdersConfig',
     'payments.apps.PaymentsConfig',
-    # 'django_redis',
+    'django_redis',
 ]
 
 MIDDLEWARE = [
@@ -117,23 +112,26 @@ WSGI_APPLICATION = "megano.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": str(os.getenv("DB_ENGINE")),
+        "NAME": str(os.getenv("DB_NAME")),
+        "USER": str(os.getenv("DB_USER")),
+        "PASSWORD": str(os.getenv("DB_PASS")),
+        "HOST": str(os.getenv("DB_HOST")),
+        "PORT": str(os.getenv("DB_PORT")),
     }
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "HOST": os.getenv("DB_HOST"),
-#         "PORT": os.getenv("DB_PORT"),
-#         "NAME": os.getenv("DB_NAME"),
-#         "USER": os.getenv("DB_USER"),
-#         "PASSWORD": os.getenv("DB_PASS"),
-#     }
-# }
+if os.getenv('DATABASE') == 'postgres':
+    INSTALLED_APPS += ['django.contrib.postgres',]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -169,9 +167,11 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+
+if sys.argv[1] == 'runserver':
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = 'media/'
 
@@ -218,16 +218,15 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Moscow'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": 'redis://redis:6379/1',
-#     }
-# }
+CACHES = {
+    "default": {
+        'BACKEND': str(os.getenv('CACHES_BACKEND')),
+        'LOCATION': str(os.getenv('CACHES_LOCATION')),
+    }
+}
 
-
-STRIPE_PUBLISHABLE_KEY = '<your key>'
-STRIPE_SECRET_KEY = '<your key>'
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
 SITE_ID=1
 

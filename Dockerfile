@@ -1,7 +1,6 @@
-FROM python:3.11
+FROM python:3.11-slim
 
 # Устанавливаем переменные окружения
-ENV DJANGO_SETTINGS_MODULE=megano.settings
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED=1
 
