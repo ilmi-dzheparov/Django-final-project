@@ -1,11 +1,11 @@
 from django import forms
-from .models import BundleDiscount, ProductDiscount, CartDiscount
-from shop.models import Product, Category
-from .utils import (
-    check_dates_of_discount,
-    check_if_products_belong_to_categories_of_another_group,
-    check_if_products_categories_exist,
-)
+
+from shop.models import Category, Product
+
+from .models import BundleDiscount, CartDiscount, ProductDiscount
+from .utils import (check_dates_of_discount,
+                    check_if_products_belong_to_categories_of_another_group,
+                    check_if_products_categories_exist)
 
 PRODUCTS = forms.ModelMultipleChoiceField(queryset=Product.objects.filter(seller_products__isnull=False).distinct(),
                                           widget=forms.CheckboxSelectMultiple,

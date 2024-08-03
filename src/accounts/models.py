@@ -1,7 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import BaseUserManager
+from django.db import models
 
 
 def user_avatar_directory_path(instance: "User", filename: str):
@@ -47,7 +46,15 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username', 'phone']
 
     def get_full_name(self):
-        return f"{self.last_name} {self.username} {self.middle_name}"
+        full_name = []
+        if self.last_name:
+            full_name.append(self.last_name)
+        if self.username:
+            full_name.append(self.username)
+        if self.middle_name:
+            full_name.append(self.middle_name)
+        # Присоединяем все непустые части имени через пробел
+        return ' '.join(full_name)
 
     def __str__(self) -> str:
         return f"User(pk={self.pk}, user={self.username})"

@@ -23,7 +23,7 @@
                         </div>
                         <span class="CategoriesButton-text">{{ category.name }}</span>
                         {% if category.children.all %}
-                            <a class="CategoriesButton-arrow" href="#"></a>
+                            <a class="CategoriesButton-arrow" href="{% url 'shop:catalog_products_list' category.pk %}"></a>
                         {% endif %}
                     </a>
                     <div class="CategoriesButton-submenu">

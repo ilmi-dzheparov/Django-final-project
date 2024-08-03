@@ -1,17 +1,19 @@
 import json
+from decimal import Decimal
 
-from django.http import HttpRequest, HttpResponse
 from django.contrib import messages
 from django.core.cache import cache
-from shop.models import Cart, CartItem, SellerProduct, Product, SiteSettings
-from django.shortcuts import get_object_or_404, render, redirect
-from decimal import Decimal
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+
 from shop.forms import JSONImportForm
-
+from shop.models import CartItem, Product, SellerProduct, SiteSettings
 
 """
-Методы для работы с корзиной неаторизованного пользователя в сессии
+Методы для работы с корзиной неавторизованного пользователя в сессии
 """
+
+
 def get_cart_from_session(request):
     cart = request.session.get('cart', {})
     cart_items_objs = []

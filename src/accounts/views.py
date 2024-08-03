@@ -1,22 +1,23 @@
 import os
 import smtplib
 
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-from django.contrib.auth.views import LogoutView
-from django.core.mail import send_mail, get_connection
-from django.http import HttpRequest, request
-from django.views.decorators.cache import never_cache
-from django.utils.decorators import method_decorator
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.views.generic import UpdateView, DetailView, CreateView, ListView, View
-from orders.models import Order
-from .models import User
-from shop.models import HistoryProduct
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserRegisterForm, UserUpdateForm, PasswordChangeForm
+from django.contrib.auth.views import LogoutView
+from django.core.mail import get_connection, send_mail
+from django.http import HttpRequest, request
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.generic import (CreateView, DetailView, ListView, UpdateView,
+                                  View)
+
+from orders.models import Order
+from shop.models import HistoryProduct
+
+from .forms import PasswordChangeForm, UserRegisterForm, UserUpdateForm
+from .models import User
 
 
 def login_view(request: HttpRequest):

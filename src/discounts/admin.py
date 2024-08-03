@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import ProductDiscount, BundleDiscount, CartDiscount
-from .forms import ProductDiscountForm, BundleDiscountForm, CartDiscountForm
+
+from .forms import BundleDiscountForm, CartDiscountForm, ProductDiscountForm
+from .models import BundleDiscount, CartDiscount, ProductDiscount
 
 
 @admin.register(ProductDiscount)

@@ -1,49 +1,35 @@
+from datetime import datetime
+from decimal import ROUND_HALF_UP, Decimal
 from random import choice
 
-from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.cache import cache
-from django.core.serializers import serialize, deserialize
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import DetailView, CreateView, DeleteView, ListView, View, UpdateView, TemplateView
+from django.core.serializers import deserialize, serialize
+from django.db.models import Count, Max, Min
+from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.safestring import mark_safe
-from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from decimal import Decimal, ROUND_HALF_UP
-from discounts.utils import calculate_best_discount
-from shop.utils import (
-    add_to_session_cart,
-    get_cart_from_session,
-    get_total_price_from_session_cart,
-    get_total_quantity_from_session_cart,
-    remove_from_session_cart,
-    update_session_cart,
-)
-
-from shop.models import (
-    Product,
-    Review,
-    Seller,
-    SellerProduct,
-    Cart,
-    CartItem,
-    Category,
-    HistoryProduct,
-)
-from shop.forms import ReviewForm, ProductFilterForm, TagsForm
-from shop.mixins import NonCachingMixin
-from django.db.models import Count, Max, Min, Q
-from shop.services import get_cached_popular_products, get_limited_products, get_cached_products, get_cached_categories
-from django.views.decorators.cache import never_cache
-from django.utils.decorators import method_decorator
+from django.views.generic import (CreateView, DetailView, ListView,
+                                  TemplateView, View)
 from taggit.models import Tag
 
 from banners.models import Banner
+from discounts.utils import calculate_best_discount
+from shop.forms import ProductFilterForm, ReviewForm, TagsForm
+from shop.mixins import NonCachingMixin
+from shop.models import (Cart, CartItem, Category, HistoryProduct, Product,
+                         Review, SellerProduct)
+from shop.services import (get_cached_categories, get_cached_popular_products,
+                           get_cached_products, get_limited_products)
+from shop.utils import (add_to_session_cart, get_cart_from_session,
+                        get_total_price_from_session_cart,
+                        get_total_quantity_from_session_cart,
+                        remove_from_session_cart, update_session_cart)
 
 
 @method_decorator(decorator=never_cache, name="get")
@@ -216,6 +202,7 @@ class AddToCartView(View):
 
         return redirect('shop:product_detail', product.product.id)
 
+
 @method_decorator(never_cache, name='dispatch')
 class CartDetailView(DetailView):
     model = Cart
@@ -370,7 +357,10 @@ class CatalogProduct(ListView):
         queryset = get_cached_products()
         sort_param = self.request.GET.get('sort')
         selected_category_id = self.kwargs.get('pk')
-        queryset = queryset.filter(product__category_id=selected_category_id)
+
+        category = get_object_or_404(Category, pk=selected_category_id)
+        children = category.children.all()
+        queryset = queryset.filter(product__category__in=[category] + list(children))
 
         if sort_param:
             if sort_param == 'popularity':

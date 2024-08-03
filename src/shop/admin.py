@@ -1,21 +1,13 @@
 from django.contrib import admin
 from django.urls import path
 
-from .forms import AttributeFormSet, ProductAttributeFormSet, CustomAttributeAdminForm
-from .models import (
-    Product,
-    Review,
-    Category,
-    Attribute,
-    ProductAttribute,
-    Seller,
-    SellerProduct,
-    Cart,
-    CartItem,
-    HistoryProduct, SiteSettings,
-
-)
-from .utils import import_json, reset_cache_all, reset_cache_products, reset_cache_seller_products
+from .forms import (AttributeFormSet, CustomAttributeAdminForm,
+                    ProductAttributeFormSet)
+from .models import (Attribute, Cart, CartItem, Category, HistoryProduct,
+                     Product, ProductAttribute, Review, Seller, SellerProduct,
+                     SiteSettings)
+from .utils import (import_json, reset_cache_all, reset_cache_products,
+                    reset_cache_seller_products)
 
 
 @admin.register(HistoryProduct)
@@ -116,8 +108,8 @@ class ProductAttributeInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductAttributeInline]
     """
-       Метод get_formsets_with_inlines определяет какие формы и inline-формы будут отображаться 
-       на странице изменения объекта в административной панели Django. 
+       Метод get_formsets_with_inlines определяет какие формы и inline-формы будут отображаться
+       на странице изменения объекта в административной панели Django.
        Переопределяем метод, чтоб инлайн-форма отображалась если редактируем объект.
        При создании объекта форма не будет отображаться
        """

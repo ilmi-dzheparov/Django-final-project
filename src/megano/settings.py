@@ -13,9 +13,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 import sys
 from pathlib import Path
-from django.urls import reverse_lazy
+
 from django.utils.translation import gettext_lazy
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -228,6 +229,6 @@ CACHES = {
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
-SITE_ID=1
+SITE_ID = 1
 
 LOGOUT_REDIRECT_URL = '/accounts/login/'

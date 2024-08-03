@@ -1,9 +1,11 @@
-from django.core.cache import cache
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
-from .models import Category, Product, SellerProduct, Cart, CartItem
 from django.contrib.auth.signals import user_logged_in
-from shop.utils import get_cart_from_session, clear_session_cart
+from django.core.cache import cache
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
+
+from shop.utils import clear_session_cart, get_cart_from_session
+
+from .models import Cart, Category, Product, SellerProduct
 
 
 @receiver(signal=post_save, sender=Category)
@@ -22,10 +24,12 @@ def reset_cache(sender, instance, **kwargs):
 def clear_product_cache(sender, **kwargs):
     cache.delete('products')
 
+
 @receiver(post_save, sender=SellerProduct)
 @receiver(post_delete, sender=SellerProduct)
 def clear_popular_product_cache(sender, **kwargs):
     cache.delete('popular_products')
+
 
 @receiver(user_logged_in)
 def merge_carts(sender, user, request, **kwargs):

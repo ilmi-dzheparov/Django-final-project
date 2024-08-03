@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from banners.models import Banner
 from django.core.cache import cache
+from django.shortcuts import render
 from django.views.generic import ListView
+
+from banners.models import Banner
 
 
 class BannerListView(ListView):
