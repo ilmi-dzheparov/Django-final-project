@@ -100,7 +100,7 @@ docker compose -f docker-compose.yml exec web python manage.py collectstatic --n
 
 `Создайте суперпользователя для доступа к административной панели:`
 ```bash
-sudo docker compose run web python manage.py createsuperuser
+docker compose -f docker-compose.yml exec web python manage.py createsuperuser
 ```
 
 # Загрузка фикстур
