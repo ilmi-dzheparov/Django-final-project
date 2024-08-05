@@ -109,5 +109,5 @@ docker compose -f docker-compose.yml exec web python manage.py createsuperuser
 * `!!! Добавляйте других пользователей только после загрузки фикстур`
 `Загрузите фикстуры с помошью команды:`
 ```bash
-sudo docker compose run web python manage.py loaddata fixtures/full-data.json
+docker compose -f docker-compose.yml exec web python manage.py loaddata fixtures/full-data.json
 ```
