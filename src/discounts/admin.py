@@ -13,7 +13,7 @@ class ProductDiscountAdmin(admin.ModelAdmin):
 
 
 @admin.register(BundleDiscount)
-class ProductDiscountAdmin(admin.ModelAdmin):
+class BundleDiscountAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'valid_from', 'valid_to', 'active', 'weight', 'discount_amount']
     list_display_links = ["name"]
 
@@ -21,7 +21,7 @@ class ProductDiscountAdmin(admin.ModelAdmin):
 
 
 @admin.register(CartDiscount)
-class ProductDiscountAdmin(admin.ModelAdmin):
+class CartDiscountAdmin(admin.ModelAdmin):
     list_display = ['name', 'description', 'valid_from', 'valid_to', 'active', 'weight', 'min_quantity', 'max_quantity',
                     'min_total', 'max_total']
     list_display_links = ["name"]

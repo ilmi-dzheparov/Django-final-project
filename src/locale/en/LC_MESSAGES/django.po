@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-07 21:26+0000\n"
+"POT-Creation-Date: 2024-08-05 16:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: megano/settings.py:197
 
 #: comparison/comparison.py:91
 msgid "Недостаточно данных для сравнения. Товаров добавлено"
@@ -32,15 +30,15 @@ msgstr "There are no suitable fields for comparison"
 msgid "Одинаковые поля скрыты"
 msgstr "Identical fields are hidden"
 
-#: megano/settings.py:197
+#: megano/settings.py:195
 msgid "English"
 msgstr ""
 
-#: megano/settings.py:198
+#: megano/settings.py:196
 msgid "Russian"
 msgstr ""
 
-#: shop/forms.py:115 templates/shop/product_detail.html:131
+#: shop/forms.py:119 templates/shop/product_detail.html:131
 msgid "Отзывы"
 msgstr "Feedbacks"
 
@@ -53,13 +51,13 @@ msgstr "Navigation"
 
 #: templates/accounts/account.html:26 templates/accounts/history-order.html:28
 #: templates/accounts/history-product.html:28
-#: templates/accounts/profile.html:26 templates/header.html:77
+#: templates/accounts/profile.html:26 templates/header.html:85
 msgid "Личный кабинет"
 msgstr "Account"
 
 #: templates/accounts/account.html:30 templates/accounts/history-order.html:33
 #: templates/accounts/history-product.html:33
-#: templates/accounts/profile.html:31 templates/footer.html:23
+#: templates/accounts/profile.html:31 templates/footer.html:24
 msgid "Профиль"
 msgstr "Profile"
 
@@ -114,42 +112,34 @@ msgstr "You don't have any orders yet"
 msgid "У вас нет просмотренных товаров"
 msgstr "You don't have any viewed products"
 
-#: templates/accounts/profile.html:54
+#: templates/accounts/profile.html:52
 msgid "Аватар"
 msgstr "Avatar"
 
-#: templates/accounts/profile.html:59
+#: templates/accounts/profile.html:57
 msgid "Загрузить фото"
 msgstr "Upload foto"
 
-#: templates/accounts/profile.html:67
+#: templates/accounts/profile.html:101
 msgid "ФИО"
 msgstr "Full name"
 
-#: templates/accounts/profile.html:78 templates/footer.html:30
+#: templates/accounts/profile.html:111 templates/footer.html:36
 #: templates/footer_alt.html:29
 msgid "Телефон"
 msgstr "Phone"
 
-#: templates/accounts/profile.html:91
-#: templates/registration/password_reset.html:20
+#: templates/accounts/profile.html:131
+#: templates/registration/password_reset.html:19
 #: templates/registration/registration_form.html:25
 msgid "Пароль"
 msgstr "Password"
 
-#: templates/accounts/profile.html:94
-msgid "Тут можно изменить пароль"
-msgstr "Change the password here"
-
-#: templates/accounts/profile.html:98
+#: templates/accounts/profile.html:136
 msgid "Подтверждение пароля"
 msgstr "Password confirmation"
 
-#: templates/accounts/profile.html:101
-msgid "Введите пароль повторно"
-msgstr "Enter new password"
-
-#: templates/accounts/profile.html:107
+#: templates/accounts/profile.html:149
 msgid "Сохранить"
 msgstr "Save"
 
@@ -158,53 +148,53 @@ msgid "Начать"
 msgstr "Get started"
 
 #: templates/footer.html:14 templates/footer_alt.html:15
-#: templates/header.html:57
+#: templates/header.html:61
 msgid "Главная"
 msgstr "Main"
 
 #: templates/footer.html:17 templates/footer_alt.html:18
-#: templates/header.html:61
+#: templates/header.html:66
 msgid "Каталог"
 msgstr "Catalog"
 
 #: templates/footer.html:20 templates/footer_alt.html:21
-#: templates/header.html:64
+#: templates/header.html:69
 msgid "Сравнение"
 msgstr "Comparison"
 
-#: templates/footer.html:29 templates/footer_alt.html:28
-msgid "Контакты"
-msgstr "Contacts"
-
-#: templates/header.html:37 templates/header_alt.html:40
-#: templates/registration/login.html:29
-#: templates/registration/registration_form.html:13
-msgid "Регистрация"
-msgstr "Registration"
-
-#: templates/header.html:38 templates/header_alt.html:39
-#: templates/registration/login.html:13
+#: templates/footer.html:28 templates/header.html:41 templates/header.html:88
+#: templates/header_alt.html:39 templates/registration/login.html:13
 #: templates/registration/registration_form.html:29
 msgid "Вход"
 msgstr "Log in"
 
-#: templates/header.html:60
+#: templates/footer.html:35 templates/footer_alt.html:28
+msgid "Контакты"
+msgstr "Contacts"
+
+#: templates/header.html:39 templates/header_alt.html:40
+#: templates/registration/login.html:32
+#: templates/registration/registration_form.html:13
+msgid "Регистрация"
+msgstr "Registration"
+
+#: templates/header.html:64 templates/header.html:65
 msgid "Скидки"
 msgstr "Discounts"
 
-#: templates/header.html:78
+#: templates/header.html:92
 msgid "Административный раздел"
 msgstr "Admin section"
 
-#: templates/header.html:79
+#: templates/header.html:96
 msgid "Выход"
 msgstr "Exit"
 
-#: templates/header.html:99
+#: templates/header.html:116
 msgid "Показать навигацию"
 msgstr "Show navigation"
 
-#: templates/header.html:124
+#: templates/header.html:139
 msgid "Поиск"
 msgstr "Search"
 
@@ -233,7 +223,7 @@ msgstr ""
 "To restore the password, enter the email address to which the account is "
 "registered"
 
-#: templates/registration/email.html:23
+#: templates/registration/email.html:25
 msgid "Получить проверочный код"
 msgstr "Get the verification code"
 
@@ -241,7 +231,7 @@ msgstr "Get the verification code"
 msgid "Войти"
 msgstr "Log in"
 
-#: templates/registration/login.html:27
+#: templates/registration/login.html:30
 msgid "Забыли пароль"
 msgstr "Forgot your password"
 
@@ -249,7 +239,7 @@ msgstr "Forgot your password"
 msgid "Придумайте новый пароль для учетной записи"
 msgstr "Create a new password for your account"
 
-#: templates/registration/password_reset.html:23
+#: templates/registration/password_reset.html:22
 msgid "Сохранить пароль"
 msgstr "Save password"
 
@@ -261,51 +251,39 @@ msgstr "Name"
 msgid "Зарегистрироваться"
 msgstr "Register"
 
-#: templates/shop/cart.html:73
+#: templates/shop/cart.html:74
 msgid "Итого"
 msgstr "Total"
 
-#: templates/shop/cart.html:77
+#: templates/shop/cart.html:78
 msgid "Оформить заказ"
 msgstr "Place the order"
 
-#: templates/shop/catalog.html:18 templates/shop/catalog.html:51
+#: templates/shop/catalog.html:17
 msgid "Фильтр"
 msgstr "Filter"
 
-#: templates/shop/catalog.html:26
-msgid "Цена"
-msgstr "Price"
-
-#: templates/shop/catalog.html:39
-msgid "Только товары в наличии"
-msgstr "Only products in stock"
-
-#: templates/shop/catalog.html:46
-msgid "С бесплатной доставкой"
-msgstr "With free delivery"
-
-#: templates/shop/catalog.html:59
+#: templates/shop/catalog.html:57
 msgid "Популярные тэги"
 msgstr "Popular tags"
 
-#: templates/shop/catalog.html:72
+#: templates/shop/catalog.html:74
 msgid "Сортировать по"
 msgstr "Sort by"
 
-#: templates/shop/catalog.html:75 templates/shop/catalog.html:77
+#: templates/shop/catalog.html:77 templates/shop/catalog.html:79
 msgid "Популярности"
 msgstr "Popularity"
 
-#: templates/shop/catalog.html:80 templates/shop/catalog.html:82
+#: templates/shop/catalog.html:82 templates/shop/catalog.html:84
 msgid "цене"
 msgstr "price"
 
-#: templates/shop/catalog.html:85 templates/shop/catalog.html:87
+#: templates/shop/catalog.html:87 templates/shop/catalog.html:89
 msgid "отзывам"
 msgstr "feedbacks"
 
-#: templates/shop/catalog.html:90 templates/shop/catalog.html:92
+#: templates/shop/catalog.html:92 templates/shop/catalog.html:94
 msgid "Новизне"
 msgstr "New coming"
 
@@ -334,27 +312,27 @@ msgstr "Show the same characteristics"
 msgid "Очистить"
 msgstr "Clear"
 
-#: templates/shop/index.html:59
+#: templates/shop/index.html:62
 msgid "дней"
 msgstr "days"
 
-#: templates/shop/index.html:65
+#: templates/shop/index.html:68
 msgid "часов"
 msgstr "hours"
 
-#: templates/shop/index.html:71
+#: templates/shop/index.html:74
 msgid "минут"
 msgstr "mins"
 
-#: templates/shop/index.html:77
+#: templates/shop/index.html:80
 msgid "секунд"
 msgstr "secs"
 
-#: templates/shop/index.html:87
+#: templates/shop/index.html:90
 msgid "Популярные товары"
 msgstr "Popular products"
 
-#: templates/shop/index.html:112
+#: templates/shop/index.html:127
 msgid "Ограниченный тираж"
 msgstr "Limited edition"
 
@@ -402,66 +380,17 @@ msgstr "Online by card"
 msgid "Стоимость"
 msgstr "Cost"
 
-#: templates/footer.html:11
-msgid "Навигация"
-msgstr "Navigation"
+#~ msgid "Тут можно изменить пароль"
+#~ msgstr "Change the password here"
 
-#: templates/footer.html:14 templates/header.html:57
-msgid "Главная"
-msgstr "Main"
+#~ msgid "Введите пароль повторно"
+#~ msgstr "Enter new password"
 
-#: templates/footer.html:17 templates/header.html:61
-msgid "Каталог"
-msgstr "Catalog"
+#~ msgid "Цена"
+#~ msgstr "Price"
 
-#: templates/footer.html:20 templates/header.html:64
-msgid "Сравнение"
-msgstr "Comparison"
+#~ msgid "Только товары в наличии"
+#~ msgstr "Only products in stock"
 
-#: templates/footer.html:23
-msgid "Профиль"
-msgstr "Profile"
-
-#: templates/footer.html:29
-msgid "Контакты"
-msgstr "Contacts"
-
-#: templates/footer.html:30
-msgid "Телефон"
-msgstr "Phone"
-
-#: templates/header.html:37
-msgid "Регистрация"
-msgstr "Registration"
-
-#: templates/header.html:38
-msgid "Вход"
-msgstr "Log in"
-
-#: templates/header.html:60
-msgid "Скидки"
-msgstr "Discounts"
-
-#: templates/header.html:77
-msgid "Личный кабинет"
-msgstr "Account"
-
-#: templates/header.html:78
-msgid "Административный раздел"
-msgstr "Admin section"
-
-#: templates/header.html:79
-msgid "Выход"
-msgstr "Exit"
-
-#: templates/header.html:99
-msgid "Показать навигацию"
-msgstr "Show navigation"
-
-#: templates/header.html:124
-msgid "Поиск"
-msgstr "Search"
-
-#: templates/shop/category-menu.html:8
-msgid "Все категории"
-msgstr "All categories"
+#~ msgid "С бесплатной доставкой"
+#~ msgstr "With free delivery"
