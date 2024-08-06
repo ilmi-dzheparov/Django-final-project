@@ -24,8 +24,8 @@ from shop.forms import ProductFilterForm, ReviewForm, TagsForm
 from shop.mixins import NonCachingMixin
 from shop.models import (Cart, CartItem, Category, HistoryProduct, Product,
                          Review, SellerProduct)
-from shop.services import (get_cached_categories, get_cached_popular_products,
-                           get_cached_products, get_limited_products)
+from shop.services import (get_cached_categories,
+                           get_cached_popular_products, get_limited_products)
 from shop.utils import (add_to_session_cart, get_cart_from_session,
                         get_total_price_from_session_cart,
                         get_total_quantity_from_session_cart,
@@ -59,7 +59,8 @@ class IndexView(TemplateView):
             discount = product.product.discounts.first()
             if discount:
                 discount_value = Decimal(discount.discount)
-                product.price_after_discount = round(product.price * (1 - discount_value / Decimal(100)), 2)
+                product.price_after_discount = round(
+                    product.price * (1 - discount_value / Decimal(100)), 2)
 
         context['popular_categories'] = popular_categories
         context['product'] = choice(products_with_discount) if products_with_discount else None
@@ -77,7 +78,8 @@ class ProductDetailView(NonCachingMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            product, created = HistoryProduct.objects.get_or_create(user=request.user, product=self.get_object())
+            product, created = HistoryProduct.objects.get_or_create(
+                user=request.user, product=self.get_object())
 
             if not created:
                 product.created_at = datetime.now()
@@ -105,11 +107,12 @@ class ProductDetailView(NonCachingMixin, DetailView):
         seller_products_data = cache.get(seller_products_cache_key)
 
         if seller_products_data is None:
-            seller_products = SellerProduct.objects.filter(product_id=product_id).prefetch_related("seller")
-            seller_products_data = serialize("json", seller_products)
+            seller_products = SellerProduct.objects.filter(
+                product_id=product_id).prefetch_related('seller')
+            seller_products_data = serialize('json', seller_products)
             cache.set(seller_products_cache_key, seller_products_data, timeout=60 * 60 * 24)
         else:
-            seller_products = [obj.object for obj in deserialize("json", seller_products_data)]
+            seller_products = [obj.object for obj in deserialize('json', seller_products_data)]
 
         return seller_products
 
@@ -274,74 +277,6 @@ class CartItemUpdateView(View):
 
 
 @method_decorator(decorator=never_cache, name="get")
-class Catalog(ListView):
-    """
-    Представление: каталог товаров
-    """
-    model = SellerProduct
-    template_name = "shop/catalog.html"
-    context_object_name = 'products'
-    category = None
-    paginate_by = 8
-    queryset = SellerProduct.objects.all()
-
-    def get_queryset(self):
-        products = get_cached_products()
-        sort_param = self.request.GET.get('sort')
-
-        if sort_param:
-            if sort_param == 'popularity':
-                popular_products = get_cached_popular_products()
-                popular_product_ids = [p.product_id for p in popular_products]
-                products = products.filter(product__id__in=popular_product_ids)
-            elif sort_param == 'price':
-                products = products.order_by('price')
-            elif sort_param == 'reviews':
-                products = products.annotate(num_reviews=Count('product__reviews')).order_by('-num_reviews')
-            elif sort_param == 'created_at':
-                products = products.order_by('-created_at')
-
-        form = ProductFilterForm(self.request.GET)
-        if form.is_valid():
-            price = form.cleaned_data.get('price')
-            title = form.cleaned_data.get('title')
-            in_stock = form.cleaned_data.get('in_stock')
-            free_delivery = form.cleaned_data.get('free_delivery')
-
-            if price:
-                min_price, max_price = map(Decimal, price.split(';'))
-                products = products.filter(price__range=(min_price, max_price))
-            if title:
-                products = products.filter(product__name__icontains=title)
-            if in_stock:
-                products = products.filter(quantity__gt=0)
-            if free_delivery:
-                products = products.filter(free_delivery=True)
-
-        tags_form = TagsForm(self.request.GET)
-        if tags_form.is_valid():
-            tags = tags_form.cleaned_data.get('tags')
-            if tags:
-                products = products.filter(product__tags__slug__icontains=tags)
-
-        return products
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        categories = get_cached_categories()
-        context['categories'] = categories
-        products = get_cached_products()
-        max_price = products.aggregate(Max('price'))['price__max']
-        min_price = products.aggregate(Min('price'))['price__min']
-        context['data_min'] = min_price
-        context['data_max'] = max_price
-        tags = Tag.objects.all()
-        context['tags'] = tags
-
-        return context
-
-
-@method_decorator(decorator=never_cache, name="get")
 class CatalogProduct(ListView):
     """
     Представление выводит все продукты переданной категории.
@@ -349,18 +284,20 @@ class CatalogProduct(ListView):
     model = SellerProduct
     template_name = "shop/catalog.html"
     context_object_name = 'products'
-    category = None
     paginate_by = 8
-    queryset = SellerProduct.objects.all()
 
     def get_queryset(self):
-        queryset = get_cached_products()
         sort_param = self.request.GET.get('sort')
         selected_category_id = self.kwargs.get('pk')
 
-        category = get_object_or_404(Category, pk=selected_category_id)
-        children = category.children.all()
-        queryset = queryset.filter(product__category__in=[category] + list(children))
+        if selected_category_id:
+            # Получаем категорию и её дочерние категории
+            category = get_object_or_404(Category, pk=selected_category_id)
+            children = category.children.all()
+            queryset = SellerProduct.objects.filter(product__category__in=[category] + list(children))
+        else:
+            # Если категория не выбрана, возвращаем все продукты
+            queryset = SellerProduct.objects.all()
 
         if sort_param:
             if sort_param == 'popularity':
@@ -370,7 +307,8 @@ class CatalogProduct(ListView):
             elif sort_param == 'price':
                 queryset = queryset.order_by('price')
             elif sort_param == 'reviews':
-                queryset = queryset.annotate(num_reviews=Count('product__reviews')).order_by('-num_reviews')
+                queryset = queryset.annotate(num_reviews=Count(
+                    'product__reviews')).order_by('-num_reviews')
             elif sort_param == 'created_at':
                 queryset = queryset.order_by('-created_at')
 
