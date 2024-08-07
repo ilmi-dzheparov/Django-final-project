@@ -341,12 +341,20 @@ class CatalogProduct(ListView):
         context = super().get_context_data(**kwargs)
         categories = get_cached_categories()
         context['categories'] = categories
-        selected_category = Category.objects.filter(pk=self.kwargs.get('pk')).first()
-        selected_products = SellerProduct.objects.filter(product__category=selected_category)
+
+        selected_category_id = self.kwargs.get('pk')
+        selected_category = Category.objects.filter(pk=selected_category_id).first()
+
+        if selected_category:
+            selected_products = SellerProduct.objects.filter(product__category=selected_category)
+        else:
+            selected_products = SellerProduct.objects.all()  # Получаем все продукты, если категории нет
+
         max_price = selected_products.aggregate(Max('price'))['price__max']
         min_price = selected_products.aggregate(Min('price'))['price__min']
         context['data_min'] = min_price
         context['data_max'] = max_price
+
         tags = Tag.objects.all()
         context['tags'] = tags
 
