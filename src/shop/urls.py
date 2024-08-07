@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (AddToCartView, CartDetailView, CartItemDeleteView,
-                    CartItemUpdateView, Catalog, CatalogProduct, IndexView,
+                    CartItemUpdateView, CatalogProduct, IndexView,
                     ProductDetailView, ReviewCreateView)
 
 app_name = "shop"
