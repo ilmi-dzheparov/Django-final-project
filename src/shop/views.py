@@ -306,11 +306,16 @@ class CatalogProduct(ListView):
                 queryset = queryset.filter(product__id__in=popular_product_ids)
             elif sort_param == 'price':
                 queryset = queryset.order_by('price')
+            elif sort_param == '-price':
+                queryset = queryset.order_by('-price')
             elif sort_param == 'reviews':
-                queryset = queryset.annotate(num_reviews=Count(
-                    'product__reviews')).order_by('-num_reviews')
+                queryset = queryset.annotate(num_reviews=Count('product__reviews')).order_by('-num_reviews')
+            elif sort_param == '-reviews':
+                queryset = queryset.annotate(num_reviews=Count('product__reviews')).order_by('num_reviews')
             elif sort_param == 'created_at':
                 queryset = queryset.order_by('-created_at')
+            elif sort_param == '-created_at':
+                queryset = queryset.order_by('created_at')
 
         form = ProductFilterForm(self.request.GET)
         if form.is_valid():
