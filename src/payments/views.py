@@ -8,9 +8,10 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, View
-
 from accounts.models import User
 from shop.models import Cart, CartItem
+
+from orders.models import Order
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -43,6 +44,11 @@ class PaymentProcess(View):
                     "quantity": item.quantity
                 }
             )
+            cart.delete_product(item)
+
+        order = Order.objects.get(pk=kwargs["id"])
+        order.order_status = "Paid"
+        order.save()
 
         session = stripe.checkout.Session.create(**session_data)
         return redirect(session.url, code=303)

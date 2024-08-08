@@ -201,7 +201,7 @@ class Step4OrderConfirmation(FormView):
             )
 
         if payment_method == 'Онлайн картой':
-            return render(self.request, template_name='orders/payment-by-card.html')
+            return redirect(reverse_lazy('payment:checkout', kwargs={"id": order.pk}))
         elif payment_method == 'Онлайн со счета':
             return render(self.request, template_name='orders/payment-from-account.html')
         else:
